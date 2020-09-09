@@ -25,7 +25,7 @@ from .views import (
 urlpatterns = [
 
     # doctor
-    url(r'^pacientesdeldia/$', pacientesdeldia, name='dotodaypatient'),
+    url(r'^pacientesdeldia/$', pacientesdeldia, name='pacientesdeldia'),
     url(r'^pacientedeldiadetalles/$', pacientedeldiadetalles, name='pacientedeldiadetalles'),
     url(r'^doccambiopass/$', doccambiopass, name='doccambiopass'),
 

@@ -8,14 +8,14 @@
  <div class="row page-head">
   <div class="col-md-4 col-sm-4 col-xs-12">
    <h1>Agenda de hoy</h1>
-   <button type="button" onclick="window.location.href = '../../../addappoinment/' ">Agregar cita</button>
+   <button type="button" onclick="window.location.href = '../../../agregarcita/' ">Agregar cita</button>
   </div>
   
   <div class="col-md-8 col-sm-8 col-xs-12">
    	<!-- search -->
     <form class="search">
 	  <i class="fa fa-search" aria-hidden="true"></i>
-      <input type="search" class="filter" data-table="table" placeholder="search..." maxlength="100" />
+      <input type="search" class="filter" data-table="table" placeholder="buscar..." maxlength="100" />
     </form>
 
   </div> 
@@ -29,21 +29,21 @@
    <table class="table my-pagination">
     <thead>
 	 <tr class="tr-head">
-	  <th>Sl.No</th>
-	  <th>Fecha</th>
+
 	  <th>Nombre paciente </th>
 	  <th>Nombre doctor</th>
+          <th>Fecha</th>
 	  <th>Hora</th>
 	 </tr>
 	</thead>
 
 	<tbody>
-	{% if today_booking %}
-		{% for app in today_booking %}
+	{% if agenda_hoy %}
+		{% for app in agenda_hoy %}
 	<tr class="tr-body">
 	  <td>{{forloop.counter}}</td>
-	  <td>{{app.fecha}}</td>
-	  <td><a class="a-link" href="/prueba/doctorlist/">{{app.paciente}}</a></td>
+	  <td><a class="a-link" href="/prueba/listadoctores/">{{app.paciente}}</a></td>
+        <td>{{app.fecha}}</td>
 	  <td>{{app.doctor}}</td>
 	  <td>{{app.hora}}</td>
 	 </tr>
@@ -69,14 +69,14 @@
  <div class="row page-head">
   <div class="col-md-4 col-sm-4 col-xs-12">
    <h1>Tratamientos de hoy</h1>
-   <button type="button" onclick="window.location.href = '../../../addtreatment/' ">Agregar tratamiento</button>
+   <button type="button" onclick="window.location.href = '../../../agregartratamiento/' ">Agregar tratamiento</button>
   </div>
   
   <div class="col-md-8 col-sm-8 col-xs-12">
    	<!-- search -->
     <form class="search">
 	  <i class="fa fa-search" aria-hidden="true"></i>
-      <input type="search" class="filter" data-table="table" placeholder="search..." maxlength="100" />
+      <input type="search" class="filter" data-table="table" placeholder="buscar..." maxlength="100" />
     </form>
 
   </div> 
@@ -90,16 +90,15 @@
    <table class="table my-pagination">
     <thead>
 	 <tr class="tr-head">
-	  <th>Sl.No</th>
 	  <th>Nombre paciente</th>
 	  <th>Nombre doctor</th>
-	  <th>titulo</th>
+	  <th>Detalles</th>
 	 </tr>
 	</thead>
 
 	<tbody>
-	{% if today_treatment %}
-		{% for app in today_treatment %}
+	{% if tratamiento_hoy %}
+		{% for app in tratamiento_hoy %}
 	<tr class="tr-body">
 	  <td>{{forloop.counter}}</td>
 	  <td>{{app.paciente}}</td>

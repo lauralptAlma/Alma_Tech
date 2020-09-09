@@ -22,5 +22,6 @@ class CitaForm(ModelForm):
 class TratamientoForm(ModelForm):
 	class Meta:
 		model = Tratamiento
+		readonly_fields = 'creado'
 		fields = ('paciente', 'doctor', 'titulo', 'descripcion', 'posicion_dental', 'test_dental')
 

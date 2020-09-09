@@ -5,11 +5,10 @@
   <div class="home">
    <div class="wrapper">
      <div class="row">
-	 <h1>AlmaTech</h1>
 	    <div class="col-md-offset-3 col-md-6">
 	   <!-- login -->
        <form method="post" action="">
-        <h3>Ingreso</h3>
+
         {% csrf_token %}
         <input type="text" placeholder="Username" name="username" maxlength="100" />
         <input type="password" placeholder="Password" name="password" maxlength="100" />
@@ -40,9 +39,9 @@
    <div class="row">
 
 	<div class="pop-up-col">
-     <h5><a href="/prueba/dotodaypatient/">Doctor</a></h5>
-	 <h5><a href="/prueba/retodaybooking/">Secretaria</a></h5>
-	 <h5><a href="/prueba/patienthome/">Paciente</a></h5>
+     <h5><a href="/prueba/pacientesdeldia/">Doctor</a></h5>
+	 <h5><a href="/prueba/resumendia/">Secretaria</a></h5>
+	 <h5><a href="/prueba/pacienteinicio/">Paciente</a></h5>
     </div>
 
    </div>

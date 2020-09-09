@@ -14,7 +14,7 @@
    	<!-- search -->
     <form class="search">
 	  <i class="fa fa-search" aria-hidden="true"></i>
-      <input type="search" class="filter" data-table="table" placeholder="search..." maxlength="100" />
+      <input type="search" class="filter" data-table="table" placeholder="buscar..." maxlength="100" />
     </form>
 
   </div> 
@@ -40,14 +40,14 @@
 	<tr class="tr-body">
 	  <td>{{forloop.counter}}</td>
 	  <td>{{doc.user.first_name}} {{doc.user.last_name}}</td>
-	  <td>{{doc.user_specialised}}</td>
-	  <td>{{doc.user_mobile}}</td>
-	  <td>{{doc.user_qualification}}</td>
+	  <td>{{doc.user_especialidad }}</td>
+	  <td>{{doc.user_celular}}</td>
+	  <td>{{doc.user_calificacion}}</td>
 	 </tr>
 	 {% endfor %}
 	 {% else %}
      <tr class="no-data">
-      <td colspan="20">No Data</td>
+      <td colspan="20">sin info</td>
      </tr>
      {% endif %}
 	</tbody>

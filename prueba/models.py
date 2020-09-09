@@ -19,9 +19,8 @@ class UserProfile(models.Model):
     user_especialidad = models.CharField(max_length=15, choices=USER_ESPECIALIDAD, blank=True, null=True)
     user_calificacion = models.CharField(max_length=100, blank=True, null=True)
 
-
-    def __str__(self):
-        return str(self.user.username)
+    def __unicode__(self):
+        return self.user
 
 
 class Paciente(models.Model):
@@ -30,7 +29,7 @@ class Paciente(models.Model):
     primer_apellido = models.CharField(max_length=100, null=True, blank=False)
     segundo_apellido = models.CharField(max_length=100, null=True, blank=False)
     fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today)
-    celular_regex = RegexValidator(regex=r'^\?09?\d{9}$', message="Número debe ser ingresado en formato '09XXXXXXX'.")
+    celular_regex = RegexValidator(regex=r'^\?09?\d{10}$', message="Número debe ser ingresado en formato '09XXXXXXX'.")
     celular = models.CharField("Número de teléfono celular", validators=[celular_regex], max_length=9, unique=True, null=False, blank=True)
     email = models.EmailField(max_length=200, unique=True, blank=True)
     alta = models.DateTimeField(auto_now_add=True),
@@ -69,7 +68,6 @@ class Cita(models.Model):
 
     class Meta:
         ordering = ('fecha',)
-
 
     def __str__(self):
         return str(self.paciente)

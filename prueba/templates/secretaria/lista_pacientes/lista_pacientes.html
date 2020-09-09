@@ -7,14 +7,14 @@
 
  <div class="row page-head">
   <div class="col-md-4 col-sm-4 col-xs-12">
-   <h1>Lista pacientes</h1><button type="button" onclick="window.location.href = '../../../addpatient/' ">Agregar paciente</button>
+   <h1>Lista pacientes</h1><button type="button" onclick="window.location.href = '../../../agregarpaciente/' ">Agregar paciente</button>
   </div>
   
   <div class="col-md-8 col-sm-8 col-xs-12">
    	<!-- search -->
     <form class="search">
 	  <i class="fa fa-search" aria-hidden="true"></i>
-      <input type="search" class="filter" data-table="table" placeholder="search..." maxlength="100" />
+      <input type="search" class="filter" data-table="table" placeholder="buscar..." maxlength="100" />
     </form>
 
   </div> 
@@ -28,7 +28,7 @@
    <table class="table my-pagination">
     <thead>
 	 <tr class="tr-head">
-	  <th>Sl.No</th>
+         <th>ID</th>
 	  <th>Nombre</th>
 	  <th>email</th>
 	  <th>celular</th>
@@ -36,12 +36,12 @@
 	</thead>
 
 	<tbody>
-	{% if patients %}
-	{% for pat in patients %}
+	{% if pacientes %}
+	{% for pat in pecientes %}
 	<tr class="tr-body">
 	  <td>{{forloop.counter}}</td>
+        <td>{{pat.id}}</td>
 	  <td>{{pat.nombre}}</td>
-	  <td>{{pat.id}}</td>
 	  <td>{{pat.email}}</td>
 	  <td>{{pat.celular}}</td>
 
