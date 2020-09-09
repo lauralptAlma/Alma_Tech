@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+{% include 'secretaria/common/header.html' %}
+
+<div class="today-booking">
+
+ <div class="row page-head">
+  <div class="col-md-4 col-sm-4 col-xs-12">
+   <h1>Agenda de hoy</h1>
+   <button type="button" onclick="window.location.href = '../../../addappoinment/' ">Agregar cita</button>
+  </div>
+  
+  <div class="col-md-8 col-sm-8 col-xs-12">
+   	<!-- search -->
+    <form class="search">
+	  <i class="fa fa-search" aria-hidden="true"></i>
+      <input type="search" class="filter" data-table="table" placeholder="search..." maxlength="100" />
+    </form>
+
+  </div> 
+ </div>
+
+ 
+<!-- details table -->
+ <div class="row">
+  <div class="col-md-12 table-responsive">
+  <div class="common-table">
+   <table class="table my-pagination">
+    <thead>
+	 <tr class="tr-head">
+	  <th>Sl.No</th>
+	  <th>Fecha</th>
+	  <th>Nombre paciente </th>
+	  <th>Nombre doctor</th>
+	  <th>Hora</th>
+	 </tr>
+	</thead>
+
+	<tbody>
+	{% if today_booking %}
+		{% for app in today_booking %}
+	<tr class="tr-body">
+	  <td>{{forloop.counter}}</td>
+	  <td>{{app.fecha}}</td>
+	  <td><a class="a-link" href="/prueba/doctorlist/">{{app.paciente}}</a></td>
+	  <td>{{app.doctor}}</td>
+	  <td>{{app.hora}}</td>
+	 </tr>
+	 {% endfor %}
+	 {% else %}
+     <tr class="no-data">
+      <td colspan="20">sin info</td>
+     </tr>
+     {% endif %}
+	</tbody>
+
+	<tfoot></tfoot>
+   </table>
+   </div>
+ </div>
+</div>
+<!-- /details table -->
+
+
+</div><!-- today-booking -->
+<div class="today-booking">
+
+ <div class="row page-head">
+  <div class="col-md-4 col-sm-4 col-xs-12">
+   <h1>Tratamientos de hoy</h1>
+   <button type="button" onclick="window.location.href = '../../../addtreatment/' ">Agregar tratamiento</button>
+  </div>
+  
+  <div class="col-md-8 col-sm-8 col-xs-12">
+   	<!-- search -->
+    <form class="search">
+	  <i class="fa fa-search" aria-hidden="true"></i>
+      <input type="search" class="filter" data-table="table" placeholder="search..." maxlength="100" />
+    </form>
+
+  </div> 
+ </div>
+
+ 
+<!-- details table -->
+ <div class="row">
+  <div class="col-md-12 table-responsive">
+  <div class="common-table">
+   <table class="table my-pagination">
+    <thead>
+	 <tr class="tr-head">
+	  <th>Sl.No</th>
+	  <th>Nombre paciente</th>
+	  <th>Nombre doctor</th>
+	  <th>titulo</th>
+	 </tr>
+	</thead>
+
+	<tbody>
+	{% if today_treatment %}
+		{% for app in today_treatment %}
+	<tr class="tr-body">
+	  <td>{{forloop.counter}}</td>
+	  <td>{{app.paciente}}</td>
+	  <td>{{app.doctor}}</td>
+	  <td>{{app.titulo}}</td>
+	 </tr>
+	 {% endfor %}
+	 {% else %}
+     <tr class="no-data">
+      <td colspan="20">sin datos</td>
+     </tr>
+     {% endif %}
+	</tbody>
+
+	<tfoot></tfoot>
+   </table>
+   </div>
+ </div>
+</div>
+<!-- /details table -->
+
+
+</div>
+
+{% endblock %}
