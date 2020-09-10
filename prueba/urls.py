@@ -43,5 +43,6 @@ urlpatterns = [
     url(r'^pacientedetalles/$', pacientedetalles, name='pacientedetalles'),
     url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
 
+
 ]
 
