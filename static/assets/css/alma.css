@@ -1,0 +1,370 @@
+{
+%
+load
+static
+%
+}
+.bg-gradient-primary-alma {
+    background-color: #39b9a7;
+    background-image: linear-gradient(180deg, #0097a7, #00838f 70%);
+    background-size: cover;
+}
+
+.text-primary-alma {
+    color: #00838f !important;
+}
+
+.primary-color-alma {
+    color: #0097a7 !important;
+}
+
+.text-alma {
+    font-family: Roboto;
+    color: #5a5c69;
+}
+
+.page-link:hover {
+    z-index: 2;
+    color: #00838f;
+    text-decoration: none;
+    background-color: #eaecf4;
+    border-color: #dddfeb;
+}
+
+a:hover {
+    color: #68d9d3;
+    text-decoration: underline;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #00acc1;
+    background-color: #fff;
+    border: 1px solid #dddfeb;
+}
+
+a {
+    color: #00acc1;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #0097a7;
+    border-color: #0097a7;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #00ACC1;
+    border-color: #0097a7;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show > .btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .2rem rgba(0, 131, 143, 0.5);
+}
+
+.btn-primary.focus, .btn-primary:focus, .btn-primary:hover {
+    color: #fff;
+    background-color: #0097A7;
+    border-color: #0097A7;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #00ACC1;
+    border-color: #00ACC1;
+}
+
+.warning {
+    color: #D32F2F;
+}
+
+.text-primary {
+    color: #00838f !important;
+}
+
+.dropdown .dropdown-list .dropdown-header {
+    background-color: #00ACC1;
+    border: 1px solid #00ACC1;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    color: #fff;
+}
+
+/*Cambio de logo según tamaño de pantalla*/
+@media only screen and (max-width: 767px) {
+    #logo {
+        content: url("/static/assets/img/logos/logo_imagen.png");
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 767px) {
+    #logo {
+        content: url("/static/assets/img/logos/LogoHAlma.png");
+    }
+}
+
+/*CSS CPO*/
+.diente {
+    position: static;
+    width: 0px;
+    height: auto;
+    margin-left: 50px;
+    display: inline-block;
+}
+
+.primer-diente {
+    position: static;
+    width: 0px;
+    height: auto;
+    margin-left: 0px;
+    display: inline-block;
+}
+
+.cuadro {
+    background-color: #FFFFFF;
+    border: 1px solid #7F7F7F;
+    position: relative;
+    width: 25px;
+    height: 15px;
+    left: 45px;
+    -webkit-border-radius: 80px 80px 0px 15px;
+    -moz-border-radius: 80px 80px 0px 15px;
+    border-radius: 80px 80px 0px 15px;
+}
+
+.cuadro:hover {
+    /*background: rgba(117, 198, 243, 0.4);*/
+
+    cursor: pointer;
+}
+
+.izquierdo {
+    top: 1px !important;
+    left: 28px !important;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+
+.debajo {
+    top: 2px !important;
+    left: 45px !important;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.derecha {
+    top: -29px !important;
+    left: 61px !important;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.centro {
+    background: #F3F3F3;
+    border: 1px solid #7F7F7F;
+    width: 25px;
+    height: 25px;
+    top: -49px;
+    left: 45px;
+    position: relative;
+}
+
+.centro:hover {
+    border: 1px solid rgba(117, 198, 243, 0.4);
+    /*background-color: rgba(117, 198, 243, 0.4);*/
+
+    cursor: pointer;
+}
+
+/*
+#tlr {
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+}
+
+#tr {
+    border-right: 1px solid black;
+}
+
+#tll {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+}
+
+#tl {
+    border-left: 1px solid black;
+}
+
+#blr {
+    border-right: 1px solid black;
+}
+
+#br {
+    border-right: 1px solid black;
+}
+
+#bl {
+    border-left: 1px solid black;
+}
+
+#bll {
+    border-left: 1px solid black;
+}
+*/
+.decayed-tooth {
+    background-color: #D32F2F !important;
+}
+
+.filled-tooth {
+    background-color: #0D47A1;
+}
+
+.lacking-tooth {
+    background-color: #747f7d !important;
+}
+
+.missing-tooth {
+    background-color: #f8d228 !important;
+}
+
+.kill {
+    background-color: green;
+}
+
+.diente-leche {
+    position: relative;
+    width: 0px;
+    height: auto;
+    margin-left: 50px;
+    display: inline-block;
+}
+
+.primer-diente-leche {
+    position: relative;
+    width: 0px;
+    height: auto;
+    margin-left: 0px;
+    display: inline-block;
+}
+
+.cuadro-leche {
+    border: 1px solid #7F7F7F;
+    position: relative;
+    width: 13px;
+    height: 13px;
+    left: 45px;
+    -webkit-border-radius: 80px 80px 0px 15px;
+    -moz-border-radius: 80px 80px 0px 15px;
+    border-radius: 80px 80px 0px 15px;
+}
+
+.cuadro-leche:hover {
+    /*background: rgba(117, 198, 243, 0.4);*/
+    cursor: pointer;
+}
+
+.izquierdo-leche {
+    top: -4px !important;
+    left: 37px !important;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+
+.top-leche {
+    width: 15px;
+    left: 47px;
+}
+
+.debajo-leche {
+    width: 15px;
+    top: -8px !important;
+    left: 47px !important;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.derecha-leche {
+    top: -30px !important;
+    left: 58px !important;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.centro-leche {
+    background: #F3F3F3;
+    border: 1px solid #7F7F7F;
+    width: 15px;
+    height: 13px;
+    top: -43px;
+    left: 47px;
+    position: relative;
+}
+
+.centro-leche:hover {
+    border: 1px solid rgba(117, 198, 243, 0.4);
+    /*background-color: rgba(117, 198, 243, 0.4);*/
+
+    cursor: pointer;
+}
+
+.referencia {
+    width: 24px;
+    height: 22px;
+    display: inline;
+}
+
+.label-alma {
+    background: #fed74f;
+}
+
+.btn-cariado {
+    color: #fff;
+    background-color: #D32F2F;
+    border-color: #D32F2F;
+}
+
+.btn-obturado {
+    color: #fff;
+    background-color: #0D47A1;
+    border-color: #0D47A1;
+}
+
+.btn-perdido {
+    color: #fff;
+    background-color: #F4B30D;
+    border-color: #F4B30D;
+}
+
+.btn-ausente {
+    color: #fff;
+    background-color: #757575;
+    border-color: #757575;
+}
+

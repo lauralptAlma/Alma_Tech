@@ -11,14 +11,26 @@ from .models import UserProfile, Tratamiento, Paciente, Cita
 from datetime import date
 
 
+def pruebaBaseFront(request):
+    form = PacienteForm()
+    if request.method == 'POST':
+        form = Paciente(request.POST)
+        if form.is_valid():
+            patient = form.save()
+            return HttpResponseRedirect("/prueba/resumendia/")
+    return render(request, "almaFront/agregar_paciente.html", {'form': form})
+
+
 # doctor
 @login_required
 def pacientesdeldia(request):
     return render(request, "doctor/paciente_dia/paciente_dia.html", {})
 
+
 @login_required
 def pacientedeldiadetalles(request):
     return render(request, "doctor/paciente_dia/paciente_dia_detalles.html", {})
+
 
 @login_required
 def doccambiopass(request):
@@ -32,6 +44,8 @@ def resumendia(request):
     tratamiento_hoy = Tratamiento.objects.filter(creado=date.today())
     return render(request, "secretaria/agenda_hoy/agenda_hoy.html",
                   {'agenda_hoy': agenda_hoy, 'tratamiento_hoy': tratamiento_hoy})
+
+
 @login_required
 def agregarcita(request):
     form = CitaForm()
@@ -41,6 +55,7 @@ def agregarcita(request):
             cita = form.save()
             return HttpResponseRedirect("/prueba/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'form': form})
+
 
 @login_required
 def agregartratamiento(request):
@@ -52,10 +67,12 @@ def agregartratamiento(request):
             return HttpResponseRedirect("/prueba/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_tratamiento.html", {'form': form})
 
+
 @login_required
 def listadoctores(request):
     doctors = UserProfile.objects.filter(user_type='DOCTOR')
     return render(request, "secretaria/lista_doctores/lista_doctores.html", {'doctors': doctors})
+
 
 @login_required
 def listapacientes(request):
@@ -63,9 +80,11 @@ def listapacientes(request):
     print(pacientes)
     return render(request, "secretaria/lista_pacientes/lista_pacientes.html", {'patients': pacientes})
 
+
 @login_required
 def rechangepassword(request):
     return render(request, "secretaria/common/cambiar_pass.html", {})
+
 
 @login_required
 def agregarpaciente(request):
@@ -83,9 +102,11 @@ def agregarpaciente(request):
 def pacienteinicio(request):
     return render(request, "paciente/home/home.html", {})
 
+
 @login_required
 def pacientedetalles(request):
     return render(request, "paciente/home/detalles.html", {})
+
 
 @login_required
 def pacientecambiopass(request):

@@ -24,9 +24,9 @@ class UserProfile(models.Model):
 
 
 class Paciente(models.Model):
-    documento = models.CharField(primary_key=True, max_length=8, help_text="Sin puntos ni guión", null=False, blank=True)
-    nombre = models.CharField(max_length=100)
-    primer_apellido = models.CharField(max_length=100, null=True, blank=False)
+    documento = models.CharField(primary_key=True, max_length=8, null=False, blank=False)
+    nombre = models.CharField(max_length=100, null=False, blank=False)
+    primer_apellido = models.CharField(max_length=100, null=False, blank=False)
     segundo_apellido = models.CharField(max_length=100, null=True, blank=False)
     fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today)
     celular_regex = RegexValidator(regex=r'^\?09?\d{10}$', message="Número debe ser ingresado en formato '09XXXXXXX'.")
