@@ -44,4 +44,3 @@ urlpatterns = [
     url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
 
 ]
-
