@@ -1,2 +1,2 @@
 
-web: gunicorn almatech.wsgi
+web: gunicorn mysite.wsgi --log-file -
