@@ -102,13 +102,12 @@ class Integrante(models.Model):
         return self.nucleo
 
 
-class Tratamiento(models.Model):
+class Consulta(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='trat_doctor', on_delete=models.CASCADE)
-    titulo = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=100, blank=True, null=True)
-    posicion_dental = models.CharField(max_length=50, blank=True, null=True)
-    test_dental = models.CharField(max_length=100, blank=True, null=True)
+    diagnostico = models.CharField(max_length=250, default='', blank=False, null=False)
+    tratamiento = models.CharField(max_length=250, default='', blank=False, null=False)
+    indicaciones = models.CharField(max_length=250, default='', blank=False, null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 

@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Paciente, Cita, Tratamiento, Nucleo, Integrante
+from .models import Paciente, Cita, Consulta, Nucleo, Integrante
 
 
 class IngresoForm(ModelForm):
@@ -27,11 +27,11 @@ class CitaForm(ModelForm):
         fields = ('paciente', 'doctor', 'fecha', 'hora')
 
 
-class TratamientoForm(ModelForm):
+class ConsultaForm(ModelForm):
     class Meta:
-        model = Tratamiento
+        model = Consulta
         readonly_fields = 'creado'
-        fields = ('paciente', 'doctor', 'titulo', 'descripcion', 'posicion_dental', 'test_dental')
+        fields = ('paciente', 'doctor', 'diagnostico', 'tratamiento', 'indicaciones')
 
 
 '''IntegranteFormset = inlineformset_factory(
