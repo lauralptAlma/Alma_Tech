@@ -5,9 +5,10 @@ from django.views import View
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
+from django.views.generic import CreateView, UpdateView
 
-from .forms import CitaForm, PacienteForm
-from .models import UserProfile, Tratamiento, Paciente, Cita
+from .forms import CitaForm, PacienteForm, IntegranteFormset
+from .models import UserProfile, Tratamiento, Paciente, Cita, Nucleo
 from datetime import date
 
 
@@ -111,6 +112,64 @@ def pacientedetalles(request):
 @login_required
 def pacientecambiopass(request):
     return render(request, "paciente/common/cambiar_constrasena.html", {})
+
+
+# nucleo
+class ParentCreateView(CreateView):
+    model = Nucleo
+    fields = ["matricula"]
+
+    def get_context_data(self, **kwargs):
+        # we need to overwrite get_context_data
+        # to make sure that our formset is rendered
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["integrantes"] = IntegranteFormset(self.request.POST)
+        else:
+            data["integrantes"] = IntegranteFormset()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        children = context["integrantes"]
+        self.object = form.save()
+        if children.is_valid():
+            children.instance = self.object
+            children.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("nucleos:list")
+
+# actualizar nucleo
+class NucleoUpdateView(UpdateView):
+    model = Nucleo
+    fields = ["matricula"]
+    def get_context_data(self, **kwargs):
+        # we need to overwrite get_context_data
+        # to make sure that our formset is rendered.
+        # the difference with CreateView is that
+        # on this view we pass instance argument
+        # to the formset because we already have
+        # the instance created
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data["integrantes"] = IntegranteFormset(self.request.POST, instance=self.object)
+        else:
+            data["integrantes"] = IntegranteFormset(instance=self.object)
+        return data
+    def form_valid(self, form):
+        context = self.get_context_data()
+        children = context["integrantes"]
+        self.object = form.save()
+        if children.is_valid():
+            children.instance = self.object
+            children.save()
+        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse("nucleos:list")
+
+
 
 
 # frontpage
