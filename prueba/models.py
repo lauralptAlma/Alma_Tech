@@ -44,8 +44,6 @@ class Paciente(models.Model):
     primer_apellido = models.CharField(max_length=100, null=True, blank=False)
     segundo_apellido = models.CharField(max_length=100, null=True, blank=False)
     fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today)
-    # Clinicos.
-
     # Contacto
     celular_regex = RegexValidator(regex=r'^\+?1?\d{9,9}$',
                                    message="El número debe ser del formato: '+XXXXXXXXX'. 9 digitos admitidos.")

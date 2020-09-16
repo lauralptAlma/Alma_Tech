@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
+import dj_database_url
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -26,7 +26,6 @@ SECRET_KEY = '=bk%+xmok^b&wh=wg1)t8ms-qapvsypzy04g85u-wz011n^y$#'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -71,7 +70,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
@@ -81,7 +79,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'prueba/db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -101,7 +98,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -115,7 +111,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
@@ -125,9 +120,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
-MEDIA_URL   = '/media/'
-MEDIA_ROOT  = os.path.join(os.path.dirname(BASE_DIR),"media_cdn")
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
 
+DATABASES['default'] = dj_database_url.config()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ALLOWED_HOSTS = ['*']
+DEBUG = False
 
-django_heroku.settings(locals())
+try:
+    from .local_settings import *
+except ImportError:
+    pass
