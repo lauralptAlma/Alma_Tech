@@ -1,1 +1,2 @@
-web: gunicorn prueba.wsgi
+
+web: gunicorn almatech.wsgi
