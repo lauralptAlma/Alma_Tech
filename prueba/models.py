@@ -11,13 +11,14 @@ NUCLEO_OPCIONES = (
     ('CONYUGE', 'CONYUGE'), ('MADRE', 'MADRE'), ('PADRE', 'PADRE'), ('HIJO', 'HIJO'),)
 # ANTECEDENTES OPTIONS
 CARDIOVASCULAR_OPCIONES = (
-    ('H.T.A.', 'HIPERTENSION'), ('ARRITMIAS', 'ARRITMIAS'), ('I.A.M', 'INFARTO MIOCARDIO'), ('OTROS', 'OTROS'))
+    ('NO', 'NO'), ('H.T.A.', 'HIPERTENSION'), ('ARRITMIAS', 'ARRITMIAS'), ('I.A.M', 'INFARTO MIOCARDIO'), ('OTROS', 'OTROS'))
 ENDOCRINOLOGICOS_OPCIONES = (
-    ('DIABETES', 'DIABETES'), ('TIROIDES', 'TIROIDES'), ('DISPLEMIAS BAJO TRATAMIENTO', 'Infarto Agudo de Miocardio'))
+    ('NO', 'NO'), ('DIABETES', 'DIABETES'), ('TIROIDES', 'TIROIDES'), ('DISPLEMIAS BAJO TRATAMIENTO', 'DISPLEMIAS BAJO TRATAMIENTO'), ('OTROS', 'OTROS'))
 NEFROUROLOGICOS_OPCIONES = (
-    ('UROLITIASIS', 'UROLITIASIS'), ('GLOMERULOPATIAS', 'GLOMERULOPATIAS'), ('MONORRENO', 'MONORRENO'))
-OSTEOARTICULARES_OPCIONES = (('LUXACIONES', 'LUXACIONES'), ('FRACTURAS', 'FRACTURAS'), ('OTROS', 'OTROS'))
-SN_OPCIONES = (('SI', 'SI'), ('NO', 'NO'))
+    ('NO', 'NO'), ('UROLITIASIS', 'UROLITIASIS'), ('GLOMERULOPATIAS', 'GLOMERULOPATIAS'), ('MONORRENO', 'MONORRENO'))
+OSTEOARTICULARES_OPCIONES = (
+    ('NO', 'NO'),('LUXACIONES', 'LUXACIONES'), ('FRACTURAS', 'FRACTURAS'), ('OTROS', 'OTROS'))
+SN_OPCIONES = (('NO', 'NO'), ('SI', 'SI'))
 
 
 # MODELOS
@@ -59,19 +60,35 @@ class Paciente(models.Model):
     def __str__(self):
         return str(self.nombre)
 
+
 class AntecedentesClinicos(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)  # FK
     fumador = models.CharField('Tabaco', max_length=2, choices=SN_OPCIONES, default='')
-    coproparasitario = alergias = models.CharField('Coproparasitario', max_length=2, choices=SN_OPCIONES, default='')
+    alcohol = models.CharField('Alcohol', max_length=2, choices=SN_OPCIONES, default='')
+    coproparasitario = models.CharField('Coproparasitario', max_length=2, choices=SN_OPCIONES, default='')
     aparato_digestivo = models.CharField('Ap.Digestivo', max_length=2, choices=SN_OPCIONES, default='')
+    desc_aparato_digestivo = models.CharField('Descripción Ap.Digestivo', max_length=150, null=True, blank=True)
+    dermatologicos = models.CharField('Dermatológicos', max_length=2, choices=SN_OPCIONES, default='')
+    desc_dermatologicos = models.CharField('Descripción Dermatológicos', max_length=150, null=True, blank=True)
     alergias = models.CharField('Alergias', max_length=2, choices=SN_OPCIONES, default='')
-    oncologicas = models.CharField('Oncologicas', max_length=2, choices=SN_OPCIONES, default='')
+    desc_alergias = models.CharField('Descripción Alergias', max_length=150, null=True, blank=True)
     autoinmnunes = models.CharField('Autoinmunes', max_length=2, choices=SN_OPCIONES, default='')
+    desc_autoinmnunes = models.CharField('Descripción Autoinmunes', max_length=150, null=True, blank=True)
+    oncologicas = models.CharField('Oncológicas', max_length=2, choices=SN_OPCIONES, default='')
+    desc_oncologicas = models.CharField('Descripción Oncológicas', max_length=150, null=True, blank=True)
+    hematologicas = models.CharField('Hematológicas', max_length=2, choices=SN_OPCIONES, default='')
+    desc_hematologicas = models.CharField('Descripción Hematológicas', max_length=150, null=True, blank=True)
     intervenciones = models.CharField('Intervenciones', max_length=2, choices=SN_OPCIONES, default='')
-    endocrinometabólico = models.CharField('Endocrinometabólico', max_length=27, choices=ENDOCRINOLOGICOS_OPCIONES,
-                                           default='')
+    desc_intervenciones = models.CharField('Descripción Intervenciones', max_length=150, null=True, blank=True)
+    toma_medicacion = models.CharField('Medicación Habitual', max_length=2, choices=SN_OPCIONES, default='')
+    desc_medicacion = models.CharField('Descripción Medicación', max_length=150, null=True, blank=True)
+    endocrinometabolico = models.CharField('Endocrinometabólico', max_length=27, choices=ENDOCRINOLOGICOS_OPCIONES, default='')
+    desc_endocrinometabolico = models.CharField('Descripción Endocrinometabólico', max_length=150, null=True, blank=True)
     cardiovascular = models.CharField('Cardiovascular', max_length=27, choices=CARDIOVASCULAR_OPCIONES, default='')
-    observations = models.TextField('Observaciones')
+    desc_cardiovascular = models.CharField('Descripción Cardiovascular', max_length=150, null=True, blank=True)
+    nefrourologicos = models.CharField('Nefrourológicos', max_length=27, choices=NEFROUROLOGICOS_OPCIONES, default='')
+    desc_nefrourologicos = models.CharField('Descripción Cardiovascular', max_length=150, null=True, blank=True)
+    observations = models.TextField('Observaciones', null=True, blank=True)
 
     def __str__(self):
         return str(self.paciente)

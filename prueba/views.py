@@ -184,3 +184,6 @@ def ingreso(request):
             else:
                 return HttpResponseRedirect('/prueba/pacienteincio')
     return render(request, 'frontpage/index.html')
+
+
+# antecedentes paciente
