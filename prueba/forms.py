@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Paciente, Cita, Tratamiento, Nucleo, Integrante
+from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos
 
 
 class IngresoForm(ModelForm):
@@ -39,11 +39,11 @@ class CitaForm(ModelForm):
         fields = ('paciente', 'doctor', 'fecha', 'hora')
 
 
-class TratamientoForm(ModelForm):
+class ConsultaForm(ModelForm):
     class Meta:
-        model = Tratamiento
+        model = Consulta
         readonly_fields = 'creado'
-        fields = ('paciente', 'doctor', 'titulo', 'descripcion', 'posicion_dental', 'test_dental')
+        fields = ('paciente', 'doctor', 'diagnostico', 'tratamiento', 'indicaciones')
 
 
 '''IntegranteFormset = inlineformset_factory(
@@ -83,3 +83,12 @@ def integrante_generator(request):
 
 def IntegranteFormset():
     return None
+
+
+class AntecedenteForm(ModelForm):
+    class Meta:
+        model = AntecedentesClinicos
+        fields = ('paciente', 'fumador', 'alcohol', 'coproparasitario', 'aparato_digestivo', 'desc_aparato_digestivo', 'dermatologicos', 'desc_dermatologicos',
+                  'alergias', 'desc_alergias', 'autoinmnunes', 'desc_autoinmnunes', 'oncologicas', 'desc_oncologicas', 'hematologicas', 'desc_hematologicas',
+                  'hematologicas', 'desc_hematologicas', 'intervenciones', 'desc_intervenciones', 'toma_medicacion', 'desc_medicacion', 'endocrinometabolico',
+                  'desc_endocrinometabolico','nefrourologicos','desc_nefrourologicos', 'observations')

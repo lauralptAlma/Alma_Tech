@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.views.generic import CreateView, UpdateView
 
 from .forms import CitaForm, PacienteForm, IntegranteFormset
-from .models import UserProfile, Tratamiento, Paciente, Cita, Nucleo
+from .models import UserProfile, Consulta, Paciente, Cita, Nucleo
 from datetime import date
 
 
@@ -42,9 +42,9 @@ def doccambiopass(request):
 @login_required
 def resumendia(request):
     agenda_hoy = Cita.objects.filter(creado=date.today())
-    tratamiento_hoy = Tratamiento.objects.filter(creado=date.today())
+    consulta_hoy = Consulta.objects.filter(creado=date.today())
     return render(request, "secretaria/agenda_hoy/agenda_hoy.html",
-                  {'agenda_hoy': agenda_hoy, 'tratamiento_hoy': tratamiento_hoy})
+                  {'agenda_hoy': agenda_hoy, 'consulta_hoy': consulta_hoy})
 
 
 @login_required
@@ -194,3 +194,6 @@ def ingreso(request):
             else:
                 return HttpResponseRedirect('/prueba/pacienteincio')
     return render(request, 'frontpage/index.html')
+
+
+# antecedentes paciente
