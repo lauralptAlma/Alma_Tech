@@ -166,7 +166,7 @@ class Nucleo(models.Model):
         verbose_name_plural = "Nucleos"
 
     def __str__(self):
-        return self.matricula or ''
+        return str(self.matricula) or ''
 
 
 class Integrante(models.Model):
