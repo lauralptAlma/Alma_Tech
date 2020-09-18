@@ -1,0 +1,24 @@
+{% extends "almaFront/blank.html" %}
+{% load static %}
+{% block tab-title %}Paciente Nuevo{% endblock %}
+{% block user-name %}Alfredo Balduini{% endblock %}
+{% block page-title %}Agregar Paciente{% endblock %}
+
+{% block page-content %}
+    <div class="form-row">
+        <div class="form-group col-lg-10">
+            <form method="post" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="footer" align="right">
+                    <button type="button" class="btn btn-secondary"
+                            onclick="window.location.href = '../../../resumendia/' ">Atrás
+                    </button>
+                    <button type="submit" class="btn btn-info">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+{% endblock %}

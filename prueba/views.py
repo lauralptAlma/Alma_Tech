@@ -12,6 +12,16 @@ from .models import UserProfile, Tratamiento, Paciente, Cita, Nucleo
 from datetime import date
 
 
+def pruebaBaseFront(request):
+    form = PacienteForm()
+    if request.method == 'POST':
+        form = Paciente(request.POST)
+        if form.is_valid():
+            patient = form.save()
+            return HttpResponseRedirect("/prueba/resumendia/")
+    return render(request, "almaFront/agregar_paciente.html", {'form': form})
+
+
 # doctor
 @login_required
 def pacientesdeldia(request):

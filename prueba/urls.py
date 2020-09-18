@@ -20,6 +20,8 @@ from .views import (
     pacienteinicio,
     pacientedetalles,
     pacientecambiopass,
+
+    pruebaBaseFront,
 )
 
 urlpatterns = [
@@ -43,4 +45,5 @@ urlpatterns = [
     url(r'^pacientedetalles/$', pacientedetalles, name='pacientedetalles'),
     url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
 
+    url(r'^pruebafront/$', pruebaBaseFront),
 ]
