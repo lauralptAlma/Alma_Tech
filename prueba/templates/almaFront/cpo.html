@@ -1,0 +1,357 @@
+{% extends "almaFront/blank.html" %}
+{% load static %}
+{% block tab-title %}CPO{% endblock %}
+{% block user-name %}Alfredo Balduini{% endblock %}
+{% block page-title %}Registrar CPO{% endblock %}
+{% block page-content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="container pt-3">
+                            <div class="row">
+                                <div id="tr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                                <div id="tl" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                                <div id="tlr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                </div>
+                                <div id="tll" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="blr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                </div>
+                                <div id="bll" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                                <div id="br" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                                <div id="bl" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                            </div>
+                        </div>
+                        <form>
+                            <div class="row">
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                    <div class="input-group mb-3 input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">CeoD</span>
+                                        </div>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="input-group mb-3 input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">CeoS</span>
+                                        </div>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                    <div class="input-group mb-3 input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">CpoD</span>
+                                        </div>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="input-group mb-3 input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">CpoS</span>
+                                        </div>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <h6 class="card-subtitle mb-2 text-primary-alma">Seleccionar Estado</h6>
+                            <p class="text-alma">Presione el botón del estado correspondiente.</p>
+                            <!--Botones para seleccionar situación del diente-->
+                            <div id="controls">
+                                <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                                    <label id="cariado" class="btn btn-cariado active">
+                                        <input type="radio" name="options" id="option1" autocomplete="off"
+                                               checked>Cariado</label>
+                                    <label id="obturado" class="btn btn-obturado">
+                                        <input type="radio" name="options" id="option2" autocomplete="off"> Obturado
+                                    </label>
+                                    <label id="perdido" class="btn btn-perdido">
+                                        <input type="radio" name="options" id="option3" autocomplete="off"> Perdido
+                                    </label>
+                                    <label id="ausente" class="btn btn-ausente">
+                                        <input type="radio" name="options" id="option4" autocomplete="off"> Ausente
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <!--Referencias-->
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div style="height: 20px; width:20px; display:inline-block;"
+                                     class="decayed-tooth"></div>
+                                = Cariado
+                                <br>
+                                <div style="height: 20px; width:20px; display:inline-block;"
+                                     class="filled-tooth"></div>
+                                = Obturación
+                                <br>
+                                <div>
+                                    <img class="referencia"
+                                         src="{% static 'assets/img/CPO/ausente.svg' %}"> =
+                                    <span style="display:inline-block;">Ausente</span>
+                                </div>
+
+                                <div>
+                                    <img class="referencia"
+                                         src="{% static 'assets/img/CPO/perdido.svg' %}"> =
+                                    <span style="display:inline-block;">Perdido</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Referencias-->
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="card col-sm-10">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
+                                <div style="height: 20px; width:20px; display:inline-block;"
+                                     class="decayed-tooth"></div>
+                                = Cariado
+                                <br>
+                                <div>
+                                    <img class="referencia" src="{% static 'assets/img/CPO/ausente.svg' %}"> =
+                                    <span style="display:inline-block;"> Pieza Ausente</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div style="height: 20px; width:20px; display:inline-block;"
+                                     class="filled-tooth"></div>
+                                = Obturación
+                                <br>
+                                <div>
+                                    <img class="referencia" src="{% static 'assets/img/CPO/perdido.svg' %}"> =
+                                    <span style="display:inline-block;"> Pieza Perdida</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+    <script type="text/javascript">
+        function replaceAll(find, replace, str) {
+            return str.replace(new RegExp(find, 'g'), replace);
+        }
+
+        function createOdontogram() {
+            var htmlLecheLeft = "",
+                htmlLecheRight = "",
+                htmlLeft = "",
+                htmlRight = "",
+                a = 1;
+            for (var i = 9 - 1; i >= 1; i--) {
+                //Dientes Definitivos Cuandrante Derecho (Superior/Inferior)
+                let claseDiente = "diente";
+                if (i == 8 || i == 1) {
+                    claseDiente = "primer-diente";
+                }
+                /*htmlRight += '<div data-name="value" id="dienteindex' + i + '" class="diente">' +*/
+                htmlRight += '<div data-name="value" id="dienteindex' + i + '" class=' + claseDiente + '>' +
+                    '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
+                    '<div id="tindex' + i + '" class="cuadro click">' +
+                    '</div>' +
+                    '<div id="lindex' + i + '" class="cuadro izquierdo click">' +
+                    '</div>' +
+                    '<div id="bindex' + i + '" class="cuadro debajo click">' +
+                    '</div>' +
+                    '<div id="rindex' + i + '" class="cuadro derecha click click">' +
+                    '</div>' +
+                    '<div id="cindex' + i + '" class="centro click">' +
+                    '</div>' +
+                    '</div>';
+                //Dientes Definitivos Cuandrante Izquierdo (Superior/Inferior)
+                htmlLeft += '<div id="dienteindex' + a + '" class=' + claseDiente + '>' +
+                    '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill badge-info">index' + a + '</span>' +
+                    '<div id="tindex' + a + '" class="cuadro click">' +
+                    '</div>' +
+                    '<div id="lindex' + a + '" class="cuadro izquierdo click">' +
+                    '</div>' +
+                    '<div id="bindex' + a + '" class="cuadro debajo click">' +
+                    '</div>' +
+                    '<div id="rindex' + a + '" class="cuadro derecha click click">' +
+                    '</div>' +
+                    '<div id="cindex' + a + '" class="centro click">' +
+                    '</div>' +
+                    '</div>';
+                if (i <= 5) {
+                    //Dientes Temporales Cuandrante Derecho (Superior/Inferior)
+                    htmlLecheRight += '<div id="dienteLindex' + i + '" style="left: -25%;" class="diente-leche">' +
+                        '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill label-alma">index' + i + '</span>' +
+                        '<div id="tlecheindex' + i + '" class="cuadro-leche top-leche click">' +
+                        '</div>' +
+                        '<div id="llecheindex' + i + '" class="cuadro-leche izquierdo-leche click">' +
+                        '</div>' +
+                        '<div id="blecheindex' + i + '" class="cuadro-leche debajo-leche click">' +
+                        '</div>' +
+                        '<div id="rlecheindex' + i + '" class="cuadro-leche derecha-leche click click">' +
+                        '</div>' +
+                        '<div id="clecheindex' + i + '" class="centro-leche click">' +
+                        '</div>' +
+                        '</div>';
+                }
+                if (a < 6) {
+                    let claseDienteLeche = "diente-leche";
+                    if (a == 1) {
+                        claseDienteLeche = "primer-diente-leche";
+                    }
+                    //Dientes Temporales Cuandrante Izquierdo (Superior/Inferior)
+                    htmlLecheLeft += '<div id="dienteLindex' + a + '" class=' + claseDienteLeche + '>' +
+                        '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill label-alma">index' + a + '</span>' +
+                        '<div id="tlecheindex' + a + '" class="cuadro-leche top-leche click">' +
+                        '</div>' +
+                        '<div id="llecheindex' + a + '" class="cuadro-leche izquierdo-leche click">' +
+                        '</div>' +
+                        '<div id="blecheindex' + a + '" class="cuadro-leche debajo-leche click">' +
+                        '</div>' +
+                        '<div id="rlecheindex' + a + '" class="cuadro-leche derecha-leche click click">' +
+                        '</div>' +
+                        '<div id="clecheindex' + a + '" class="centro-leche click">' +
+                        '</div>' +
+                        '</div>';
+                }
+                a++;
+            }
+            $("#tr").append(replaceAll('index', '1', htmlRight));
+            $("#tl").append(replaceAll('index', '2', htmlLeft));
+            $("#tlr").append(replaceAll('index', '5', htmlLecheRight));
+            $("#tll").append(replaceAll('index', '6', htmlLecheLeft));
+
+
+            $("#bl").append(replaceAll('index', '3', htmlLeft));
+            $("#br").append(replaceAll('index', '4', htmlRight));
+            $("#bll").append(replaceAll('index', '7', htmlLecheLeft));
+            $("#blr").append(replaceAll('index', '8', htmlLecheRight));
+        }
+
+        $(document).ready(function () {
+            createOdontogram();
+            $(".click").click(function (event) {
+                var control = $("#controls").children().find('.active').attr('id');
+                var cuadro = $(this).find("input[name=cuadro]:hidden").val();
+                console.log($(this).attr('id'))
+                switch (control) {
+                    case "cariado":
+                        if ($(this).hasClass("filled-tooth")) {
+                            $(this).removeClass('filled-tooth');
+                            $(this).addClass('decayed-tooth');
+                        } else if ($(this).hasClass("missing-tooth")) {
+                            $(this).parent().children().each(function (index, el) {
+                                $(el).removeClass("missing-tooth");
+                            });
+                            $(this).addClass('decayed-tooth');
+                        } else if ($(this).hasClass("lacking-tooth")) {
+                            $(this).parent().children().each(function (index, el) {
+                                $(el).removeClass("lacking-tooth");
+                            });
+                            $(this).addClass('decayed-tooth');
+                        } else {
+                            if ($(this).hasClass("decayed-tooth")) {
+                                $(this).removeClass('decayed-tooth');
+                            } else {
+                                $(this).addClass('decayed-tooth');
+                            }
+                        }
+                        break;
+                    case "obturado":
+                        if ($(this).hasClass("decayed-tooth")) {
+                            $(this).removeClass('decayed-tooth');
+                            $(this).addClass('filled-tooth');
+                        } else if ($(this).hasClass("missing-tooth")) {
+                            $(this).parent().children().each(function (index, el) {
+                                $(el).removeClass("missing-tooth");
+                            });
+                            $(this).addClass('filled-tooth');
+                        } else if ($(this).hasClass("lacking-tooth")) {
+                            $(this).parent().children().each(function (index, el) {
+                                $(el).removeClass("lacking-tooth");
+                            });
+                            $(this).addClass('filled-tooth');
+                        } else {
+                            if ($(this).hasClass("filled-tooth")) {
+                                $(this).removeClass('filled-tooth');
+                            } else {
+                                $(this).addClass('filled-tooth');
+                            }
+                        }
+                        break;
+                    case "perdido":
+                        var dientePosition = $(this).position();
+                        console.log($(this))
+                        console.log(dientePosition)
+                        $(this).parent().children().each(function (index, el) {
+                            if ($(el).hasClass("click")) {
+                                if ($(el).hasClass("missing-tooth")) {
+                                    $(el).removeClass("missing-tooth");
+                                } else if ($(el).hasClass("filled-tooth")) {
+                                    $(el).removeClass("filled-tooth");
+                                    $(el).addClass('missing-tooth');
+                                } else if ($(el).hasClass("decayed-tooth")) {
+                                    $(el).removeClass("decayed-tooth");
+                                    $(el).addClass('missing-tooth');
+                                } else if ($(el).hasClass("lacking-tooth")) {
+                                    $(el).removeClass("lacking-tooth");
+                                    $(el).addClass('missing-tooth');
+                                } else {
+                                    $(el).addClass('missing-tooth');
+                                }
+                            }
+                        });
+                        break;
+                    case "ausente":
+                        var dientePosition = $(this).position();
+                        console.log($(this))
+                        console.log(dientePosition)
+                        $(this).parent().children().each(function (index, el) {
+                            if ($(el).hasClass("click")) {
+                                if ($(el).hasClass("lacking-tooth")) {
+                                    $(el).removeClass("lacking-tooth");
+                                } else if ($(el).hasClass("filled-tooth")) {
+                                    $(el).removeClass("filled-tooth");
+                                    $(el).addClass('lacking-tooth');
+                                } else if ($(el).hasClass("decayed-tooth")) {
+                                    $(el).removeClass("decayed-tooth");
+                                    $(el).addClass('lacking-tooth');
+                                } else if ($(el).hasClass("missing-tooth")) {
+                                    $(el).removeClass("missing-tooth")
+                                    $(el).addClass('lacking-tooth');
+                                } else {
+                                    $(el).addClass('lacking-tooth');
+                                }
+                            }
+                        });
+                        break
+                    default:
+                        console.log("borrar case");
+                }
+                return false;
+            });
+            return false;
+        });
+    </script>
+{% endblock %}

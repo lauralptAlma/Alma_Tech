@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Nucleos{% endblock %}
+
+{% block body_title %}Nucleos{% endblock %}
+
+
+{% block content %}
+
+  {% if nucleo_lista %}
+
+    <ul>
+      {% for nucleo in mucleo_lista %}
+        <li>
+          <a href="{{ nucleo.get_absolute_url }}">{{ nucleo.matricula }}</a>
+          ({{ nucleo.intgrantese.count }} integrante{{ nucleo.integrantes.count|pluralize }})
+        </li>
+      {% endfor %}
+    </ul>
+
+  {% else %}
+
+    <p>NO existen nucleos para listar</p>
+
+  {% endif %}
+
+  <p>
+    <a href="{% url 'nucleo:nucleo_crear' %}">Agregar nucleo</a>
+  </p>
+
+{% endblock content %}

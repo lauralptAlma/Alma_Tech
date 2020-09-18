@@ -97,8 +97,8 @@
 	</thead>
 
 	<tbody>
-	{% if tratamiento_hoy %}
-		{% for app in tratamiento_hoy %}
+	{% if consulta_hoy %}
+		{% for app in consulta_hoy %}
 	<tr class="tr-body">
 	  <td>{{forloop.counter}}</td>
 	  <td>{{app.paciente}}</td>

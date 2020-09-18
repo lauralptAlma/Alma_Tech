@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ nucleo.name }}{% endblock %}
+
+{% block body_title %}{{ nucleo.name }}{% endblock %}
+
+
+{% block content %}
+
+
+  <h2>Nucleos Familiares</h2>
+
+  {% if publisher.books.all %}
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Titular</th>
+          <th>Images</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in nucleo.integrantes.all %}
+          <tr>
+            <td>{{ integrante.id }}</td>
+            <td>{{ integrante.title }}</td>
+            <td>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% else %}
+
+    <p>Este nucleo no tiene integrantes</p>
+
+  {% endif %}
+
+  <p>
+    <a href="{% url 'nucleo:nucleo_integrantes_update' pk=nucleo.pk %}">
+      {% if nucleo.integrantes.all %}
+        Edit estos integrantes books
+      {% else %}
+        agregar integrantes
+      {% endif %}
+    </a>
+    |
+    <a href="{% url 'nucleo:nucleo_lista' %}">Todos los nucleos</a>
+  </p>
+
+{% endblock content %}
