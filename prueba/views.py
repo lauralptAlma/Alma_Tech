@@ -117,6 +117,7 @@ def pacientecambiopass(request):
 
 
 # nucleo e integrantes
+
 class NucleoListView(ListView):
     model = Nucleo
     template_name = 'nucleo/nucleo_lista.html'
