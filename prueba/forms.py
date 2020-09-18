@@ -94,7 +94,6 @@ class AntecedenteForm(ModelForm):
         fields = ('paciente', 'fumador', 'alcohol', 'coproparasitario', 'aparato_digestivo', 'desc_aparato_digestivo',
                   'dermatologicos', 'desc_dermatologicos',
                   'alergias', 'desc_alergias', 'autoinmnunes', 'desc_autoinmnunes', 'oncologicas', 'desc_oncologicas',
-                  'hematologicas', 'desc_hematologicas',
                   'hematologicas', 'desc_hematologicas', 'intervenciones', 'desc_intervenciones', 'toma_medicacion',
-                  'desc_medicacion', 'endocrinometabolico',
-                  'desc_endocrinometabolico', 'nefrourologicos', 'desc_nefrourologicos', 'observations')
+                  'desc_medicacion', 'endocrinometabolico', 'desc_endocrinometabolico', 'cardiovascular',
+                  'desc_cardiovascular', 'nefrourologicos', 'desc_nefrourologicos', 'observations')
