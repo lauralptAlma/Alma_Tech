@@ -1,4 +1,5 @@
 /almaEnv
+/venv
 /prueba/migrations/
 /prueba/*.pyc
 /prueba/__pycache__/

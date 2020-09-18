@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
@@ -55,6 +56,66 @@ class Paciente(models.Model):
     alta = models.DateTimeField(auto_now_add=True),
     nucleo_activo = models.BooleanField(default=True)
 
+    def clean(self):
+        try:
+            ci = int(self.documento)
+        except ValueError:
+            raise ValidationError('Por favor ingrese solamente números')
+        print(ci)
+        if not self.validate_ci(ci):
+            raise ValidationError('El documento no tiene un formato válido')
+
+    # Validación de Cédula
+    # The MIT License (MIT)
+    #
+    # Copyright (c) 2014 Franco Correa
+    #
+    # Permission is hereby granted, free of charge, #to any person obtaining a copy
+    # of this software and associated documentation #files (the "Software"), to deal
+    # in the Software without restriction, #including without limitation the rights
+    # to use, copy, modify, merge, publish, #distribute, sublicense, and/or sell
+    # copies of the Software, and to permit persons #to whom the Software is
+    # furnished to do so, subject to the following #conditions:
+    #
+    # The above copyright notice and this #permission notice shall be included in all
+    # copies or substantial portions of the Software.
+    #
+    # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    # SOFTWARE.
+
+    @staticmethod
+    def get_validation_digit(ci):
+        a = 0
+        i = 0
+        if len(str(ci)) <= 6:
+            for i in range(len(ci), 7):
+                ci = '0' + ci
+                i = i + 1
+
+        for i in range(0, 7):
+            a += (int("2987634"[i]) * int(str(ci)[i])) % 10
+            i = i + 1
+
+        if a % 10 == 0:
+            return 0
+        else:
+            return 10 - a % 10
+
+    @staticmethod
+    def clean_ci(ci):
+        return int(str(ci).replace("-", "").replace('.', ''))
+
+    def validate_ci(self, ci):
+        ci = self.clean_ci(ci)
+        dig = int(str(ci)[int(len(str(ci))) - 1])
+        print(dig)
+        print(self.get_validation_digit(ci))
+        return dig == self.get_validation_digit(ci)
 
     def __str__(self):
         return str(self.nombre)

@@ -91,7 +91,7 @@ def rechangepassword(request):
 def agregarpaciente(request):
     form = PacienteForm()
     if request.method == 'POST':
-        form = Paciente(request.POST)
+        form = PacienteForm(request.POST)
         if form.is_valid():
             patient = form.save()
             return HttpResponseRedirect("/prueba/resumendia/")
