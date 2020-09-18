@@ -1,13 +1,15 @@
 from django.contrib.auth.decorators import login_required
+from django.core.checks import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import View
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
+from django.views.generic.detail import SingleObjectMixin
 
-from .forms import CitaForm, PacienteForm, IntegranteFormset
+from .forms import CitaForm, PacienteForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo
 from datetime import date
 
@@ -114,62 +116,75 @@ def pacientecambiopass(request):
     return render(request, "paciente/common/cambiar_constrasena.html", {})
 
 
-# nucleo
-class ParentCreateView(CreateView):
+# nucleo e integrantes
+class NucleoListView(ListView):
     model = Nucleo
-    fields = ["matricula"]
+    template_name = 'nucleo/nucleo_lista.html'
 
-    def get_context_data(self, **kwargs):
-        # we need to overwrite get_context_data
-        # to make sure that our formset is rendered
-        data = super().get_context_data(**kwargs)
-        if self.request.POST:
-            data["integrantes"] = IntegranteFormset(self.request.POST)
-        else:
-            data["integrantes"] = IntegranteFormset()
-        return data
+
+class NucleoDetailView(DetailView):
+    model = Nucleo
+    template_name = 'nucleo/nucleo_detalles.html'
+
+
+class NucleoCreateView(CreateView):
+    """
+    Solo crea un nucleo nuevo,agrega integrantes se hace desde
+    NucleoIntegrantesUpdateView().
+    """
+    model = Nucleo
+    template_name = 'nucleo/nucleo_crear.html'
+    fields = ['matricula','titular']
 
     def form_valid(self, form):
-        context = self.get_context_data()
-        children = context["integrantes"]
-        self.object = form.save()
-        if children.is_valid():
-            children.instance = self.object
-            children.save()
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'EL nucleo ha sido agregado con exito'
+        )
+
         return super().form_valid(form)
 
-    def get_success_url(self):
-        return reverse("nucleos:list")
 
-# actualizar nucleo
-class NucleoUpdateView(UpdateView):
+class NucleoIntegrantesUpdateView(SingleObjectMixin, FormView):
+    """
+    Para agregar integrantes a un nucleo o editarlos
+    """
+
     model = Nucleo
-    fields = ["matricula"]
-    def get_context_data(self, **kwargs):
-        # we need to overwrite get_context_data
-        # to make sure that our formset is rendered.
-        # the difference with CreateView is that
-        # on this view we pass instance argument
-        # to the formset because we already have
-        # the instance created
-        data = super().get_context_data(**kwargs)
-        if self.request.POST:
-            data["integrantes"] = IntegranteFormset(self.request.POST, instance=self.object)
-        else:
-            data["integrantes"] = IntegranteFormset(instance=self.object)
-        return data
+    template_name = 'nucleo/nucleo_integrantes_update.html'
+
+    def get(self, request, *args, **kwargs):
+        # El nucleo que estamos editando:
+        self.object = self.get_object(queryset=Nucleo.objects.all())
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # El nuecleo que estamos editando:
+        self.object = self.get_object(queryset=Nucleo.objects.all())
+        return super().post(request, *args, **kwargs)
+
+    def get_form(self, form_class=None):
+        """
+        Use our big formset of formsets, and pass in the Publisher object.
+        """
+
     def form_valid(self, form):
-        context = self.get_context_data()
-        children = context["integrantes"]
-        self.object = form.save()
-        if children.is_valid():
-            children.instance = self.object
-            children.save()
-        return super().form_valid(form)
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        form.save()
+
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'Informacion actualizada'
+        )
+
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
-        return reverse("nucleos:list")
-
-
+        return reverse('nucleo:nucleo_detalles', kwargs={'pk': self.object.pk})
 
 
 # frontpage
@@ -194,6 +209,5 @@ def ingreso(request):
             else:
                 return HttpResponseRedirect('/prueba/pacienteincio')
     return render(request, 'frontpage/index.html')
-
 
 # antecedentes paciente

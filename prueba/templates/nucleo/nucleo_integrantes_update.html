@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Editing books for {{ nucleo.matricula }}{% endblock %}
+
+{% block body_title %}Editar integrantes del nucleo familiar matricuala  <a href="{{ nucleo.get_absolute_url }}">{{ nucleo.matricula }}</a>{% endblock %}
+
+
+{% block content %}
+  <form action="" method="post" enctype="multipart/form-data">
+
+    {% for hidden_field in form.hidden_fields %}
+      {{ hidden_field.errors }}
+      {{ hidden_field }}
+    {% endfor %}
+
+    {% csrf_token %}
+
+    {{ form.management_form }}
+    {{ form.non_form_errors }}
+
+      <hr>
+
+      <h2>
+        {% if book_form.instance.id %}
+          Book #{{ book_form.instance.id }}</h2>
+        {% else %}
+          {% if form.forms|length > 1 %}
+            Add another book
+          {% else %}
+            Add a book
+          {% endif %}
+        {% endif %}
+      </h2>
+
+      {% for hidden_field in book_form.hidden_fields %}
+        {{ hidden_field.errors }}
+      {% endfor %}
+
+      <table>
+        {{ book_form.as_table }}
+      </table>
+
+    <p>
+      <input type="submit" value="Actualizar integrantes">
+      &nbsp; &nbsp;
+      <a href="{{ nucleo.get_absolute_url  }}">Cancelar</a>
+    </p>
+  </form>
+
+{% endblock content %}
