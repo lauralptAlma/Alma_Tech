@@ -1,4 +1,6 @@
 /almaEnv
 /venv
-/prueba/migrations
+/dentalE/migrations/
 .idea
+mysite/__pycache__/
+/dentalE/__pycache__/
