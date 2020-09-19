@@ -18,7 +18,7 @@ class IngresoForm(ModelForm):
 class PacienteForm(ModelForm):
     class Meta:
         model = Paciente
-        fields = ('documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'fecha_nacimiento', 'email', 'celular',
+        fields = ('documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'direccion', 'fecha_nacimiento', 'email', 'celular',
                   'nucleo_activo')
 
         widgets = {
