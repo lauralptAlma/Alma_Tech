@@ -224,8 +224,3 @@ class Cita(models.Model):
 
     def __str__(self):
         return str(self.paciente)
-
-
-class Post(models.Model):
-    post_title = models.CharField(max_length=250)
-    post_desc = models.TextField()
