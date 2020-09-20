@@ -1,0 +1,39 @@
+{% load static %}
+<nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary-alma p-0"
+     style="background-color: #0f6470;">
+    <div class="container-fluid d-flex flex-column p-0">
+        <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#"
+           style="width: 100%;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;background: #040404;">
+            <!--img class="img-fluid d-lg-flex justify-content-lg-center align-items-lg-center" style="width:100%;"-->
+            <div id="logo" class="sidebar-brand-icon"></div>
+        </a>
+        <hr class="sidebar-divider my-0">
+        <ul class="nav navbar-nav text-light" id="accordionSidebar">
+            <li class="nav-item">
+                <a class="nav-link" href="/dentalE/resumendia/">
+                    <i class="far fa-calendar-alt" {% if 'resumendia' in request.path %}
+                       style="color: white" {% endif %}></i>
+                    <span class={% if 'resumendia' in request.path %} actual-page {% endif %}>Agenda</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/dentalE/listapacientes/">
+                <i class="fas fa-user" {% if 'listapacientes' in request.path %} style="color: white" {% endif %}></i>
+                <span class={% if 'listapacientes' in request.path %} actual-page {% endif %}>Pacientes</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/dentalE/agregarpaciente/">
+                <i class="fas fa-user-plus" {% if 'agregarpaciente' in request.path %} style="color: white" {% endif %}></i>
+                <span class={% if 'agregarpaciente' in request.path %} actual-page {% endif %}>Agregar Paciente</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="nucleos-familiares.html">
+                <i class="fas fa-users" {% if 'listanucleos' in request.path %} style="color: white" {% endif %}></i>
+                <span class={% if 'listanucleos' in request.path %} actual-page {% endif %}>Núcleos Familiares</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/dentalE/listadoctores/"><i
+                    class="fas fa-user-md" {% if 'listadoctores' in request.path %}
+                    style="color: white" {% endif %}></i>
+                <span {% if 'listadoctores' in request.path %} actual-page {% endif %}>Doctores</span></a></li>
+        </ul>
+        <div class="text-center d-none d-md-inline">
+            <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
+        </div>
+    </div>
+</nav>

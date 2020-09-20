@@ -1,0 +1,87 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/ico" href="{% static 'files/images/favicon.ico' %}"/>
+    <title>{% block tab-title %}ALMA Tech{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,400">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome5-overrides.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/alma.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/Bootstrap-Calendar.css' %}">
+</head>
+
+<body class="bg-login-image" style="background-image: url({% static 'frontpage/images/fondo.png' %});">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-6 col-xl-6">
+            <div class="card shadow-lg o-hidden border-0 my-5">
+                <div class="card-body p-0">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h4 class="text-dark mb-4">Ingresar a Dental-e</h4>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-dark mb-4">Para ingresar debe estar dado de alta en el sistema y
+                                        contar con una cuenta
+                                        de Google suite. Contacte a su administrador.
+                                    </div>
+                                </div>
+                                <form method="post" action="" class="user">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <input class="form-control form-control-user" type="text"
+                                               id="user" placeholder="Ingrese usuario..." name="username"
+                                               maxlength="100">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-user" type="password"
+                                               id="password" placeholder="Contraseña" name="password" maxlength="100">
+                                    </div>
+                                    <br>
+                                    <button class="btn btn-primary btn-block text-white btn-user" type="submit">Ingresar
+                                    </button>
+                                    <hr>
+                                    <a class="btn btn-primary btn-block text-white btn-user" role="button"><i
+                                            class="fab fa-google"></i>&nbsp; Ingresar con Google
+                                    </a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="sticky-footer primary-color-alma">
+    <div class="container my-auto">
+        <div class="text-center my-auto copyright">
+            <span>Copyright &copy;
+                <script type="text/javascript">document.write(new Date().getFullYear());</script> | AlmaTech
+            </span>
+        </div>
+    </div>
+</footer>
+</div>
+<!-- jquery js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- bootstrap -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+<script src="{% static 'assets/js/bs-init.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+<script src="{% static 'assets/js/theme.js' %}"></script>
+{% block page-javascript %}
+{% endblock %}
+</body>
+</html>

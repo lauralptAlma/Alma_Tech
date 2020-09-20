@@ -1,4 +1,4 @@
-{% extends "almaFront/blank.html" %}
+{% extends "almaFront/bases/blank.html" %}
 {% load static %}
 {% block tab-title %}Paciente Nuevo{% endblock %}
 {% block user-name %}Alfredo Balduini{% endblock %}
@@ -21,4 +21,11 @@
     </div>
 {% endblock %}
 {% block page-javascript %}
+    <script type="text/javascript">
+        $(function () {
+            $("#id_fecha_nacimiento").datetimepicker({
+                format: 'DD/MM/YYYY HH:mm',
+            });
+        });
+    </script>
 {% endblock %}

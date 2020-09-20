@@ -18,8 +18,10 @@ class IngresoForm(ModelForm):
 class PacienteForm(ModelForm):
     class Meta:
         model = Paciente
-        fields = ('documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'direccion', 'fecha_nacimiento', 'email', 'celular',
-                  'nucleo_activo')
+        fields = (
+        'documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'direccion', 'fecha_nacimiento', 'email',
+        'celular',
+        'nucleo_activo')
 
         widgets = {
             'documento': forms.TextInput(
@@ -27,10 +29,14 @@ class PacienteForm(ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control', 'display': 'inline-block'}),
             'primer_apellido': forms.TextInput(attrs={'class': 'form-control'}),
             'segundo_apellido': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_nacimiento': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'ej. 01/08/2012'}),
+            'fecha_nacimiento': forms.DateTimeInput(attrs={
+                'class': 'form-control datetimepicker-input',
+                'data-target': '#datepickerbirthdate'
+            }),
+            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'celular': forms.TextInput(attrs={'class': 'form-control'}),
-            'nucleo_activo': forms.TextInput(attrs={'class': 'form-control'}),
+            'nucleo_activo': forms.CheckboxInput(attrs={'type': 'checkbox', 'class': 'custom-checkbox'}),
             'relacion_nucleo': forms.Select(attrs={'class': 'form-control'}),
         }
 
