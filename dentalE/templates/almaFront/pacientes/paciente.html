@@ -1,0 +1,91 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Detalles Paciente{% endblock %}
+{% block page-title %}{{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+
+{% block page-content %}
+    <div class="row mb-3">
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Información</p>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <p><strong>Documento: </strong> {{ patient.documento }}</p>
+                                <p><strong>Dirección: </strong> {{ patient.direccion }}</p>
+                                <p><strong>Celular: </strong> {{ patient.celular }}</p>
+                                <p><strong>Fecha de Nacimiento: </strong> {{ patient.fecha_nacimiento }}</p>
+                                <p><strong>Skills: </strong>
+                                    <span class="badge badge-pill badge-info">html5</span>
+                                    <span class="badge badge-pill badge-info">css3</span>
+                                    <span class="badge badge-pill badge-info">jquery</span>
+                                    <span class="badge badge-pill badge-info">bootstrap3</span>
+                                </p>
+                            </div>
+                            <div class="row justify-content-end mr-3"><a href="#" style="text-align: left;">Editar</a></div>
+                        </div>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 font-weight-bold">Antecedentes Clínicos</p>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group"><label for="address"><strong>Address</strong></label><input
+                                        class="form-control" type="text" placeholder="Sunset Blvd, 38" name="address">
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group"><label for="city"><strong>City</strong></label><input
+                                                class="form-control" type="text" placeholder="Los Angeles" name="city">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group"><label
+                                                for="country"><strong>Country</strong></label><input
+                                                class="form-control" type="text" placeholder="USA" name="country"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;Settings</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="text-primary font-weight-bold m-0">Consultas</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col"><i class="fa fa-file-text-o" style="margin-right: 15px;"></i><a href="#">Ver
+                            historia clínica</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><i class="fas fa-tooth" style="margin-right: 15px;"></i><a href="#">Nueva
+                            consulta
+                            general</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><i class="fas fa-teeth" style="margin-right: 15px;"></i><a href="#">Nueva
+                            consulta
+                            ortodoncia</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><i class="fas fa-teeth-open" style="margin-right: 15px;"></i><a href="#">Nueva
+                            consulta con CPO</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+{% endblock %}

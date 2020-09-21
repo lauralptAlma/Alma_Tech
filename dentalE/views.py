@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.core.checks import messages
+from django.contrib import messages
+#from django.core.checks import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import View
@@ -9,19 +10,19 @@ from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
-from .forms import CitaForm, PacienteForm
-from .models import UserProfile, Consulta, Paciente, Cita, Nucleo
+from .forms import CitaForm, PacienteForm, AntecedenteForm
+from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
 from datetime import date
 
 
 def pruebaBaseFront(request):
-    form = PacienteForm()
+    form = AntecedenteForm()
     if request.method == 'POST':
-        form = Paciente(request.POST)
+        form = AntecedenteForm(request.POST)
         if form.is_valid():
             patient = form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
-    return render(request, "almaFront/agregar_paciente.html", {'form': form})
+    return render(request, "almaFront/agregar_antecedentes_clinicos.html", {'form': form})
 
 
 # doctor
@@ -45,9 +46,8 @@ def doccambiopass(request):
 def resumendia(request):
     agenda_hoy = Cita.objects.filter(creado=date.today())
     consulta_hoy = Consulta.objects.filter(creado=date.today())
-    usuario = request.user.get_full_name()
     return render(request, "almaFront/secretaria/agenda_hoy.html",
-                  {'agenda_hoy': agenda_hoy, 'consulta_hoy': consulta_hoy, 'usuario': usuario})
+                  {'agenda_hoy': agenda_hoy, 'consulta_hoy': consulta_hoy})
 
 
 @login_required(login_url="/")
@@ -81,8 +81,7 @@ def listadoctores(request):
 @login_required(login_url="/")
 def listapacientes(request):
     pacientes = Paciente.objects.all()
-    print(pacientes)
-    return render(request, "secretaria/lista_pacientes/lista_pacientes.html", {'patients': pacientes})
+    return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
 
 
 @login_required(login_url="/")
@@ -97,7 +96,12 @@ def agregarpaciente(request):
         form = PacienteForm(request.POST)
         if form.is_valid():
             patient = form.save()
-            return HttpResponseRedirect("/dentalE/resumendia/")
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Paciente agregado exitosamente!'
+            )
+            return HttpResponseRedirect("/dentalE/agregarpaciente/")
     return render(request, "almaFront/agregar_paciente.html", {'form': form})
 
 
@@ -108,8 +112,10 @@ def pacienteinicio(request):
 
 
 @login_required(login_url="/")
+#def pacientedetalles(request,patient_id):
 def pacientedetalles(request):
-    return render(request, "paciente/home/detalles.html", {})
+    paciente = Paciente.objects.get(documento=84406668)
+    return render(request, "almaFront/pacientes/paciente.html", {'patient': paciente})
 
 
 @login_required(login_url="/")
@@ -136,7 +142,7 @@ class NucleoCreateView(CreateView):
     """
     model = Nucleo
     template_name = 'nucleo/nucleo_crear.html'
-    fields = ['matricula','titular']
+    fields = ['matricula', 'titular']
 
     def form_valid(self, form):
         messages.add_message(
@@ -212,10 +218,23 @@ def ingreso(request):
                 return HttpResponseRedirect('/dentalE/pacienteincio')
     return render(request, 'almaFront/index.html')
 
+# def user_view(request):
 
-#def user_view(request):
-
-    #current_user = request.user
-    #return current_user.get_full_name()
+# current_user = request.user
+# return current_user.get_full_name()
 
 # antecedentes paciente
+@login_required(login_url="/")
+def agregarantecedentes(request):
+    form = AntecedenteForm()
+    if request.method == 'POST':
+        form = AntecedenteForm(request.POST)
+        if form.is_valid():
+            patient = form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Atencedentes guardados exitosamente!'
+            )
+            return HttpResponseRedirect("/dentalE/agregarantecedentes/")
+    return render(request, "almaFront/agregar_antecedentes_clinicos.html", {'form': form})

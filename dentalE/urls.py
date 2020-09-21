@@ -16,11 +16,11 @@ from .views import (
     agregarcita,
     agregartratamiento,
 
-
     # paciente
     pacienteinicio,
     pacientedetalles,
     pacientecambiopass,
+    agregarantecedentes,
 
     pruebaBaseFront,
 )
@@ -41,11 +41,11 @@ urlpatterns = [
     url(r'^agregarcita/$', agregarcita, name="agregarcita"),
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
 
-
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),
     url(r'^pacientedetalles/$', pacientedetalles, name='pacientedetalles'),
     url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
+    url(r'^agregarantecedentes/$', agregarantecedentes, name='agregarantecedentes'),
 
     url(r'^pruebafront/$', pruebaBaseFront),
 ]

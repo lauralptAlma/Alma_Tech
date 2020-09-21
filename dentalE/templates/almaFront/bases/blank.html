@@ -51,8 +51,8 @@
                             <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
                                                                        data-toggle="dropdown" aria-expanded="false"
                                                                        href="#">
-                                <span
-                                        class="d-none d-lg-inline mr-2 text-gray-600 small">{% block user-name %}{% endblock %}<br></span><img
+                                <span class="d-none d-lg-inline mr-2 text-gray-600 small"> {{ user.get_full_name }}
+                                    <br></span><img
                                     class="border rounded-circle img-profile"
                                     src="{% static 'assets/img/avatars/avatar3.jpeg' %}"></a>
                                 <!--Dropdown en perfil de usuario-->
@@ -76,6 +76,7 @@
             </nav>
 
             <div class="container-fluid">
+                {% include 'almaFront/bases/alertas.html' %}
                 <h3 class="text-dark mb-1">{% block page-title %}Título Base{% endblock %}</h3>
                 <br>
                 {% block page-content %}
