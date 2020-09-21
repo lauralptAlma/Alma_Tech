@@ -7,9 +7,7 @@ import datetime
 # USUARIO OPTIONS
 USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'), ('PACIENTE', 'PACIENTE'))
 USER_ESPECIALIDAD = (('ORTOPEDIA', 'ORTOPEDIA'), ('ORTODONCIA', 'ORTODONCIA'), ('GENERAL', 'GENERAL'))
-# NUCLEO OPTIONS
-NUCLEO_OPCIONES = (
-    ('CONYUGE', 'CONYUGE'), ('MADRE', 'MADRE'), ('PADRE', 'PADRE'), ('HIJO', 'HIJO'),)
+
 # ANTECEDENTES OPTIONS
 CARDIOVASCULAR_OPCIONES = (
     ('NO', 'NO'), ('H.T.A.', 'HIPERTENSION'), ('ARRITMIAS', 'ARRITMIAS'), ('I.A.M', 'INFARTO MIOCARDIO'),
@@ -45,7 +43,8 @@ class Paciente(models.Model):
     primer_apellido = models.CharField(max_length=100, null=False, blank=False)
     segundo_apellido = models.CharField(max_length=100, null=True, blank=True)
     direccion = models.CharField(max_length=155, null=False, blank=False)
-    fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today, null=False, blank=False)
+    fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today,
+                                        null=False, blank=False)
     # Contacto
     celular_regex = RegexValidator(regex=r'^\+?1?\d{9,9}$',
                                    message="El número debe ser del formato: '+XXXXXXXXX'. 9 digitos admitidos.")
@@ -160,26 +159,21 @@ class Nucleo(models.Model):
     matricula = models.CharField(primary_key=True, max_length=8, help_text="solo numeros", null=False,
                                  blank=True)
     titular = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    integrantes = models.ManyToManyField('nucleos.Integrante', verbose_name='Integrantes', through='Paciente')
 
     class Meta:
         verbose_name = "Nucleo"
         verbose_name_plural = "Nucleos"
 
-    def __str__(self):
-        return str(self.matricula) or ''
-
-
-class Integrante(models.Model):
-    nucleo = models.ForeignKey(Nucleo, on_delete=models.CASCADE)
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    relacion_nucleo = models.CharField(max_length=12, choices=NUCLEO_OPCIONES, default='')
-
-    class Meta:
-        verbose_name = "Integrante"
-        verbose_name_plural = "Integrantes"
+    def nucleo_intergantes_nombres(self):
+        '''return nombres de integrantes de cada nucleo '''
+        return ', '.join([a.id for a in self.integrantes.all()])
 
     def __str__(self):
-        return self.nucleo
+        return str(self.matricula)
+
+
+
 
 
 class Consulta(models.Model):
