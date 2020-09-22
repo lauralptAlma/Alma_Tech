@@ -24,6 +24,11 @@
                    style="color: white" {% endif %}></i>
                 <span class={% if 'agregarpaciente' in request.path %} actual-page {% endif %}>Agregar Paciente</span></a>
             </li>
+         <li class="nav-item"><a class="nav-link" href="/dentalE/agregarconsulta/">
+                <i class="fas fa-laptop-medical" {% if 'agregarconsulta' in request.path %}
+                   style="color: white" {% endif %}></i>
+                <span class={% if 'agregarconsulta' in request.path %} actual-page {% endif %}>Agregar Consulta</span></a>
+            </li>
             <li class="nav-item"><a class="nav-link" href="/dentalE/agregarantecedentes/">
                 <i class="fas fa-user-plus" {% if 'agregarantecedentes' in request.path %}
                    style="color: white" {% endif %}></i>

@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
-from .forms import CitaForm, PacienteForm, AntecedenteForm
+from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
 from datetime import date
 
@@ -28,17 +28,28 @@ def pruebaBaseFront(request):
 # doctor
 @login_required(login_url="/")
 def pacientesdeldia(request):
-    return render(request, "doctor/paciente_dia/paciente_dia.html", {})
+    return render(request, "doctor/today_patient/paciente_dia.html", {})
 
 
 @login_required(login_url="/")
 def pacientedeldiadetalles(request):
-    return render(request, "doctor/paciente_dia/paciente_dia_detalles.html", {})
+    return render(request, "doctor/today_patient/paciente_dia_detalles.html", {})
 
 
 @login_required(login_url="/")
 def doccambiopass(request):
     return render(request, "doctor/common/cambiar_pass.html", {})
+
+
+@login_required(login_url="/")
+def agregarconsulta(request):
+    form = ConsultaForm()
+    if request.method == 'POST':
+        form = CitaForm(request.POST)
+        if form.is_valid():
+            consulta = form.save()
+            return HttpResponseRedirect("/dentalE/resumendia/")
+    return render(request, "almaFront/doctores/agregar_consulta.html", {'form': form})
 
 
 # secretaria
@@ -219,7 +230,6 @@ def ingreso(request):
     return render(request, 'almaFront/index.html')
 
 # def user_view(request):
-
 # current_user = request.user
 # return current_user.get_full_name()
 

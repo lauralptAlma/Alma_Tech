@@ -185,7 +185,7 @@ class Integrante(models.Model):
 
 class Consulta(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(User, related_name='trat_doctor', on_delete=models.CASCADE)
+    doctor = models.ForeignKey(User, related_name='consulta_doctor', on_delete=models.CASCADE)
     diagnostico = models.CharField(max_length=250, default='', blank=False, null=False)
     tratamiento = models.CharField(max_length=250, default='', blank=False, null=False)
     indicaciones = models.CharField(max_length=250, default='', blank=False, null=False)

@@ -15,6 +15,7 @@ from .views import (
     listapacientes,
     agregarcita,
     agregartratamiento,
+    agregarconsulta,
 
     # paciente
     pacienteinicio,
@@ -40,6 +41,7 @@ urlpatterns = [
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
     url(r'^agregarcita/$', agregarcita, name="agregarcita"),
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
+    url(r'^agregarconsulta/$', agregarconsulta, name="agregarconsulta"),
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),
