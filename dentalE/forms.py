@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
+import datetime
+from django.forms.widgets import SelectDateWidget
+from django.forms import ModelForm, Form
 from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos
 
 
@@ -18,19 +20,24 @@ class IngresoForm(ModelForm):
 class PacienteForm(ModelForm):
     class Meta:
         model = Paciente
-        fields = ('documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'direccion', 'fecha_nacimiento', 'email', 'celular',
-                  'nucleo_activo')
+        fields = (
+        'documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'direccion', 'fecha_nacimiento', 'email',
+        'celular',
+        'nucleo_activo')
 
         widgets = {
-            'documento': forms.TextInput(
-                attrs={'class': 'form-control', 'placeholder': 'Sin puntos ni guión', 'display': 'inline-block'}),
-            'nombre': forms.TextInput(attrs={'class': 'form-control', 'display': 'inline-block'}),
+            'documento': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'primer_apellido': forms.TextInput(attrs={'class': 'form-control'}),
             'segundo_apellido': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_nacimiento': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'ej. 01/08/2012'}),
+            'fecha_nacimiento': forms.DateTimeInput(attrs={
+                'class': 'form-control datetimepicker-input',
+                'data-target': '#datepickerbirthdate'
+            }),
+            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'celular': forms.TextInput(attrs={'class': 'form-control'}),
-            'nucleo_activo': forms.TextInput(attrs={'class': 'form-control'}),
+            'nucleo_activo': forms.CheckboxInput(attrs={'type': 'checkbox', 'class': 'custom-checkbox'}),
             'relacion_nucleo': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -57,6 +64,21 @@ class AntecedenteForm(ModelForm):
                   'hematologicas', 'desc_hematologicas', 'intervenciones', 'desc_intervenciones', 'toma_medicacion',
                   'desc_medicacion', 'endocrinometabolico', 'desc_endocrinometabolico', 'cardiovascular',
                   'desc_cardiovascular', 'nefrourologicos', 'desc_nefrourologicos', 'observations')
+
+        widgets = {
+            'desc_aparato_digestivo': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_dermatologicos': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_alergias': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_autoinmnunes': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_oncologicas': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_hematologicas': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_intervenciones': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_medicacion': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_endocrinometabolico': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_cardiovascular': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_nefrourologicos': forms.TextInput(attrs={'class': 'form-control'}),
+            'observations': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
 
 PacienteIntegranteFormset = inlineformset_factory(

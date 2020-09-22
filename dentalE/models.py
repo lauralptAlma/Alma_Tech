@@ -39,22 +39,22 @@ class UserProfile(models.Model):
 
 class Paciente(models.Model):
     # Informacion
-    documento = models.CharField(primary_key=True, max_length=8, help_text="Sin puntos ni guión", null=False,
+    documento = models.CharField('Documento', primary_key=True, max_length=8, help_text="Sin puntos ni guión", null=False,
                                  blank=False)
-    nombre = models.CharField(max_length=100, null=False, blank=False)
-    primer_apellido = models.CharField(max_length=100, null=False, blank=False)
-    segundo_apellido = models.CharField(max_length=100, null=True, blank=True)
-    direccion = models.CharField(max_length=155, null=False, blank=False)
+    nombre = models.CharField('Nombre', max_length=100, null=False, blank=False)
+    primer_apellido = models.CharField('Primer Apellido', max_length=100, null=False, blank=False)
+    segundo_apellido = models.CharField('Segundo Apellido', max_length=100, null=True, blank=True)
+    direccion = models.CharField('Dirección', max_length=155, null=False, blank=False)
     fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today, null=False, blank=False)
     # Contacto
     celular_regex = RegexValidator(regex=r'^\+?1?\d{9,9}$',
                                    message="El número debe ser del formato: '+XXXXXXXXX'. 9 digitos admitidos.")
     celular = models.CharField("Número de teléfono celular", validators=[celular_regex], max_length=9, unique=True,
                                null=False, blank=False)  # validators should be a list
-    email = models.EmailField(max_length=200, unique=True, blank=True)
+    email = models.EmailField('Email', max_length=200, unique=True, blank=True)
     # Nucleo
     alta = models.DateTimeField(auto_now_add=True),
-    nucleo_activo = models.BooleanField(default=True)
+    nucleo_activo = models.BooleanField('Núcleo Activo', default=True)
 
     def clean(self):
         try:

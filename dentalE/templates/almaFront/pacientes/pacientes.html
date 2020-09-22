@@ -1,0 +1,53 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Pacientes{% endblock %}
+{% block page-title %}Pacientes{% endblock %}
+
+{% block page-content %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="row justify-content-end">
+                <div>
+                    <div class="text-md-right dataTables_filter" id="dataTable_filter"><label>
+                        <input type="search" class="form-control form-control-sm"
+                               aria-controls="dataTable" placeholder="Buscar"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table class="table my-0" id="dataTable">
+                    <thead class="card-header py-3">
+                    <tr>
+                        <th>Documento</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Celular</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if patients %}
+                        {% for pat in patients %}
+                            <tr class="tr-body">
+                                <td>{{ pat.documento }}</td>
+                                <td><a class="a-link"
+                                       href="/dentalE/pacientedetalles/{{ pat.documento }}">{{ pat.nombre }} {{ pat.primer_apellido }}</a></td>
+                                <td>{{ pat.email }}</td>
+                                <td>{{ pat.celular }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="no-data">
+                            <td colspan="20">No existen pacientes en el sistema.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                    <tfoot>
+                    <tr></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+{% endblock %}

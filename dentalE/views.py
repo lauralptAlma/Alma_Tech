@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.core.checks import messages
+from django.contrib import messages
+#from django.core.checks import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import View
@@ -9,47 +10,47 @@ from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
-from .forms import CitaForm, PacienteForm
-from .models import UserProfile, Consulta, Paciente, Cita, Nucleo
+from .forms import CitaForm, PacienteForm, AntecedenteForm
+from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
 from datetime import date
 
 
 def pruebaBaseFront(request):
-    form = PacienteForm()
+    form = AntecedenteForm()
     if request.method == 'POST':
-        form = Paciente(request.POST)
+        form = AntecedenteForm(request.POST)
         if form.is_valid():
             patient = form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
-    return render(request, "almaFront/agregar_paciente.html", {'form': form})
+    return render(request, "almaFront/agregar_antecedentes_clinicos.html", {'form': form})
 
 
 # doctor
-@login_required
+@login_required(login_url="/")
 def pacientesdeldia(request):
     return render(request, "doctor/paciente_dia/paciente_dia.html", {})
 
 
-@login_required
+@login_required(login_url="/")
 def pacientedeldiadetalles(request):
     return render(request, "doctor/paciente_dia/paciente_dia_detalles.html", {})
 
 
-@login_required
+@login_required(login_url="/")
 def doccambiopass(request):
     return render(request, "doctor/common/cambiar_pass.html", {})
 
 
 # secretaria
-@login_required
+@login_required(login_url="/")
 def resumendia(request):
     agenda_hoy = Cita.objects.filter(creado=date.today())
     consulta_hoy = Consulta.objects.filter(creado=date.today())
-    return render(request, "secretaria/agenda_hoy/agenda_hoy.html",
+    return render(request, "almaFront/secretaria/agenda_hoy.html",
                   {'agenda_hoy': agenda_hoy, 'consulta_hoy': consulta_hoy})
 
 
-@login_required
+@login_required(login_url="/")
 def agregarcita(request):
     form = CitaForm()
     if request.method == 'POST':
@@ -60,7 +61,7 @@ def agregarcita(request):
     return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'form': form})
 
 
-@login_required
+@login_required(login_url="/")
 def agregartratamiento(request):
     form = CitaForm()
     if request.method == 'POST':
@@ -71,47 +72,53 @@ def agregartratamiento(request):
     return render(request, "secretaria/agenda_hoy/agregar_tratamiento.html", {'form': form})
 
 
-@login_required
+@login_required(login_url="/")
 def listadoctores(request):
     doctors = UserProfile.objects.filter(user_type='DOCTOR')
     return render(request, "secretaria/lista_doctores/lista_doctores.html", {'doctors': doctors})
 
 
-@login_required
+@login_required(login_url="/")
 def listapacientes(request):
     pacientes = Paciente.objects.all()
-    print(pacientes)
-    return render(request, "secretaria/lista_pacientes/lista_pacientes.html", {'patients': pacientes})
+    return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
 
 
-@login_required
+@login_required(login_url="/")
 def rechangepassword(request):
     return render(request, "secretaria/common/cambiar_pass.html", {})
 
 
-@login_required
+@login_required(login_url="/")
 def agregarpaciente(request):
     form = PacienteForm()
     if request.method == 'POST':
         form = PacienteForm(request.POST)
         if form.is_valid():
             patient = form.save()
-            return HttpResponseRedirect("/dentalE/resumendia/")
-    return render(request, "secretaria/agenda_hoy/agregar_paciente.html", {'form': form})
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Paciente agregado exitosamente!'
+            )
+            return HttpResponseRedirect("/dentalE/agregarpaciente/")
+    return render(request, "almaFront/agregar_paciente.html", {'form': form})
 
 
 # paciente
-@login_required
+@login_required(login_url="/")
 def pacienteinicio(request):
     return render(request, "paciente/home/home.html", {})
 
 
-@login_required
-def pacientedetalles(request):
-    return render(request, "paciente/home/detalles.html", {})
+@login_required(login_url="/")
+#def pacientedetalles(request,patient_id):
+def pacientedetalles(request, documento):
+    paciente = Paciente.objects.get(documento=documento)
+    return render(request, "almaFront/pacientes/paciente.html", {'patient': paciente})
 
 
-@login_required
+@login_required(login_url="/")
 def pacientecambiopass(request):
     return render(request, "paciente/common/cambiar_constrasena.html", {})
 
@@ -135,7 +142,7 @@ class NucleoCreateView(CreateView):
     """
     model = Nucleo
     template_name = 'nucleo/nucleo_crear.html'
-    fields = ['matricula','titular']
+    fields = ['matricula', 'titular']
 
     def form_valid(self, form):
         messages.add_message(
@@ -189,10 +196,10 @@ class NucleoIntegrantesUpdateView(SingleObjectMixin, FormView):
 
 
 # frontpage
-@login_required
+@login_required(login_url="/")
 class HomeView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, "frontpage/index.html")
+        return render(request, "almaFront/index.html")
 
 
 def ingreso(request):
@@ -209,6 +216,25 @@ def ingreso(request):
                 return HttpResponseRedirect('/dentalE/pacientesdeldia/')
             else:
                 return HttpResponseRedirect('/dentalE/pacienteincio')
-    return render(request, 'frontpage/index.html')
+    return render(request, 'almaFront/index.html')
+
+# def user_view(request):
+
+# current_user = request.user
+# return current_user.get_full_name()
 
 # antecedentes paciente
+@login_required(login_url="/")
+def agregarantecedentes(request):
+    form = AntecedenteForm()
+    if request.method == 'POST':
+        form = AntecedenteForm(request.POST)
+        if form.is_valid():
+            patient = form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Atencedentes guardados exitosamente!'
+            )
+            return HttpResponseRedirect("/dentalE/agregarantecedentes/")
+    return render(request, "almaFront/agregar_antecedentes_clinicos.html", {'form': form})
