@@ -8,10 +8,16 @@
         <div class="card-body">
             <div class="row justify-content-end">
                 <div>
-                    <div class="text-md-right dataTables_filter" id="dataTable_filter"><label>
-                        <input type="search" class="form-control form-control-sm"
-                               aria-controls="dataTable" placeholder="Buscar"></label>
-                    </div>
+                    <form method="GET" id="search-form" autocomplete="off">
+            <div class="search-div input-group">
+                <input type="text" class="bg-light form-control border-0 small" id="search" name="search"
+                     placeholder="Buscar paciente..." value="{{ search }}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary py-0" type="button" type="submit" id="search-btn">
+                        <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </form>
                 </div>
             </div>
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -22,6 +28,7 @@
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Celular</th>
+                        <th>      </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -33,6 +40,10 @@
                                        href="/dentalE/pacientedetalles/{{ pat.documento }}">{{ pat.nombre }} {{ pat.primer_apellido }}</a></td>
                                 <td>{{ pat.email }}</td>
                                 <td>{{ pat.celular }}</td>
+                                <td>
+                            <a href="{% url 'pacientedetalles' pat.documento %}">
+                                <span><i class="fas fa-pencil-alt"></i></span></a>
+                        </td>
                             </tr>
                         {% endfor %}
                     {% else %}

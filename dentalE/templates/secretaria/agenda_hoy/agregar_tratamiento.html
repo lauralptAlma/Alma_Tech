@@ -1,40 +1,37 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "almaFront/bases/blank.html" %}
 {% load static %}
-{% include 'secretaria/common/header.html' %}
+{% block tab-title %}Consultas Odontología General{% endblock %}
+{% block page-title %}Agregar Consulta{% endblock %}
 
-<div class="add-department">
+{% block page-content %}
+    <div class="form-row">
+        <div class="form-group col-lg-10">
+            <div class="row">
+                <div class="col">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Odontología General</p>
+                        </div>
+                        <div class="card-body" align="justify">
+                            <div>
+                                <form method="post" action="">
+                                    {% csrf_token %}
+                                    <table class="col-sm-10">
 
- <div class="row page-head">
-  <div class="col-md-4 col-sm-4 col-xs-12">
-   <h1>Agregar tratamiento</h1>
-  </div>
-  
-  <div class="col-md-8 col-sm-8 col-xs-12">
-   <button type="button" onclick="window.location.href = '../../../retodaybooking/' ">atras</button>
-  </div> 
- </div>
+                                        {{ form.as_table }}
+                                    </table>
 
+                                    <div class="footer" align="right">
+                                        <button type="submit" class="btn btn-info">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
 
-<div class="row">
-  <div class="col-md-12">
-   <div class="page-form">
-   
-   <form method="post" action="">
-    	{% csrf_token %}
-    	{{ form.as_p }}
-	
-	<div class="footer">
-	 <button type="submit">guardar</button>
-	 <button type="button" onclick="window.location.href = '../../../retodaybooking/' ">atras</button>
-	</div>
-	</form>
-	
-   </div>
-  </div> 
-</div>
-
-
-</div><!-- add-department -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

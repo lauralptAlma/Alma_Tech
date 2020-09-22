@@ -46,7 +46,8 @@ class Paciente(models.Model):
     primer_apellido = models.CharField('Primer Apellido', max_length=100, null=False, blank=False)
     segundo_apellido = models.CharField('Segundo Apellido', max_length=100, null=True, blank=True)
     direccion = models.CharField('Dirección', max_length=155, null=False, blank=False)
-    fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today, null=False, blank=False)
+    fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today,
+                                        null=False, blank=False)
     # Contacto
     celular_regex = RegexValidator(regex=r'^\+?1?\d{9,9}$',
                                    message="El número debe ser del formato: '+XXXXXXXXX'. 9 digitos admitidos.")
@@ -186,14 +187,17 @@ class Integrante(models.Model):
 class Consulta(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='consulta_doctor', on_delete=models.CASCADE)
-    diagnostico = models.CharField(max_length=250, default='', blank=False, null=False)
-    tratamiento = models.CharField(max_length=250, default='', blank=False, null=False)
-    indicaciones = models.CharField(max_length=250, default='', blank=False, null=False)
+    diagnostico = models.TextField(max_length=250, default='', blank=False, null=False)
+    tratamiento = models.TextField(max_length=250, default='', blank=False, null=False)
+    indicaciones = models.TextField(max_length=250, default='', blank=False, null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
         return str(self.paciente)
+
+    class Meta:
+        ordering = ('creado',)
 
 
 class Foto(models.Model):
@@ -206,7 +210,7 @@ class Foto(models.Model):
     image = models.ImageField("Imagen", upload_to='upload/imagenesConsulta')
 
     class Meta:
-        db_table = "ImgConsultas"
+        db_table = "dentalE_imagenes"
 
 
 class Cita(models.Model):

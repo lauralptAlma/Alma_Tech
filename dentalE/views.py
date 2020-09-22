@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-#from django.core.checks import messages
+# from django.core.checks import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import View
@@ -41,17 +41,6 @@ def doccambiopass(request):
     return render(request, "doctor/common/cambiar_pass.html", {})
 
 
-@login_required(login_url="/")
-def agregarconsulta(request):
-    form = ConsultaForm()
-    if request.method == 'POST':
-        form = CitaForm(request.POST)
-        if form.is_valid():
-            consulta = form.save()
-            return HttpResponseRedirect("/dentalE/resumendia/")
-    return render(request, "almaFront/doctores/agregar_consulta.html", {'form': form})
-
-
 # secretaria
 @login_required(login_url="/")
 def resumendia(request):
@@ -74,11 +63,11 @@ def agregarcita(request):
 
 @login_required(login_url="/")
 def agregartratamiento(request):
-    form = CitaForm()
+    form = ConsultaForm()
     if request.method == 'POST':
-        form = CitaForm(request.POST)
+        form = ConsultaForm(request.POST)
         if form.is_valid():
-            tratamiento = form.save()
+            consulta = form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_tratamiento.html", {'form': form})
 
@@ -91,8 +80,15 @@ def listadoctores(request):
 
 @login_required(login_url="/")
 def listapacientes(request):
-    pacientes = Paciente.objects.all()
+    pacientes = Paciente.objects.all().order_by('primer_apellido')
+
     return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
+
+    def get_queryset(self):
+        search = self.request.GET.get('search')
+        if search:
+            pacientes = Paciente.objects.filter(documento__exact=search).order_by('primer_apellido')
+        return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
 
 
 @login_required(login_url="/")
@@ -123,7 +119,7 @@ def pacienteinicio(request):
 
 
 @login_required(login_url="/")
-#def pacientedetalles(request,patient_id):
+# def pacientedetalles(request,patient_id):
 def pacientedetalles(request, documento):
     paciente = Paciente.objects.get(documento=documento)
     return render(request, "almaFront/pacientes/paciente.html", {'patient': paciente})
@@ -228,6 +224,7 @@ def ingreso(request):
             else:
                 return HttpResponseRedirect('/dentalE/pacienteincio')
     return render(request, 'almaFront/index.html')
+
 
 # def user_view(request):
 # current_user = request.user
