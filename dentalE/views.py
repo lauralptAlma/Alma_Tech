@@ -113,8 +113,8 @@ def pacienteinicio(request):
 
 @login_required(login_url="/")
 #def pacientedetalles(request,patient_id):
-def pacientedetalles(request):
-    paciente = Paciente.objects.get(documento=84406668)
+def pacientedetalles(request, documento):
+    paciente = Paciente.objects.get(documento=documento)
     return render(request, "almaFront/pacientes/paciente.html", {'patient': paciente})
 
 
