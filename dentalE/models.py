@@ -39,7 +39,8 @@ class UserProfile(models.Model):
 
 class Paciente(models.Model):
     # Informacion
-    documento = models.CharField('Documento', primary_key=True, max_length=8, help_text="Sin puntos ni guión", null=False,
+    paciente_id = models.AutoField(primary_key=True)
+    documento = models.CharField('Documento', max_length=8, unique=True, help_text="Sin puntos ni guión", null=False,
                                  blank=False)
     nombre = models.CharField('Nombre', max_length=100, null=False, blank=False)
     primer_apellido = models.CharField('Primer Apellido', max_length=100, null=False, blank=False)
