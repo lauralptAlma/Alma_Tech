@@ -8,18 +8,19 @@
         <div class="card-body">
             <div class="row justify-content-end">
                 <div>
-                    <form method="GET" id="search-form" autocomplete="off">
-            <div class="search-div input-group">
-                <input type="text" class="bg-light form-control border-0 small" id="search" name="search"
-                     placeholder="Buscar paciente..." value="{{ search }}">
-                <div class="input-group-append">
-                    <button class="btn btn-primary py-0" type="button" type="submit" id="search-btn">
-                        <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
+                    <form method="GET" id="search-form" autocomplete="on">
+                        <div class="search-div input-group">
+                            <input type="text" class="bg-light form-control border-0 small" id="search" name="search"
+                                   placeholder="Buscar paciente..." value="{{ search_text }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary py-0" type="button" type="submit" id="search-btn">
+                                    <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </form>
-                </div>
-            </div>
+
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                 <table class="table my-0" id="dataTable">
                     <thead class="card-header py-3">
@@ -28,7 +29,7 @@
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Celular</th>
-                        <th>      </th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,13 +38,14 @@
                             <tr class="tr-body">
                                 <td>{{ pat.documento }}</td>
                                 <td><a class="a-link"
-                                       href="/dentalE/pacientedetalles/{{ pat.documento }}">{{ pat.nombre }} {{ pat.primer_apellido }}</a></td>
+                                       href="/dentalE/pacientedetalles/{{ pat.documento }}">{{ pat.nombre }} {{ pat.primer_apellido }}</a>
+                                </td>
                                 <td>{{ pat.email }}</td>
                                 <td>{{ pat.celular }}</td>
                                 <td>
-                            <a href="{% url 'pacientedetalles' pat.documento %}">
-                                <span><i class="fas fa-pencil-alt"></i></span></a>
-                        </td>
+                                    <a href="{% url 'pacientedetalles' pat.documento %}">
+                                        <span><i class="fas fa-pencil-alt"></i></span></a>
+                                </td>
                             </tr>
                         {% endfor %}
                     {% else %}
@@ -59,6 +61,9 @@
             </div>
         </div>
     </div>
+    {% if is_paginated %}
+        {% include "paginator.html" %}
+    {% endif %}
 {% endblock %}
 {% block page-javascript %}
 {% endblock %}

@@ -1,3 +1,6 @@
+from search_views.search import SearchListView
+from search_views.filters import BaseFilter
+
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # from django.core.checks import messages
@@ -81,14 +84,7 @@ def listadoctores(request):
 @login_required(login_url="/")
 def listapacientes(request):
     pacientes = Paciente.objects.all().order_by('primer_apellido')
-
     return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
-
-    def get_queryset(self):
-        search = self.request.GET.get('search')
-        if search:
-            pacientes = Paciente.objects.filter(documento__exact=search).order_by('primer_apellido')
-        return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
 
 
 @login_required(login_url="/")
