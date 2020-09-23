@@ -6,5 +6,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', ingreso, name='ingreso'),
     url(r'^dentalE/', include('dentalE.urls')),
-
+    url(r'^accounts/', include('allauth.urls')),
 ]
