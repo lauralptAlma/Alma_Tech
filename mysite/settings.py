@@ -181,5 +181,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-ACCOUNT_LOGOUT_REDIRECT_URL ='/dentalE/resumendia/'
-LOGIN_REDIRECT_URL = '/dentalE/resumendia/' # default to /accounts/profile
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/dentalE/resumendia/'  # default to /accounts/profile
+ACCOUNT_LOGOUT_ON_GET = True
