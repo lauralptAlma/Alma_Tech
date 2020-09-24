@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-#from django.core.checks import messages
+from django.contrib import messages, auth
+# from django.core.checks import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import View
@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
-
 from .forms import CitaForm, PacienteForm, AntecedenteForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
 from datetime import date
@@ -28,7 +27,9 @@ def pruebaBaseFront(request):
 # doctor
 @login_required(login_url="/")
 def pacientesdeldia(request):
-    return render(request, "doctor/paciente_dia/paciente_dia.html", {})
+    citas_doctor_hoy = Cita.objects.filter(creado=date.today(), doctor=request.user)
+    return render(request, "almaFront/doctor/pacientes_dia.html",
+                  {'citas_usuario_hoy': citas_doctor_hoy})
 
 
 @login_required(login_url="/")
@@ -112,7 +113,7 @@ def pacienteinicio(request):
 
 
 @login_required(login_url="/")
-#def pacientedetalles(request,patient_id):
+# def pacientedetalles(request,patient_id):
 def pacientedetalles(request, documento):
     paciente = Paciente.objects.get(documento=documento)
     return render(request, "almaFront/pacientes/paciente.html", {'patient': paciente})
@@ -211,12 +212,13 @@ def ingreso(request):
             login(request, user)
             userprofile = UserProfile.objects.get(user=user)
             if userprofile.user_tipo == 'SECRETARIA':
-                return HttpResponseRedirect('/dentalE/resumendia/')
-            elif user.UserProfile.user_tipo == 'DOCTOR':
-                return HttpResponseRedirect('/dentalE/pacientesdeldia/')
+                return HttpResponseRedirect('/dentalE/resumendia/', {'user': userprofile})
+            elif userprofile.user_tipo == 'DOCTOR':
+                return HttpResponseRedirect('/dentalE/pacientesdeldia/', {'user': userprofile})
             else:
-                return HttpResponseRedirect('/dentalE/pacienteincio')
+                return HttpResponseRedirect('/dentalE/pacienteincio', {'user': userprofile})
     return render(request, 'almaFront/index.html')
+
 
 # def user_view(request):
 
@@ -238,3 +240,8 @@ def agregarantecedentes(request):
             )
             return HttpResponseRedirect("/dentalE/agregarantecedentes/")
     return render(request, "almaFront/agregar_antecedentes_clinicos.html", {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('ingreso')

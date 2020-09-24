@@ -1,0 +1,54 @@
+{% extends "almaFront/bases/blank.html"%}
+{% load static %}
+{% block tab-title %}Agenda{% endblock %}
+{% block page-title %}Agenda de hoy{% endblock %}
+
+{% block page-content %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="row justify-content-end">
+                <div>
+                    <div class="text-md-right dataTables_filter" id="dataTable_filter"><label>
+                        <input type="search" class="form-control form-control-sm"
+                               aria-controls="dataTable" placeholder="Buscar"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table class="table my-0" id="dataTable">
+                    <thead class="card-header py-3">
+                    <tr>
+                        <th>Nombre paciente</th>
+                        <th>Nombre doctor</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if agenda_hoy %}
+                        {% for app in citas_usuario_hoy %}
+                            <tr class="tr-body">
+                                <td><a class="a-link"
+                                       href="/dentalE/listadoctores/">{{ app.paciente.nombre }} {{ app.paciente.primer_apellido }}</a>
+                                </td>
+                                <td>{{ app.doctor.get_full_name }}</td>
+                                <td>{{ app.fecha }}</td>
+                                <td>{{ app.hora }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="no-data">
+                            <td colspan="20">No existen citas agendadas para el día de hoy.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                    <tfoot>
+                    <tr></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+{% endblock %}
