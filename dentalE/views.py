@@ -29,7 +29,7 @@ def pruebaBaseFront(request):
 def pacientesdeldia(request):
     citas_doctor_hoy = Cita.objects.filter(creado=date.today(), doctor=request.user)
     return render(request, "almaFront/doctor/pacientes_dia.html",
-                  {'citas_usuario_hoy': citas_doctor_hoy})
+                  {'citas_doctor_hoy': citas_doctor_hoy})
 
 
 @login_required(login_url="/")
@@ -45,7 +45,7 @@ def doccambiopass(request):
 # secretaria
 @login_required(login_url="/")
 def resumendia(request):
-    agenda_hoy = Cita.objects.filter(creado=date.today())
+    agenda_hoy = Cita.objects.filter(fecha=date.today())
     consulta_hoy = Consulta.objects.filter(creado=date.today())
     return render(request, "almaFront/secretaria/agenda_hoy.html",
                   {'agenda_hoy': agenda_hoy, 'consulta_hoy': consulta_hoy})
