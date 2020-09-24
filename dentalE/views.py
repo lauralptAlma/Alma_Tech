@@ -1,18 +1,15 @@
-from search_views.search import SearchListView
-from search_views.filters import BaseFilter
-
+from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-# from django.core.checks import messages
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, request
 from django.views import View
+from django.db.models import Q
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
-
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
 from datetime import date
@@ -83,9 +80,20 @@ def listadoctores(request):
 
 @login_required(login_url="/")
 def listapacientes(request):
-    pacientes = Paciente.objects.all().order_by('primer_apellido')
-    return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
+    busqueda = request.GET.get("buscar")
+    pacientes = Paciente.objects.all()
+    if busqueda:
+        pacientes = Paciente.objects.filter(
+            Q(nombre__icontains=busqueda) |
+            Q(primer_apellido__icontains=busqueda) |
+            Q(documento__icontains=busqueda)
+        ).distinct()
+    return render(request, "almaFront/pacientes/pacientes.html",
+                  {'patients': pacientes})
 
+class buscarView(TemplateView):
+    def post(self, request, *args, **kwargs):
+        return render(request, {'alma/pacientes/buscarpaciente.html'})
 
 @login_required(login_url="/")
 def rechangepassword(request):

@@ -8,6 +8,7 @@ from .views import (
     doccambiopass,
     agregartratamiento,
 
+
     # secretaria
     resumendia,
     listadoctores,
@@ -17,13 +18,14 @@ from .views import (
     agregarcita,
     agregartratamiento,
 
+
     # paciente
     pacienteinicio,
     pacientedetalles,
     pacientecambiopass,
     agregarantecedentes,
-
     pruebaBaseFront,
+
 )
 
 urlpatterns = [

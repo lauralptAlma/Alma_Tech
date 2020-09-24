@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^$', ingreso, name='ingreso'),
     url(r'^dentalE/', include('dentalE.urls')),
 
+
 ]

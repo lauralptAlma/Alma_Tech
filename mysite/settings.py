@@ -23,7 +23,6 @@ SECRET_KEY = '=bk%+xmok^b&wh=wg1)t8ms-qapvsypzy04g85u-wz011n^y$#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -35,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'dentalE',
 ]
 

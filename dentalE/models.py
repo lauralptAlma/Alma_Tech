@@ -28,10 +28,10 @@ SN_OPCIONES = (('NO', 'NO'), ('SI', 'SI'))
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_tipo = models.CharField(max_length=15, choices=USER_TIPO, default='')
-    user_celular = models.CharField(null=True)
+    user_celular = models.IntegerField(null=True)
     user_alta = models.DateField(blank=True, null=True)
     user_especialidad = models.CharField(max_length=15, choices=USER_ESPECIALIDAD, blank=True, null=True)
-    user_calificacion = models.IntegerField(max_length=100, blank=True, null=True)
+    user_calificacion = models.CharField(max_length=100, blank=True, null=True)
 
     def __unicode__(self):
         return self.user

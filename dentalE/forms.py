@@ -122,10 +122,10 @@ class BaseIntegrantesFormset(BaseInlineFormSet):
             if self._is_adding_nested_inlines_to_empty_form(form):
                 form.add_error(
                     field=None,
-                    error=_('Esta tratando de agregar integrantes a un nucleo'
-                            'que no existe'
-                            'Por favor ingrese la informacion del nucleo '
-                            'e intente luego con los integrantes'))
+                    error=('Esta tratando de agregar integrantes a un nucleo'
+                           'que no existe'
+                           'Por favor ingrese la informacion del nucleo '
+                           'e intente luego con los integrantes'))
 
     def save(self, commit=True):
         """

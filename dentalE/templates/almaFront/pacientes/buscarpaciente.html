@@ -1,27 +1,13 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
-{% block tab-title %}Pacientes{% endblock %}
-{% block page-title %}Pacientes{% endblock %}
+{% block tab-title %}Resultado{% endblock %}
+{% block page-title %}Resultado de la busqueda{% endblock %}
 
 {% block page-content %}
     <div class="card shadow">
         <div class="card-body">
             <div class="row justify-content-end">
-                <div>
-                    <form method="GET" id="search-form" autocomplete="on" >
-                        <div class="search-div input-group">{% csrf_token %}
-                            <input type="text" class="bg-light form-control border-0 small"
-                                   name="buscar" value="{{documento }}"
-                                   placeholder="Buscar paciente...">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary py-0" type="submit" id="search-btn" >
-                                    <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
-                            </div>
-                        </div>
 
-                    </form>
-
-                </div>
             </div>
 
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -58,6 +44,7 @@
                         <tr class="no-data">
                             <td colspan="20">No existen pacientes en el sistema.</td>
                         </tr>
+                        {% csrf_token %}
                     {% endif %}
                     </tbody>
                     <tfoot>
