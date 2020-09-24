@@ -1,15 +1,17 @@
+from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 # from django.core.checks import messages
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, request
 from django.views import View
+from django.db.models import Q
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
-from .forms import CitaForm, PacienteForm, AntecedenteForm
+from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
 from datetime import date
 
@@ -34,7 +36,7 @@ def pacientesdeldia(request):
 
 @login_required(login_url="/")
 def pacientedeldiadetalles(request):
-    return render(request, "doctor/paciente_dia/paciente_dia_detalles.html", {})
+    return render(request, "doctor/today_patient/paciente_dia_detalles.html", {})
 
 
 @login_required(login_url="/")
@@ -64,11 +66,11 @@ def agregarcita(request):
 
 @login_required(login_url="/")
 def agregartratamiento(request):
-    form = CitaForm()
+    form = ConsultaForm()
     if request.method == 'POST':
-        form = CitaForm(request.POST)
+        form = ConsultaForm(request.POST)
         if form.is_valid():
-            tratamiento = form.save()
+            consulta = form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_tratamiento.html", {'form': form})
 
@@ -81,9 +83,20 @@ def listadoctores(request):
 
 @login_required(login_url="/")
 def listapacientes(request):
+    busqueda = request.GET.get("buscar")
     pacientes = Paciente.objects.all()
-    return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
+    if busqueda:
+        pacientes = Paciente.objects.filter(
+            Q(nombre__icontains=busqueda) |
+            Q(primer_apellido__icontains=busqueda) |
+            Q(documento__icontains=busqueda)
+        ).distinct()
+    return render(request, "almaFront/pacientes/pacientes.html",
+                  {'patients': pacientes})
 
+class buscarView(TemplateView):
+    def post(self, request, *args, **kwargs):
+        return render(request, {'alma/pacientes/buscarpaciente.html'})
 
 @login_required(login_url="/")
 def rechangepassword(request):
@@ -221,7 +234,6 @@ def ingreso(request):
 
 
 # def user_view(request):
-
 # current_user = request.user
 # return current_user.get_full_name()
 

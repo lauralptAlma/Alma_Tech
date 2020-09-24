@@ -38,6 +38,16 @@
                 </li>
             {% endif %}
 
+         <li class="nav-item"><a class="nav-link" href="/dentalE/agregartratamiento/">
+                <i class="fas fa-laptop-medical" {% if 'agregarconsulta' in request.path %}
+                   style="color: white" {% endif %}></i>
+                <span class={% if 'agregarconsulta' in request.path %} actual-page {% endif %}>Agregar Consulta</span></a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/dentalE/agregarantecedentes/">
+                <i class="fas fa-user-plus" {% if 'agregarantecedentes' in request.path %}
+                   style="color: white" {% endif %}></i>
+                <span class={% if 'agregarantecedentes' in request.path %} actual-page {% endif %}>Agregar Antecedentes Clínicos</span></a>
+            </li>
             <li class="nav-item"><a class="nav-link" href="nucleos-familiares.html">
                 <i class="fas fa-users" {% if 'listanucleos' in request.path %} style="color: white" {% endif %}></i>
                 <span class={% if 'listanucleos' in request.path %} actual-page {% endif %}>Núcleos Familiares</span></a>
