@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 {% load socialaccount %}
 <html>
@@ -29,13 +30,10 @@
                         <div class="col-lg-10">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h4 class="text-dark mb-4">Ingresar a Dental-e</h4>
+                                    <img src= "static/assets/img/logos/LogoHAlma_2.jpg" class="img-fluid" >
                                 </div>
                                 <div class="text-center">
-                                    <div class="text-dark mb-4">Para ingresar debe estar dado de alta en el sistema y
-                                        contar con una cuenta
-                                        de Google suite. Contacte a su administrador.
-                                    </div>
+
                                 </div>
                                 <form method="post" action="" class="user">
                                     {% csrf_token %}
@@ -52,7 +50,8 @@
                                     <button class="btn btn-primary btn-block text-white btn-user" type="submit">Ingresar
                                     </button>
                                     <hr>
-                                    <a href="{% provider_login_url 'google'%}" class="btn btn-primary btn-block text-white btn-user" role="button"><i
+                                    <a href="{% provider_login_url 'google' %}"
+                                       class="btn btn-primary btn-block text-white btn-user" role="button"><i
                                             class="fab fa-google"></i>&nbsp; Ingresar con Google
                                     </a>
                                 </form>
