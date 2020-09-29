@@ -4,7 +4,6 @@ from .views import (
 
     # doctor
     pacientedeldiadetalles,
-    pacientesdeldia,
     doccambiopass,
     agregartratamiento,
 
@@ -31,7 +30,6 @@ from .views import (
 urlpatterns = [
 
     # doctor
-    url(r'^pacientesdeldia/$', pacientesdeldia, name='pacientesdeldia'),
     url(r'^pacientedeldiadetalles/$', pacientedeldiadetalles, name='pacientedeldiadetalles'),
     url(r'^doccambiopass/$', doccambiopass, name='doccambiopass'),
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),

@@ -10,15 +10,9 @@
         <hr class="sidebar-divider my-0">
         <ul class="nav navbar-nav text-light" id="accordionSidebar">
             <li class="nav-item">
-                <a class="nav-link" {% if user.userprofile.user_tipo == 'DOCTOR' %} href="/dentalE/pacientesdeldia/"
-                {% elif  user.userprofile.user_tipo == 'SECRETARIA' %}
-                   href="/dentalE/resumendia/"
-                {% else %}
-                   href="{% url 'logout' %}"
-                {% endif %}
-                >
+                <a class="nav-link" href="/dentalE/resumendia/">
                     <i class="far fa-calendar-alt"
-                            {% if 'resumendia' in request.path or 'pacientesdeldia' in request.path %}
+                            {% if 'resumendia' in request.path %}
                        style="color: white" {% endif %}></i>
                     <span class={% if 'resumendia' in request.path or 'pacientesdeldia' in request.path %} actual-page {% endif %}>Agenda</span></a>
             </li>

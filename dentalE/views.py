@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
@@ -28,10 +29,21 @@ def pruebaBaseFront(request):
 
 # doctor
 @login_required(login_url="/")
-def pacientesdeldia(request):
-    citas_doctor_hoy = Cita.objects.filter(creado=date.today(), doctor=request.user)
-    return render(request, "almaFront/doctor/pacientes_dia.html",
-                  {'citas_doctor_hoy': citas_doctor_hoy})
+def resumendia(request):
+    try:
+        userprofile = UserProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        return render(request, 'almaFront/bases/404.html')
+    if userprofile.user_tipo == 'SECRETARIA':
+        agenda_hoy = Cita.objects.filter(fecha=date.today())
+        return render(request, 'almaFront/secretaria/agenda_hoy.html',
+                      {'agenda_hoy': agenda_hoy})
+    elif userprofile.user_tipo == 'DOCTOR':
+        citas_doctor_hoy = Cita.objects.filter(creado=date.today(), doctor=request.user)
+        return render(request, 'almaFront/doctor/pacientes_dia.html',
+                      {'citas_doctor_hoy': citas_doctor_hoy})
+    else:
+        return HttpResponseRedirect('account_logout')
 
 
 @login_required(login_url="/")
@@ -43,14 +55,6 @@ def pacientedeldiadetalles(request):
 def doccambiopass(request):
     return render(request, "doctor/common/cambiar_pass.html", {})
 
-
-# secretaria
-@login_required(login_url="/")
-def resumendia(request):
-    agenda_hoy = Cita.objects.filter(fecha=date.today())
-    consulta_hoy = Consulta.objects.filter(creado=date.today())
-    return render(request, "almaFront/secretaria/agenda_hoy.html",
-                  {'agenda_hoy': agenda_hoy, 'consulta_hoy': consulta_hoy})
 
 
 @login_required(login_url="/")
@@ -126,9 +130,8 @@ def pacienteinicio(request):
 
 
 @login_required(login_url="/")
-# def pacientedetalles(request,patient_id):
-def pacientedetalles(request, documento):
-    paciente = Paciente.objects.get(documento=documento)
+def pacientedetalles(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
     return render(request, "almaFront/pacientes/paciente.html", {'patient': paciente})
 
 
