@@ -1,16 +1,17 @@
+from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-#from django.core.checks import messages
+from django.contrib import messages, auth
+# from django.core.checks import messages
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, request
 from django.views import View
+from django.db.models import Q
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
-
-from .forms import CitaForm, PacienteForm, AntecedenteForm
+from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
 from datetime import date
 
@@ -28,12 +29,14 @@ def pruebaBaseFront(request):
 # doctor
 @login_required(login_url="/")
 def pacientesdeldia(request):
-    return render(request, "doctor/paciente_dia/paciente_dia.html", {})
+    citas_doctor_hoy = Cita.objects.filter(creado=date.today(), doctor=request.user)
+    return render(request, "almaFront/doctor/pacientes_dia.html",
+                  {'citas_doctor_hoy': citas_doctor_hoy})
 
 
 @login_required(login_url="/")
 def pacientedeldiadetalles(request):
-    return render(request, "doctor/paciente_dia/paciente_dia_detalles.html", {})
+    return render(request, "doctor/today_patient/paciente_dia_detalles.html", {})
 
 
 @login_required(login_url="/")
@@ -44,7 +47,7 @@ def doccambiopass(request):
 # secretaria
 @login_required(login_url="/")
 def resumendia(request):
-    agenda_hoy = Cita.objects.filter(creado=date.today())
+    agenda_hoy = Cita.objects.filter(fecha=date.today())
     consulta_hoy = Consulta.objects.filter(creado=date.today())
     return render(request, "almaFront/secretaria/agenda_hoy.html",
                   {'agenda_hoy': agenda_hoy, 'consulta_hoy': consulta_hoy})
@@ -63,11 +66,11 @@ def agregarcita(request):
 
 @login_required(login_url="/")
 def agregartratamiento(request):
-    form = CitaForm()
+    form = ConsultaForm()
     if request.method == 'POST':
-        form = CitaForm(request.POST)
+        form = ConsultaForm(request.POST)
         if form.is_valid():
-            tratamiento = form.save()
+            consulta = form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_tratamiento.html", {'form': form})
 
@@ -80,9 +83,20 @@ def listadoctores(request):
 
 @login_required(login_url="/")
 def listapacientes(request):
+    busqueda = request.GET.get("buscar")
     pacientes = Paciente.objects.all()
-    return render(request, "almaFront/pacientes/pacientes.html", {'patients': pacientes})
+    if busqueda:
+        pacientes = Paciente.objects.filter(
+            Q(nombre__icontains=busqueda) |
+            Q(primer_apellido__icontains=busqueda) |
+            Q(documento__icontains=busqueda)
+        ).distinct()
+    return render(request, "almaFront/pacientes/pacientes.html",
+                  {'patients': pacientes})
 
+class buscarView(TemplateView):
+    def post(self, request, *args, **kwargs):
+        return render(request, {'alma/pacientes/buscarpaciente.html'})
 
 @login_required(login_url="/")
 def rechangepassword(request):
@@ -112,7 +126,7 @@ def pacienteinicio(request):
 
 
 @login_required(login_url="/")
-#def pacientedetalles(request,patient_id):
+# def pacientedetalles(request,patient_id):
 def pacientedetalles(request, documento):
     paciente = Paciente.objects.get(documento=documento)
     return render(request, "almaFront/pacientes/paciente.html", {'patient': paciente})
@@ -211,15 +225,15 @@ def ingreso(request):
             login(request, user)
             userprofile = UserProfile.objects.get(user=user)
             if userprofile.user_tipo == 'SECRETARIA':
-                return HttpResponseRedirect('/dentalE/resumendia/')
-            elif user.UserProfile.user_tipo == 'DOCTOR':
-                return HttpResponseRedirect('/dentalE/pacientesdeldia/')
+                return HttpResponseRedirect('/dentalE/resumendia/', {'user': userprofile})
+            elif userprofile.user_tipo == 'DOCTOR':
+                return HttpResponseRedirect('/dentalE/pacientesdeldia/', {'user': userprofile})
             else:
-                return HttpResponseRedirect('/dentalE/pacienteincio')
+                return HttpResponseRedirect('/dentalE/pacienteincio', {'user': userprofile})
     return render(request, 'almaFront/index.html')
 
-# def user_view(request):
 
+# def user_view(request):
 # current_user = request.user
 # return current_user.get_full_name()
 
@@ -238,3 +252,8 @@ def agregarantecedentes(request):
             )
             return HttpResponseRedirect("/dentalE/agregarantecedentes/")
     return render(request, "almaFront/agregar_antecedentes_clinicos.html", {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('ingreso')

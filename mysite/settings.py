@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 from django.contrib.messages import constants as messages
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,7 +23,6 @@ SECRET_KEY = '=bk%+xmok^b&wh=wg1)t8ms-qapvsypzy04g85u-wz011n^y$#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -34,7 +34,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'dentalE',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -47,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # Simplified static file serving.
     # https://warehouse.python.org/project/whitenoise/
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -76,7 +82,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        "CLIENT": {"name": 'dentaledb',
+        "CLIENT": {"name": 'oauthdb',
                    "host": 'mongodb+srv://admin:almaAdmin@clusteralmatech.izim4.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true',
                    "username": 'admin',
                    "password": 'almaAdmin',
@@ -153,3 +159,28 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '953947530415-0a9apj9ac2s34fah80u2rr54a44a1be3.apps.googleusercontent.com',
+            'secret': 'Vy17yZes7PRxD2m2gylDZSxk',
+            'key': ''
+        }
+    }
+}
+
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/dentalE/resumendia/'  # default to /accounts/profile
+ACCOUNT_LOGOUT_ON_GET = True

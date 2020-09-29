@@ -6,6 +6,8 @@ from .views import (
     pacientedeldiadetalles,
     pacientesdeldia,
     doccambiopass,
+    agregartratamiento,
+
 
     # secretaria
     resumendia,
@@ -16,13 +18,14 @@ from .views import (
     agregarcita,
     agregartratamiento,
 
+
     # paciente
     pacienteinicio,
     pacientedetalles,
     pacientecambiopass,
     agregarantecedentes,
-
     pruebaBaseFront,
+
 )
 
 urlpatterns = [
@@ -31,6 +34,7 @@ urlpatterns = [
     url(r'^pacientesdeldia/$', pacientesdeldia, name='pacientesdeldia'),
     url(r'^pacientedeldiadetalles/$', pacientedeldiadetalles, name='pacientedeldiadetalles'),
     url(r'^doccambiopass/$', doccambiopass, name='doccambiopass'),
+    url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),

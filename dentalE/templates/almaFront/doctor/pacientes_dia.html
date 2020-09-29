@@ -1,4 +1,4 @@
-{% extends "almaFront/bases/blank.html" %}
+{% extends "almaFront/bases/blank.html"%}
 {% load static %}
 {% block tab-title %}Agenda{% endblock %}
 {% block page-title %}Agenda de hoy{% endblock %}
@@ -8,16 +8,10 @@
         <div class="card-body">
             <div class="row justify-content-end">
                 <div>
-                  <form method="GET" id="search-form" autocomplete="off">
-            <div class="search-div input-group">
-                <input type="text" class="form-control" id="search" name="search"
-                     placeholder="Buscar paciente..." value="{{ search }}">
-                <div class="input-group-append">
-                    <button class="btn input-group-text lime lighten-2" type="submit" id="search-btn">
-                        <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
-                </div>
-            </div>
-        </form>
+                    <div class="text-md-right dataTables_filter" id="dataTable_filter"><label>
+                        <input type="search" class="form-control form-control-sm"
+                               aria-controls="dataTable" placeholder="Buscar"></label>
+                    </div>
                 </div>
             </div>
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -31,8 +25,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% if agenda_hoy %}
-                        {% for app in agenda_hoy %}
+                    {% if citas_doctor_hoy %}
+                        {% for app in citas_doctor_hoy %}
                             <tr class="tr-body">
                                 <td><a class="a-link"
                                        href="/dentalE/listadoctores/">{{ app.paciente.nombre }} {{ app.paciente.primer_apellido }}</a>

@@ -21,9 +21,9 @@ class PacienteForm(ModelForm):
     class Meta:
         model = Paciente
         fields = (
-        'documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'direccion', 'fecha_nacimiento', 'email',
-        'celular',
-        'nucleo_activo')
+            'documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'direccion', 'fecha_nacimiento', 'email',
+            'celular',
+            'nucleo_activo')
 
         widgets = {
             'documento': forms.TextInput(attrs={'class': 'form-control'}),
@@ -122,10 +122,10 @@ class BaseIntegrantesFormset(BaseInlineFormSet):
             if self._is_adding_nested_inlines_to_empty_form(form):
                 form.add_error(
                     field=None,
-                    error=_('Esta tratando de agregar integrantes a un nucleo'
-                            'que no existe'
-                            'Por favor ingrese la informacion del nucleo '
-                            'e intente luego con los integrantes'))
+                    error=('Esta tratando de agregar integrantes a un nucleo'
+                           'que no existe'
+                           'Por favor ingrese la informacion del nucleo '
+                           'e intente luego con los integrantes'))
 
     def save(self, commit=True):
         """
