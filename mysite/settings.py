@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django.contrib.sites',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -184,3 +185,8 @@ SOCIALACCOUNT_PROVIDERS = {
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/dentalE/resumendia/'  # default to /accounts/profile
 ACCOUNT_LOGOUT_ON_GET = True
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
