@@ -110,7 +110,7 @@ a {
 @media only screen and (min-width: 767px) {
     #logo {
         content: url("/static/assets/img/logos/LogoHAlma.png");
-        width: 100%;
+         width: 100%;
 
     }
 }

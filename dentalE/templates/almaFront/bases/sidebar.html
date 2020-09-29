@@ -14,7 +14,7 @@
                     <i class="far fa-calendar-alt"
                             {% if 'resumendia' in request.path %}
                        style="color: white" {% endif %}></i>
-                    <span class={% if 'resumendia' in request.path %} actual-page {% endif %}>Agenda</span></a>
+                    <span class={% if 'resumendia' in request.path or 'pacientesdeldia' in request.path %} actual-page {% endif %}>Agenda</span></a>
             </li>
             <li class="nav-item"><a class="nav-link" href="/dentalE/listapacientes/">
                 <i class="fas fa-user" {% if 'listapacientes' in request.path %} style="color: white" {% endif %}></i>

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 # from django.core.checks import messages
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, request
 from django.views import View
 from django.db.models import Q
 from django.contrib.auth.models import User, Group
@@ -98,11 +98,9 @@ def listapacientes(request):
     return render(request, "almaFront/pacientes/pacientes.html",
                   {'patients': pacientes})
 
-
 class buscarView(TemplateView):
     def post(self, request, *args, **kwargs):
         return render(request, {'alma/pacientes/buscarpaciente.html'})
-
 
 @login_required(login_url="/")
 def rechangepassword(request):
