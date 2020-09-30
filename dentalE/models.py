@@ -1,7 +1,10 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from djongo.models import JSONField
+
 from django.contrib.auth.models import User
+
 import datetime
 
 # USUARIO OPTIONS
@@ -213,6 +216,17 @@ class Foto(models.Model):
         db_table = "dentalE_imagenes"
 
 
+class CPO(models.Model):
+    cpo_id = models.AutoField(primary_key=True)
+    contenido_cpo = JSONField()
+
+    class Meta:
+        db_table = "dentalE_CPOs"
+
+    def __str__(self):
+        return str(self.cpo_id)
+
+
 class Cita(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='app_doctor', on_delete=models.CASCADE)
@@ -229,3 +243,16 @@ class Cita(models.Model):
 
     def __str__(self):
         return str(self.paciente)
+
+
+'''
+va comentado lo del shell para que lo puedas usar
+(almaEnv) C:\ProyectoAlma\Alma_Tech>python manage.py shell
+Python 3.8.5 (tags/v3.8.5:580fbb0, Jul 20 2020, 15:43:08) [MSC v.1926 32 bit (Intel)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from dentalE.models import CPO
+>>> cpo=CPO(contenido_cpo={'C1': {'11': {'sano':False,'perdido':False,'ausente':False,'mesial':'cariado','oclusal':'obturado'}}, 'C2':{'17':{'sano':True}}})
+>>> cpo.save()
+>>>
+'''

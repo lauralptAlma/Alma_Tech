@@ -8,7 +8,7 @@ from django.urls import reverse
 import datetime
 from django.forms.widgets import SelectDateWidget
 from django.forms import ModelForm, Form
-from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos
+from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos, CPO
 
 
 class IngresoForm(ModelForm):

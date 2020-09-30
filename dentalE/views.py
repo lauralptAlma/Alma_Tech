@@ -1,10 +1,12 @@
+import json
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 # from django.core.checks import messages
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect, request
+from django.http import HttpResponseRedirect
 from django.views import View
 from django.db.models import Q
 from django.contrib.auth.models import User, Group
@@ -13,7 +15,7 @@ from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm
-from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
+from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos, CPO
 from datetime import date
 
 
@@ -54,7 +56,6 @@ def pacientedeldiadetalles(request):
 @login_required(login_url="/")
 def doccambiopass(request):
     return render(request, "doctor/common/cambiar_pass.html", {})
-
 
 
 @login_required(login_url="/")
@@ -98,9 +99,11 @@ def listapacientes(request):
     return render(request, "almaFront/pacientes/pacientes.html",
                   {'patients': pacientes})
 
+
 class buscarView(TemplateView):
     def post(self, request, *args, **kwargs):
         return render(request, {'alma/pacientes/buscarpaciente.html'})
+
 
 @login_required(login_url="/")
 def rechangepassword(request):
@@ -260,3 +263,14 @@ def agregarantecedentes(request):
 def logout_view(request):
     logout(request)
     return redirect('ingreso')
+
+
+@login_required(login_url="/")
+def add_cpo(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        cpo = CPO()
+        cpo.contenido_cpo = data
+        cpo.save()
+        return HttpResponseRedirect("/dentalE/agregarantecedentes/")
+    return render(request, "almaFront/agregar_antecedentes_clinicos.html")
