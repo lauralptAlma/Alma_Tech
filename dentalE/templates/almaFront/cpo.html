@@ -30,45 +30,54 @@
                                 </div>
                             </div>
                         </div>
-                        <form>
-                            <div class="row">
-                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                                    <div class="input-group mb-3 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CeoD</span>
+                        <div class="row">
+                            <form>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                            <div class="input-group mb-3 input-group-sm">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">CeoD</span>
+                                                </div>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                            <div class="input-group mb-3 input-group-sm">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">CeoS</span>
+                                                </div>
+                                                <input type="text" class="form-control">
+                                            </div>
                                         </div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <div class="input-group mb-3 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CeoS</span>
+                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                            <div class="input-group mb-3 input-group-sm">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">CpoD</span>
+                                                </div>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                            <div class="input-group mb-3 input-group-sm">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">CpoS</span>
+                                                </div>
+                                                <input type="text" class="form-control">
+                                            </div>
                                         </div>
-                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                                    <div class="input-group mb-3 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CpoD</span>
-                                        </div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <div class="input-group mb-3 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CpoS</span>
-                                        </div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </div>
+                            </form>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <button class="btn btn-info" onclick="obtenerCPO()"
+                                        style="float: right;">Guardar
+                                </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row justify-content-center">
                             <h6 class="card-subtitle mb-2 text-primary-alma">Seleccionar Estado</h6>
                             <p class="text-alma">Presione el botón del estado correspondiente.</p>
                             <!--Botones para seleccionar situación del diente-->
@@ -94,11 +103,11 @@
                             <!--Referencias-->
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div style="height: 20px; width:20px; display:inline-block;"
-                                     class="decayed-tooth"></div>
+                                     class="decayed-tooth-ref"></div>
                                 = Cariado
                                 <br>
                                 <div style="height: 20px; width:20px; display:inline-block;"
-                                     class="filled-tooth"></div>
+                                     class="filled-tooth-ref"></div>
                                 = Obturación
                                 <br>
                                 <div>
@@ -111,38 +120,6 @@
                                     <img class="referencia"
                                          src="{% static 'assets/img/CPO/perdido.svg' %}"> =
                                     <span style="display:inline-block;">Perdido</span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Referencias-->
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="card col-sm-10">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
-                                <div style="height: 20px; width:20px; display:inline-block;"
-                                     class="decayed-tooth"></div>
-                                = Cariado
-                                <br>
-                                <div>
-                                    <img class="referencia" src="{% static 'assets/img/CPO/ausente.svg' %}"> =
-                                    <span style="display:inline-block;"> Pieza Ausente</span>
-                                </div>
-                            </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <div style="height: 20px; width:20px; display:inline-block;"
-                                     class="filled-tooth"></div>
-                                = Obturación
-                                <br>
-                                <div>
-                                    <img class="referencia" src="{% static 'assets/img/CPO/perdido.svg' %}"> =
-                                    <span style="display:inline-block;"> Pieza Perdida</span>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +230,7 @@
             $(".click").click(function (event) {
                 var control = $("#controls").children().find('.active').attr('id');
                 var cuadro = $(this).find("input[name=cuadro]:hidden").val();
-                console.log($(this).attr('id'))
+                //console.log($(this).attr('id'))
                 switch (control) {
                     case "cariado":
                         if ($(this).hasClass("filled-tooth")) {
@@ -301,8 +278,8 @@
                         break;
                     case "perdido":
                         var dientePosition = $(this).position();
-                        console.log($(this))
-                        console.log(dientePosition)
+                        //console.log($(this))
+                        //console.log(dientePosition)
                         $(this).parent().children().each(function (index, el) {
                             if ($(el).hasClass("click")) {
                                 if ($(el).hasClass("missing-tooth")) {
@@ -324,8 +301,8 @@
                         break;
                     case "ausente":
                         var dientePosition = $(this).position();
-                        console.log($(this))
-                        console.log(dientePosition)
+                        //console.log($(this))
+                        //console.log(dientePosition)
                         $(this).parent().children().each(function (index, el) {
                             if ($(el).hasClass("click")) {
                                 if ($(el).hasClass("lacking-tooth")) {
@@ -352,5 +329,43 @@
             });
             return false;
         });
+    </script>
+    <script type="text/javascript">
+        function obtenerCPO() {
+            //let dientes = [];
+            let dientes = '{';
+            const cariados = $('.decayed-tooth');
+            cariados.each(function (index, element) {
+                let idCarie = $(element).attr('id');
+                //dientes.push(idCarie,'cariado')
+                dientes += '"' + idCarie + '"' + ':"cariado",'
+                console.log($(element).attr('id'))
+            });
+            const obturados = $('.filled-tooth');
+            obturados.each(function (index, element) {
+                let idObturado = $(element).attr('id');
+                //dientes.push(idObturado,'obturado')
+                dientes += '"' + idObturado + '"' + ':"obturado",'
+                console.log($(element).attr('id'))
+            });
+            const perdidos = $('.missing-tooth');
+            perdidos.each(function (index, element) {
+                let idPerdido = $(element).attr('id');
+                //dientes.push(idPerdido,'perdido')
+                dientes += '"' + idPerdido + '"' + ':"perdido",'
+                console.log($(element).attr('id'))
+            });
+            const ausentes = $('.lacking-tooth');
+            ausentes.each(function (index, element) {
+                let idAusente = $(element).attr('id');
+                //dientes.push(idAusente,'ausente')
+                dientes += '"' + idAusente + '"' + ':"ausente",'
+                console.log($(element).attr('id'))
+            });
+            dientes = dientes.substring(0, dientes.length - 1);
+            dientes += '}'
+            console.log(dientes)
+            console.log(JSON.parse(dientes))
+        }
     </script>
 {% endblock %}

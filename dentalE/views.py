@@ -20,13 +20,7 @@ from datetime import date
 
 
 def pruebaBaseFront(request):
-    form = AntecedenteForm()
-    if request.method == 'POST':
-        form = AntecedenteForm(request.POST)
-        if form.is_valid():
-            patient = form.save()
-            return HttpResponseRedirect("/dentalE/resumendia/")
-    return render(request, "almaFront/agregar_antecedentes_clinicos.html", {'form': form})
+    return render(request, "almaFront/cpo.html")
 
 
 # doctor
@@ -263,6 +257,11 @@ def agregarantecedentes(request):
 def logout_view(request):
     logout(request)
     return redirect('ingreso')
+
+
+@login_required(login_url="/")
+def agregarCPO(request):
+    return render(request, "almaFront/cpo.html")
 
 
 @login_required(login_url="/")

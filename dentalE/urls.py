@@ -6,7 +6,7 @@ from .views import (
     pacientedeldiadetalles,
     doccambiopass,
     agregartratamiento,
-
+    agregarCPO,
 
     # secretaria
     resumendia,
@@ -15,8 +15,6 @@ from .views import (
     agregarpaciente,
     listapacientes,
     agregarcita,
-    agregartratamiento,
-
 
     # paciente
     pacienteinicio,
@@ -33,6 +31,7 @@ urlpatterns = [
     url(r'^pacientedeldiadetalles/$', pacientedeldiadetalles, name='pacientedeldiadetalles'),
     url(r'^doccambiopass/$', doccambiopass, name='doccambiopass'),
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
+    url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
@@ -41,7 +40,6 @@ urlpatterns = [
     url(r'^agregarpaciente/$', agregarpaciente, name="agregarpaciente"),
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
     url(r'^agregarcita/$', agregarcita, name="agregarcita"),
-    url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),

@@ -242,8 +242,16 @@ a {
     background-color: #D32F2F !important;
 }
 
+.decayed-tooth-ref {
+    background-color: #D32F2F !important;
+}
+
 .filled-tooth {
-    background-color: #0D47A1;
+    background-color: #0D47A1 !important;
+}
+
+.filled-tooth-ref {
+    background-color: #0D47A1 !important;
 }
 
 .lacking-tooth {
