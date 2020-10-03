@@ -1,7 +1,7 @@
 function replaceAll(find, replace, str) {
     return str.replace(new RegExp(find, 'g'), replace);
 }
-
+/*Crea la estructura del odontograma*/
 function createOdontogram() {
     var htmlLecheLeft = "",
         htmlLecheRight = "",
@@ -14,7 +14,6 @@ function createOdontogram() {
         if (i == 8 || i == 1) {
             claseDiente = "primer-diente";
         }
-        /*htmlRight += '<div data-name="value" id="dienteindex' + i + '" class="diente">' +*/
         htmlRight += '<div data-name="value" id="dienteindex' + i + '" class=' + claseDiente + '>' +
             '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
             '<div id="tindex' + i + '" class="cuadro click">' +
@@ -91,7 +90,8 @@ function createOdontogram() {
     $("#bll").append(replaceAll('index', '7', htmlLecheLeft));
     $("#blr").append(replaceAll('index', '8', htmlLecheRight));
 }
-
+/* Cuando se carga la página, crea el odontograma y según el botón seleccionado y la pieza en que se hizo click
+* se le agrega la clase correspondiente a dicha pieza */
 $(document).ready(function () {
     createOdontogram();
     $(".click").click(function (event) {
@@ -191,3 +191,37 @@ $(document).ready(function () {
     });
     return false;
 });
+
+/* Al presionar Guardar obtiene el id de los elementos que tienen como atributo las clases correspondientes
+* a cariado, obturado, perdido o ausente y los almacena en un string con formato JSON. Al finalizar quita
+* la última coma y le asigna el valor del CPO al elemento correspondiente para ser almacenado. */
+function obtenerCPO() {
+    let dientes = '{';
+    const cariados = $('.decayed-tooth');
+    cariados.each(function (index, element) {
+        let idCarie = $(element).attr('id');
+        dientes += '"' + idCarie + '"' + ':"cariado",'
+        console.log($(element).attr('id'))
+    });
+    const obturados = $('.filled-tooth');
+    obturados.each(function (index, element) {
+        let idObturado = $(element).attr('id');
+        dientes += '"' + idObturado + '"' + ':"obturado",'
+        console.log($(element).attr('id'))
+    });
+    const perdidos = $('.missing-tooth');
+    perdidos.each(function (index, element) {
+        let idPerdido = $(element).attr('id');
+        dientes += '"' + idPerdido + '"' + ':"perdido",'
+        console.log($(element).attr('id'))
+    });
+    const ausentes = $('.lacking-tooth');
+    ausentes.each(function (index, element) {
+        let idAusente = $(element).attr('id');
+        dientes += '"' + idAusente + '"' + ':"ausente",'
+        console.log($(element).attr('id'))
+    });
+    dientes = dientes.substring(0, dientes.length - 1);
+    dientes += '}'
+    $("#id_contenido_cpo").val(dientes)
+}

@@ -43,7 +43,7 @@ urlpatterns = [
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),
-    url(r'^pacientedetalles/(?P<documento>\w{0,50})$', pacientedetalles, name='pacientedetalles'),
+    url(r'^pacientedetalles/(?P<paciente_id>[0-9])/$', pacientedetalles, name='pacientedetalles'),
     url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
     url(r'^agregarantecedentes/$', agregarantecedentes, name='agregarantecedentes'),
 

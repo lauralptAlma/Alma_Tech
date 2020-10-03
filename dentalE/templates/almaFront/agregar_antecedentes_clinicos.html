@@ -19,7 +19,8 @@
     </div>
 {% endblock %}
 {% block page-javascript %}
-    {% include 'almaFront/bases/hide-elements.html' %}
+    <script type="text/javascript" src="{% static 'assets/js/hide-elements-antecedentes.js'%}">
+    </script>
     <script>
         $('select').attr('class', 'form-control');
     </script>

@@ -71,7 +71,7 @@ def agregartratamiento(request):
         if form.is_valid():
             consulta = form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
-    return render(request, "secretaria/agenda_hoy/agregar_tratamiento.html", {'form': form})
+    return render(request, "almaFront/consultas/agregar_tratamiento.html", {'form': form})
 
 
 @login_required(login_url="/")
@@ -82,6 +82,11 @@ def agregarCPO(request):
         if formCPO.is_valid():
             formCPO.instance.doctor = request.user
             consulta_cpo = formCPO.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'CPO agregado exitosamente!'
+            )
             return HttpResponseRedirect("/dentalE/agregarcpo/")
         #En un futuro redirigirlo al historial de CPOs del paciente
     return render(request, "almaFront/cpo.html", {'formCPO': formCPO})
