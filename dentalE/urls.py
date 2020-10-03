@@ -3,15 +3,12 @@ from django.contrib import admin
 from .views import (
 
     # doctor
-    pacientedeldiadetalles,
-    doccambiopass,
     agregartratamiento,
     agregarCPO,
 
     # secretaria
     resumendia,
     listadoctores,
-    rechangepassword,
     agregarpaciente,
     listapacientes,
     agregarcita,
@@ -28,15 +25,12 @@ from .views import (
 urlpatterns = [
 
     # doctor
-    url(r'^pacientedeldiadetalles/$', pacientedeldiadetalles, name='pacientedeldiadetalles'),
-    url(r'^doccambiopass/$', doccambiopass, name='doccambiopass'),
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
     url(r'^doctorlista/$', listadoctores, name='listadoctores'),
-    url(r'^rechangepassword/$', rechangepassword, name='rechangepassword'),
     url(r'^agregarpaciente/$', agregarpaciente, name="agregarpaciente"),
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
     url(r'^agregarcita/$', agregarcita, name="agregarcita"),

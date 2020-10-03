@@ -43,16 +43,6 @@ def resumendia(request):
 
 
 @login_required(login_url="/")
-def pacientedeldiadetalles(request):
-    return render(request, "doctor/today_patient/paciente_dia_detalles.html", {})
-
-
-@login_required(login_url="/")
-def doccambiopass(request):
-    return render(request, "doctor/common/cambiar_pass.html", {})
-
-
-@login_required(login_url="/")
 def agregarcita(request):
     form = CitaForm()
     if request.method == 'POST':
@@ -115,11 +105,6 @@ def listapacientes(request):
 class buscarView(TemplateView):
     def post(self, request, *args, **kwargs):
         return render(request, {'alma/pacientes/buscarpaciente.html'})
-
-
-@login_required(login_url="/")
-def rechangepassword(request):
-    return render(request, "secretaria/common/cambiar_pass.html", {})
 
 
 @login_required(login_url="/")
