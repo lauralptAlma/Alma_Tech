@@ -3,11 +3,17 @@
 {% block tab-title %}CPO{% endblock %}
 {% block page-title %}Registrar CPO{% endblock %}
 {% block page-content %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                <div class="card">
+            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                <div class="card shadow mb-3">
+                    <div class="card-header py-3">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+                        </div>
+                    </div>
                     <div class="card-body">
+                        <!-- Estructura necesaria para armar el CPO -->
                         <div class="container pt-3">
                             <div class="row">
                                 <div id="tr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -30,47 +36,69 @@
                                 </div>
                             </div>
                         </div>
-                        <form>
-                            <div class="row">
-                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                                    <div class="input-group mb-3 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CeoD</span>
+                        <div class="flex-row">
+                            <!-- Sección formulario -->
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="input-group mb-3 input-group-sm">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">CeoD</span>
+                                            </div>
+                                            {{ formCPO.ceod }}
                                         </div>
-                                        <input type="text" class="form-control">
+                                        <div class="input-group mb-3 input-group-sm">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">CeoS</span>
+                                            </div>
+                                            {{ formCPO.ceos }}
+                                        </div>
                                     </div>
-                                    <div class="input-group mb-3 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CeoS</span>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="input-group mb-3 input-group-sm">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">CpoD</span>
+                                            </div>
+                                            {{ formCPO.cpod }}
                                         </div>
-                                        <input type="text" class="form-control">
+                                        <div class="input-group mb-3 input-group-sm">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">CpoS</span>
+                                            </div>
+                                            {{ formCPO.cpos }}
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        <div class="input-group input-group-sm mr-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Paciente: </span>
+                                            </div>
+                                            {{ formCPO.paciente }}
+                                        </div>
+                                        <div class="row justify-content-end">
+                                            <button type="submit" class="btn btn-info mt-2 mr-3" onclick="obtenerCPO()"
+                                                    >Guardar
+                                            </button>
+                                        </div>
+                                        {{ formCPO.contenido_cpo }}
                                     </div>
                                 </div>
-                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                                    <div class="input-group mb-3 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CpoD</span>
-                                        </div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <div class="input-group mb-3 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">CpoS</span>
-                                        </div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                <div class="card">
+            <!-- Sección lateral de botones y referencias -->
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <div class="card shadow mb-3">
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Seleccionar Estado</p>
+                    </div>
                     <div class="card-body">
-                        <div class="row">
-                            <h6 class="card-subtitle mb-2 text-primary-alma">Seleccionar Estado</h6>
-                            <p class="text-alma">Presione el botón del estado correspondiente.</p>
+                        <div class="row justify-content-center">
+                            <p class="text-alma">Presione el botón del estado que desea asignar, luego seleccione la
+                                pieza.</p>
                             <!--Botones para seleccionar situación del diente-->
                             <div id="controls">
                                 <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
@@ -94,11 +122,11 @@
                             <!--Referencias-->
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div style="height: 20px; width:20px; display:inline-block;"
-                                     class="decayed-tooth"></div>
+                                     class="decayed-tooth-ref"></div>
                                 = Cariado
                                 <br>
                                 <div style="height: 20px; width:20px; display:inline-block;"
-                                     class="filled-tooth"></div>
+                                     class="filled-tooth-ref"></div>
                                 = Obturación
                                 <br>
                                 <div>
@@ -113,38 +141,6 @@
                                     <span style="display:inline-block;">Perdido</span>
                                 </div>
                             </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Referencias-->
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="card col-sm-10">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-left">
-                                <div style="height: 20px; width:20px; display:inline-block;"
-                                     class="decayed-tooth"></div>
-                                = Cariado
-                                <br>
-                                <div>
-                                    <img class="referencia" src="{% static 'assets/img/CPO/ausente.svg' %}"> =
-                                    <span style="display:inline-block;"> Pieza Ausente</span>
-                                </div>
-                            </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <div style="height: 20px; width:20px; display:inline-block;"
-                                     class="filled-tooth"></div>
-                                = Obturación
-                                <br>
-                                <div>
-                                    <img class="referencia" src="{% static 'assets/img/CPO/perdido.svg' %}"> =
-                                    <span style="display:inline-block;"> Pieza Perdida</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -153,204 +149,6 @@
     </div>
 {% endblock %}
 {% block page-javascript %}
-    <script type="text/javascript">
-        function replaceAll(find, replace, str) {
-            return str.replace(new RegExp(find, 'g'), replace);
-        }
-
-        function createOdontogram() {
-            var htmlLecheLeft = "",
-                htmlLecheRight = "",
-                htmlLeft = "",
-                htmlRight = "",
-                a = 1;
-            for (var i = 9 - 1; i >= 1; i--) {
-                //Dientes Definitivos Cuandrante Derecho (Superior/Inferior)
-                let claseDiente = "diente";
-                if (i == 8 || i == 1) {
-                    claseDiente = "primer-diente";
-                }
-                /*htmlRight += '<div data-name="value" id="dienteindex' + i + '" class="diente">' +*/
-                htmlRight += '<div data-name="value" id="dienteindex' + i + '" class=' + claseDiente + '>' +
-                    '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
-                    '<div id="tindex' + i + '" class="cuadro click">' +
-                    '</div>' +
-                    '<div id="lindex' + i + '" class="cuadro izquierdo click">' +
-                    '</div>' +
-                    '<div id="bindex' + i + '" class="cuadro debajo click">' +
-                    '</div>' +
-                    '<div id="rindex' + i + '" class="cuadro derecha click click">' +
-                    '</div>' +
-                    '<div id="cindex' + i + '" class="centro click">' +
-                    '</div>' +
-                    '</div>';
-                //Dientes Definitivos Cuandrante Izquierdo (Superior/Inferior)
-                htmlLeft += '<div id="dienteindex' + a + '" class=' + claseDiente + '>' +
-                    '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill badge-info">index' + a + '</span>' +
-                    '<div id="tindex' + a + '" class="cuadro click">' +
-                    '</div>' +
-                    '<div id="lindex' + a + '" class="cuadro izquierdo click">' +
-                    '</div>' +
-                    '<div id="bindex' + a + '" class="cuadro debajo click">' +
-                    '</div>' +
-                    '<div id="rindex' + a + '" class="cuadro derecha click click">' +
-                    '</div>' +
-                    '<div id="cindex' + a + '" class="centro click">' +
-                    '</div>' +
-                    '</div>';
-                if (i <= 5) {
-                    //Dientes Temporales Cuandrante Derecho (Superior/Inferior)
-                    htmlLecheRight += '<div id="dienteLindex' + i + '" style="left: -25%;" class="diente-leche">' +
-                        '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill label-alma">index' + i + '</span>' +
-                        '<div id="tlecheindex' + i + '" class="cuadro-leche top-leche click">' +
-                        '</div>' +
-                        '<div id="llecheindex' + i + '" class="cuadro-leche izquierdo-leche click">' +
-                        '</div>' +
-                        '<div id="blecheindex' + i + '" class="cuadro-leche debajo-leche click">' +
-                        '</div>' +
-                        '<div id="rlecheindex' + i + '" class="cuadro-leche derecha-leche click click">' +
-                        '</div>' +
-                        '<div id="clecheindex' + i + '" class="centro-leche click">' +
-                        '</div>' +
-                        '</div>';
-                }
-                if (a < 6) {
-                    let claseDienteLeche = "diente-leche";
-                    if (a == 1) {
-                        claseDienteLeche = "primer-diente-leche";
-                    }
-                    //Dientes Temporales Cuandrante Izquierdo (Superior/Inferior)
-                    htmlLecheLeft += '<div id="dienteLindex' + a + '" class=' + claseDienteLeche + '>' +
-                        '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill label-alma">index' + a + '</span>' +
-                        '<div id="tlecheindex' + a + '" class="cuadro-leche top-leche click">' +
-                        '</div>' +
-                        '<div id="llecheindex' + a + '" class="cuadro-leche izquierdo-leche click">' +
-                        '</div>' +
-                        '<div id="blecheindex' + a + '" class="cuadro-leche debajo-leche click">' +
-                        '</div>' +
-                        '<div id="rlecheindex' + a + '" class="cuadro-leche derecha-leche click click">' +
-                        '</div>' +
-                        '<div id="clecheindex' + a + '" class="centro-leche click">' +
-                        '</div>' +
-                        '</div>';
-                }
-                a++;
-            }
-            $("#tr").append(replaceAll('index', '1', htmlRight));
-            $("#tl").append(replaceAll('index', '2', htmlLeft));
-            $("#tlr").append(replaceAll('index', '5', htmlLecheRight));
-            $("#tll").append(replaceAll('index', '6', htmlLecheLeft));
-
-
-            $("#bl").append(replaceAll('index', '3', htmlLeft));
-            $("#br").append(replaceAll('index', '4', htmlRight));
-            $("#bll").append(replaceAll('index', '7', htmlLecheLeft));
-            $("#blr").append(replaceAll('index', '8', htmlLecheRight));
-        }
-
-        $(document).ready(function () {
-            createOdontogram();
-            $(".click").click(function (event) {
-                var control = $("#controls").children().find('.active').attr('id');
-                var cuadro = $(this).find("input[name=cuadro]:hidden").val();
-                console.log($(this).attr('id'))
-                switch (control) {
-                    case "cariado":
-                        if ($(this).hasClass("filled-tooth")) {
-                            $(this).removeClass('filled-tooth');
-                            $(this).addClass('decayed-tooth');
-                        } else if ($(this).hasClass("missing-tooth")) {
-                            $(this).parent().children().each(function (index, el) {
-                                $(el).removeClass("missing-tooth");
-                            });
-                            $(this).addClass('decayed-tooth');
-                        } else if ($(this).hasClass("lacking-tooth")) {
-                            $(this).parent().children().each(function (index, el) {
-                                $(el).removeClass("lacking-tooth");
-                            });
-                            $(this).addClass('decayed-tooth');
-                        } else {
-                            if ($(this).hasClass("decayed-tooth")) {
-                                $(this).removeClass('decayed-tooth');
-                            } else {
-                                $(this).addClass('decayed-tooth');
-                            }
-                        }
-                        break;
-                    case "obturado":
-                        if ($(this).hasClass("decayed-tooth")) {
-                            $(this).removeClass('decayed-tooth');
-                            $(this).addClass('filled-tooth');
-                        } else if ($(this).hasClass("missing-tooth")) {
-                            $(this).parent().children().each(function (index, el) {
-                                $(el).removeClass("missing-tooth");
-                            });
-                            $(this).addClass('filled-tooth');
-                        } else if ($(this).hasClass("lacking-tooth")) {
-                            $(this).parent().children().each(function (index, el) {
-                                $(el).removeClass("lacking-tooth");
-                            });
-                            $(this).addClass('filled-tooth');
-                        } else {
-                            if ($(this).hasClass("filled-tooth")) {
-                                $(this).removeClass('filled-tooth');
-                            } else {
-                                $(this).addClass('filled-tooth');
-                            }
-                        }
-                        break;
-                    case "perdido":
-                        var dientePosition = $(this).position();
-                        console.log($(this))
-                        console.log(dientePosition)
-                        $(this).parent().children().each(function (index, el) {
-                            if ($(el).hasClass("click")) {
-                                if ($(el).hasClass("missing-tooth")) {
-                                    $(el).removeClass("missing-tooth");
-                                } else if ($(el).hasClass("filled-tooth")) {
-                                    $(el).removeClass("filled-tooth");
-                                    $(el).addClass('missing-tooth');
-                                } else if ($(el).hasClass("decayed-tooth")) {
-                                    $(el).removeClass("decayed-tooth");
-                                    $(el).addClass('missing-tooth');
-                                } else if ($(el).hasClass("lacking-tooth")) {
-                                    $(el).removeClass("lacking-tooth");
-                                    $(el).addClass('missing-tooth');
-                                } else {
-                                    $(el).addClass('missing-tooth');
-                                }
-                            }
-                        });
-                        break;
-                    case "ausente":
-                        var dientePosition = $(this).position();
-                        console.log($(this))
-                        console.log(dientePosition)
-                        $(this).parent().children().each(function (index, el) {
-                            if ($(el).hasClass("click")) {
-                                if ($(el).hasClass("lacking-tooth")) {
-                                    $(el).removeClass("lacking-tooth");
-                                } else if ($(el).hasClass("filled-tooth")) {
-                                    $(el).removeClass("filled-tooth");
-                                    $(el).addClass('lacking-tooth');
-                                } else if ($(el).hasClass("decayed-tooth")) {
-                                    $(el).removeClass("decayed-tooth");
-                                    $(el).addClass('lacking-tooth');
-                                } else if ($(el).hasClass("missing-tooth")) {
-                                    $(el).removeClass("missing-tooth")
-                                    $(el).addClass('lacking-tooth');
-                                } else {
-                                    $(el).addClass('lacking-tooth');
-                                }
-                            }
-                        });
-                        break
-                    default:
-                        console.log("borrar case");
-                }
-                return false;
-            });
-            return false;
-        });
+    <script type="text/javascript" src="{% static 'assets/js/odontograma.js' %}">
     </script>
 {% endblock %}

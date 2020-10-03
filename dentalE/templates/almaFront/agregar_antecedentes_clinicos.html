@@ -11,7 +11,6 @@
                 <table class="col-sm-10">
                     {{ form.as_table }}
                 </table>
-
                 <div class="footer" align="right">
                     <button type="submit" class="btn btn-info">Guardar</button>
                 </div>
@@ -20,7 +19,8 @@
     </div>
 {% endblock %}
 {% block page-javascript %}
-    {% include 'almaFront/bases/hide-elements.html' %}
+    <script type="text/javascript" src="{% static 'assets/js/hide-elements-antecedentes.js'%}">
+    </script>
     <script>
         $('select').attr('class', 'form-control');
     </script>

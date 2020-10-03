@@ -3,20 +3,15 @@ from django.contrib import admin
 from .views import (
 
     # doctor
-    pacientedeldiadetalles,
-    doccambiopass,
     agregartratamiento,
-
+    agregarCPO,
 
     # secretaria
     resumendia,
     listadoctores,
-    rechangepassword,
     agregarpaciente,
     listapacientes,
     agregarcita,
-    agregartratamiento,
-
 
     # paciente
     pacienteinicio,
@@ -30,22 +25,19 @@ from .views import (
 urlpatterns = [
 
     # doctor
-    url(r'^pacientedeldiadetalles/$', pacientedeldiadetalles, name='pacientedeldiadetalles'),
-    url(r'^doccambiopass/$', doccambiopass, name='doccambiopass'),
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
+    url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
     url(r'^doctorlista/$', listadoctores, name='listadoctores'),
-    url(r'^rechangepassword/$', rechangepassword, name='rechangepassword'),
     url(r'^agregarpaciente/$', agregarpaciente, name="agregarpaciente"),
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
     url(r'^agregarcita/$', agregarcita, name="agregarcita"),
-    url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),
-    url(r'^pacientedetalles/(?P<documento>\w{0,50})$', pacientedetalles, name='pacientedetalles'),
+    url(r'^pacientedetalles/(?P<paciente_id>[0-9])/$', pacientedetalles, name='pacientedetalles'),
     url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
     url(r'^agregarantecedentes/$', agregarantecedentes, name='agregarantecedentes'),
 

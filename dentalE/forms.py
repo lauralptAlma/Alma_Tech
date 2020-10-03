@@ -8,7 +8,7 @@ from django.urls import reverse
 import datetime
 from django.forms.widgets import SelectDateWidget
 from django.forms import ModelForm, Form
-from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos
+from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos, CPO
 
 
 class IngresoForm(ModelForm):
@@ -53,6 +53,21 @@ class ConsultaForm(ModelForm):
         model = Consulta
         readonly_fields = 'creado'
         fields = ('paciente', 'doctor', 'diagnostico', 'tratamiento', 'indicaciones')
+
+
+class ConsultaCPOForm(ModelForm):
+    class Meta:
+        model = CPO
+        readonly_fields = 'creado'
+        fields = ('paciente', 'contenido_cpo', 'ceod', 'ceos', 'cpod', 'cpos')
+        widgets = {
+            'ceod': forms.NumberInput(attrs={'class': 'form-control'}),
+            'ceos': forms.NumberInput(attrs={'class': 'form-control'}),
+            'cpod': forms.NumberInput(attrs={'class': 'form-control'}),
+            'cpos': forms.NumberInput(attrs={'class': 'form-control'}),
+            'contenido_cpo': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
+            'paciente': forms.Select(attrs={'class': 'form-control mdb-select md-form', 'searchable':'Search here..'})
+        }
 
 
 class AntecedenteForm(ModelForm):

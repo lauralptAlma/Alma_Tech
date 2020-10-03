@@ -1,7 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+
 from django.contrib.auth.models import User
+
 import datetime
 
 # USUARIO OPTIONS
@@ -213,6 +215,25 @@ class Foto(models.Model):
         db_table = "dentalE_imagenes"
 
 
+class CPO(models.Model):
+    creado = models.DateField(auto_now_add=True, blank=True, null=True)
+    modificado = models.DateField(auto_now=True, blank=True, null=True)
+    doctor = models.ForeignKey(User, related_name='cpo_doctor', on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    cpo_id = models.AutoField(primary_key=True)
+    contenido_cpo = models.TextField()
+    ceod = models.IntegerField()
+    ceos = models.IntegerField()
+    cpod = models.IntegerField()
+    cpos = models.IntegerField()
+
+    class Meta:
+        db_table = "dentalE_CPOs"
+
+    def __str__(self):
+        return str(self.cpo_id)
+
+
 class Cita(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='app_doctor', on_delete=models.CASCADE)
@@ -229,3 +250,4 @@ class Cita(models.Model):
 
     def __str__(self):
         return str(self.paciente)
+
