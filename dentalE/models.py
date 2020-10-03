@@ -251,15 +251,3 @@ class Cita(models.Model):
     def __str__(self):
         return str(self.paciente)
 
-
-'''
-va comentado lo del shell para que lo puedas usar
-(almaEnv) C:\ProyectoAlma\Alma_Tech>python manage.py shell
-Python 3.8.5 (tags/v3.8.5:580fbb0, Jul 20 2020, 15:43:08) [MSC v.1926 32 bit (Intel)] on win32
-Type "help", "copyright", "credits" or "license" for more information.
-(InteractiveConsole)
->>> from dentalE.models import CPO
->>> cpo=CPO(contenido_cpo={'C1': {'11': {'sano':False,'perdido':False,'ausente':False,'mesial':'cariado','oclusal':'obturado'}}, 'C2':{'17':{'sano':True}}})
->>> cpo.save()
->>>
-'''
