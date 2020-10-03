@@ -14,8 +14,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
-from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm
-from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos, CPO
+from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, ConsultaCPOForm
+from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
 from datetime import date
 
 
@@ -72,6 +72,19 @@ def agregartratamiento(request):
             consulta = form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_tratamiento.html", {'form': form})
+
+
+@login_required(login_url="/")
+def agregarCPO(request):
+    formCPO = ConsultaCPOForm()
+    if request.method == 'POST':
+        formCPO = ConsultaCPOForm(request.POST)
+        if formCPO.is_valid():
+            formCPO.instance.doctor = request.user
+            consulta_cpo = formCPO.save()
+            return HttpResponseRedirect("/dentalE/agregarcpo/")
+        #En un futuro redirigirlo al historial de CPOs del paciente
+    return render(request, "almaFront/cpo.html", {'formCPO': formCPO})
 
 
 @login_required(login_url="/")
@@ -257,19 +270,3 @@ def agregarantecedentes(request):
 def logout_view(request):
     logout(request)
     return redirect('ingreso')
-
-
-@login_required(login_url="/")
-def agregarCPO(request):
-    return render(request, "almaFront/cpo.html")
-
-
-@login_required(login_url="/")
-def add_cpo(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        cpo = CPO()
-        cpo.contenido_cpo = data
-        cpo.save()
-        return HttpResponseRedirect("/dentalE/agregarantecedentes/")
-    return render(request, "almaFront/agregar_antecedentes_clinicos.html")

@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
-from djongo.models import JSONField
 
 from django.contrib.auth.models import User
 
@@ -217,8 +216,16 @@ class Foto(models.Model):
 
 
 class CPO(models.Model):
+    creado = models.DateField(auto_now_add=True, blank=True, null=True)
+    modificado = models.DateField(auto_now=True, blank=True, null=True)
+    doctor = models.ForeignKey(User, related_name='cpo_doctor', on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     cpo_id = models.AutoField(primary_key=True)
-    contenido_cpo = JSONField()
+    contenido_cpo = models.TextField()
+    ceod = models.IntegerField()
+    ceos = models.IntegerField()
+    cpod = models.IntegerField()
+    cpos = models.IntegerField()
 
     class Meta:
         db_table = "dentalE_CPOs"
