@@ -8,7 +8,8 @@ from django.urls import reverse
 import datetime
 from django.forms.widgets import SelectDateWidget
 from django.forms import ModelForm, Form
-from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos, CPO
+from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos, CPO, \
+    CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES
 
 
 class IngresoForm(ModelForm):
@@ -52,7 +53,7 @@ class ConsultaForm(ModelForm):
     class Meta:
         model = Consulta
         readonly_fields = 'creado'
-        fields = ('paciente', 'doctor', 'diagnostico', 'tratamiento', 'indicaciones')
+        fields = ('paciente', 'diagnostico', 'tratamiento', 'indicaciones')
 
 
 class ConsultaCPOForm(ModelForm):
@@ -66,7 +67,8 @@ class ConsultaCPOForm(ModelForm):
             'cpod': forms.NumberInput(attrs={'class': 'form-control'}),
             'cpos': forms.NumberInput(attrs={'class': 'form-control'}),
             'contenido_cpo': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
-            'paciente': forms.Select(attrs={'class': 'form-control mdb-select md-form', 'searchable':'Search here..'})
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'})
         }
 
 
@@ -75,16 +77,34 @@ class AntecedenteForm(ModelForm):
         model = AntecedentesClinicos
         fields = ('paciente', 'fumador', 'alcohol', 'coproparasitario', 'aparato_digestivo', 'desc_aparato_digestivo',
                   'dermatologicos', 'desc_dermatologicos',
-                  'alergias', 'desc_alergias', 'autoinmnunes', 'desc_autoinmnunes', 'oncologicas', 'desc_oncologicas',
+                  'alergias', 'desc_alergias', 'autoinmunes', 'desc_autoinmunes', 'oncologicas', 'desc_oncologicas',
                   'hematologicas', 'desc_hematologicas', 'intervenciones', 'desc_intervenciones', 'toma_medicacion',
                   'desc_medicacion', 'endocrinometabolico', 'desc_endocrinometabolico', 'cardiovascular',
-                  'desc_cardiovascular', 'nefrourologicos', 'desc_nefrourologicos', 'observations')
+                  'desc_cardiovascular', 'nefrourologicos', 'desc_nefrourologicos', 'osteoarticulares',
+                  'desc_osteoarticulares', 'observations')
 
         widgets = {
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'}),
+            'fumador': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'alcohol': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'coproparasitario': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'aparato_digestivo': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
             'desc_aparato_digestivo': forms.TextInput(attrs={'class': 'form-control'}),
+            'dermatologicos': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'alergias': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'autoinmunes': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'oncologicas': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'hematologicas': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'intervenciones': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'toma_medicacion': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'endocrinometabolico': forms.CheckboxSelectMultiple(choices=ENDOCRINOLOGICOS_OPCIONES),
+            'cardiovascular': forms.CheckboxSelectMultiple(choices=CARDIOVASCULAR_OPCIONES),
+            'nefrourologicos': forms.CheckboxSelectMultiple(choices=NEFROUROLOGICOS_OPCIONES),
+            'osteoarticulares': forms.CheckboxSelectMultiple(choices=OSTEOARTICULARES_OPCIONES),
             'desc_dermatologicos': forms.TextInput(attrs={'class': 'form-control'}),
             'desc_alergias': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_autoinmnunes': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_autoinmunes': forms.TextInput(attrs={'class': 'form-control'}),
             'desc_oncologicas': forms.TextInput(attrs={'class': 'form-control'}),
             'desc_hematologicas': forms.TextInput(attrs={'class': 'form-control'}),
             'desc_intervenciones': forms.TextInput(attrs={'class': 'form-control'}),
@@ -92,6 +112,7 @@ class AntecedenteForm(ModelForm):
             'desc_endocrinometabolico': forms.TextInput(attrs={'class': 'form-control'}),
             'desc_cardiovascular': forms.TextInput(attrs={'class': 'form-control'}),
             'desc_nefrourologicos': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_osteoarticulares': forms.TextInput(attrs={'class': 'form-control'}),
             'observations': forms.Textarea(attrs={'class': 'form-control'}),
         }
 

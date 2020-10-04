@@ -53,6 +53,11 @@ a {
     background-color: transparent;
 }
 
+li {
+    list-style: none;
+    margin-right: 12px;
+}
+
 .page-item.active .page-link {
     z-index: 3;
     color: #fff;
@@ -119,6 +124,10 @@ a {
 .actual-page {
     font-weight: bold;
     color: white;
+}
+
+.navbar li {
+    margin-right: 0px;
 }
 
 /*CSS CPO*/
@@ -203,41 +212,6 @@ a {
     cursor: pointer;
 }
 
-/*
-#tlr {
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-}
-
-#tr {
-    border-right: 1px solid black;
-}
-
-#tll {
-    border-bottom: 1px solid black;
-    border-left: 1px solid black;
-}
-
-#tl {
-    border-left: 1px solid black;
-}
-
-#blr {
-    border-right: 1px solid black;
-}
-
-#br {
-    border-right: 1px solid black;
-}
-
-#bl {
-    border-left: 1px solid black;
-}
-
-#bll {
-    border-left: 1px solid black;
-}
-*/
 .decayed-tooth {
     background-color: #D32F2F !important;
 }

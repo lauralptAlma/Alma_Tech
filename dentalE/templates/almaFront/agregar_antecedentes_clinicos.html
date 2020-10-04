@@ -4,24 +4,220 @@
 {% block page-title %}Agregar Antecedentes Clínicos{% endblock %}
 
 {% block page-content %}
-    <div class="form-row">
-        <div class="form-group col-lg-10">
-            <form method="post" action="">
-                {% csrf_token %}
-                <table class="col-sm-10">
-                    {{ form.as_table }}
-                </table>
-                <div class="footer" align="right">
-                    <button type="submit" class="btn btn-info">Guardar</button>
+    <div class="container-fluid">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-10 col-xl-10 mb-4">
+                    <div class="card shadow border-left-info py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters mb-3">
+                                <div class="input-group input-group-sm mr-3 mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Paciente* : </span>
+                                    </div>
+                                    {{ form.paciente }}
+                                </div>
+                                <div class="col mr-3">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.fumador.label_tag }}</span>
+                                    </div>
+                                    {{ form.fumador }}
+                                </div>
+                                <div class="col mr-3">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.alcohol.label_tag }}</span>
+                                    </div>
+                                    {{ form.alcohol }}
+                                </div>
+                                <div class="col mr-3">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.coproparasitario.label_tag }}</span>
+                                    </div>
+                                    {{ form.coproparasitario }}
+                                </div>
+                            </div>
+                            <div class="row align-items-center no-gutters mb-3">
+                                <div class="col mr-3">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.aparato_digestivo.label_tag }}</span>
+                                    </div>
+                                    {{ form.aparato_digestivo }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_aparato_digestivo.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_aparato_digestivo }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="col mr-3">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.dermatologicos.label_tag }}</span>
+                                    </div>
+                                    {{ form.dermatologicos }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_dermatologicos.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_dermatologicos }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="col mr-3">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.alergias.label_tag }}</span>
+                                    </div>
+                                    {{ form.alergias }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_alergias.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_alergias }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center no-gutters mb-3">
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.autoinmunes.label_tag }}</span>
+                                    </div>
+                                    {{ form.autoinmunes }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_autoinmunes.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_autoinmunes }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.oncologicas.label_tag }}</span>
+                                    </div>
+                                    {{ form.oncologicas }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_oncologicas.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_oncologicas }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.hematologicas.label_tag }}</span>
+                                    </div>
+                                    {{ form.hematologicas }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_hematologicas.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_hematologicas }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center no-gutters mb-3">
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.intervenciones.label_tag }}</span>
+                                    </div>
+                                    {{ form.intervenciones }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_intervenciones.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_intervenciones }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.toma_medicacion.label_tag }}</span>
+                                    </div>
+                                    {{ form.toma_medicacion }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_medicacion.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_medicacion }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-xl-10 mb-4">
+                    <div class="card shadow border-left-warning py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center no-gutters mb-3">
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.endocrinometabolico.label_tag }}</span>
+                                    </div>
+                                    {{ form.endocrinometabolico }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_endocrinometabolico.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_endocrinometabolico }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.cardiovascular.label_tag }}</span>
+                                    </div>
+                                    {{ form.cardiovascular }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_cardiovascular.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_cardiovascular }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center no-gutters mb-3">
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.nefrourologicos.label_tag }}</span>
+                                    </div>
+                                    {{ form.nefrourologicos }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_nefrourologicos.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_nefrourologicos }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col mr-3 mt-2">
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.osteoarticulares.label_tag }}</span>
+                                    </div>
+                                    {{ form.osteoarticulares }}
+                                    <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                        <span>{{ form.desc_osteoarticulares.label_tag }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-dark mb-0"><span>{{ form.desc_osteoarticulares }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center no-gutters mb-3">
+                                <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
+                                    <span>{{ form.observations.label_tag }}</span>
+                                </div>
+                                {{ form.observations }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-info">Guardar</button>
+            </div>
+        </form>
     </div>
 {% endblock %}
 {% block page-javascript %}
-    <script type="text/javascript" src="{% static 'assets/js/hide-elements-antecedentes.js'%}">
-    </script>
-    <script>
-        $('select').attr('class', 'form-control');
+    <script type="text/javascript" src="{% static 'assets/js/hide-elements-antecedentes.js' %}">
     </script>
 {% endblock %}

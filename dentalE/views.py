@@ -59,8 +59,14 @@ def agregartratamiento(request):
     if request.method == 'POST':
         form = ConsultaForm(request.POST)
         if form.is_valid():
+            form.instance.doctor = request.user
             consulta = form.save()
-            return HttpResponseRedirect("/dentalE/resumendia/")
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Consulta agregada exitosamente!'
+            )
+            return HttpResponseRedirect("/dentalE/agregartratamiento/")
     return render(request, "almaFront/consultas/agregar_tratamiento.html", {'form': form})
 
 

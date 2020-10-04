@@ -51,10 +51,10 @@
                             <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
                                                                        data-toggle="dropdown" aria-expanded="false"
                                                                        href="#">
-                                <span class="d-none d-lg-inline mr-2 text-gray-600 small"> {{ user.get_full_name }}
+                                <span class="d-none d-lg-inline mr-2 text-gray-600"> {{ user.get_full_name }}
                                     <br></span><img
                                     class="border rounded-circle img-profile"
-                                    src="{% static 'assets/img/avatars/avatar3.jpeg' %}"></a>
+                                    src="{{ user.socialaccount_set.all.0.get_avatar_url }}" ></a>
                                 <!--Dropdown en perfil de usuario-->
                                 <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a
