@@ -198,32 +198,41 @@ $(document).ready(function () {
 * a cariado, obturado, perdido o ausente y los almacena en un string con formato JSON. Al finalizar quita
 * la última coma y le asigna el valor del CPO al elemento correspondiente para ser almacenado. */
 function obtenerCPO() {
-    let dientes = '{';
+    //let dientes = '{"cariados":[';
+    const caries = [];
     const cariados = $('.decayed-tooth');
     cariados.each(function (index, element) {
-        let idCarie = $(element).attr('id');
-        dientes += '"' + idCarie + '"' + ':"cariado",'
-        console.log($(element).attr('id'))
+        let idCarie = `"${$(element).attr('id')}"`;
+        caries.push(idCarie);
+        //dientes += '"' + idCarie + '"' + ','
     });
+    //dientes += '],"obturados":[';
+    const obturaciones = [];
     const obturados = $('.filled-tooth');
     obturados.each(function (index, element) {
-        let idObturado = $(element).attr('id');
-        dientes += '"' + idObturado + '"' + ':"obturado",'
-        console.log($(element).attr('id'))
+        let idObturado = `"${$(element).attr('id')}"`;
+        //dientes += '"' + idObturado + '"' + ','
+        obturaciones.push(idObturado)
     });
+    //dientes += '],"perdidos":[';
+    const perdidas = [];
     const perdidos = $('.missing-tooth');
     perdidos.each(function (index, element) {
-        let idPerdido = $(element).attr('id');
-        dientes += '"' + idPerdido + '"' + ':"perdido",'
-        console.log($(element).attr('id'))
+        let idPerdido = `"${$(element).attr('id')}"`;
+        //dientes += '"' + idPerdido + '"' + ','
+        perdidas.push(idPerdido)
     });
+    //dientes += '],"ausentes":[';
+    const ausente = [];
     const ausentes = $('.lacking-tooth');
     ausentes.each(function (index, element) {
-        let idAusente = $(element).attr('id');
-        dientes += '"' + idAusente + '"' + ':"ausente",'
-        console.log($(element).attr('id'))
+        let idAusente = `"${$(element).attr('id')}"`;
+        //dientes += '"' + idAusente + '"' + ','
+        ausente.push(idAusente)
     });
-    dientes = dientes.substring(0, dientes.length - 1);
-    dientes += '}'
+    //dientes = dientes.substring(0, dientes.length - 1);
+    //dientes += ']}'
+    let dientes = `{"cariados":[${caries}],"obturados":[${obturaciones}],"perdidos":[${perdidas}],"ausentes":[${ausente}]}`;
     $("#id_contenido_cpo").val(dientes)
+    console.log(dientes)
 }

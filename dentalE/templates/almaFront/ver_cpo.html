@@ -123,11 +123,12 @@
     <script type="text/javascript" src="{% static 'assets/js/odontograma.js' %}">
     </script>
     <script>
+
         function ultimoCPO() {
-            //const lastCpo = JSON.parse($('#cpo_ultimo').attr('value'));
-            const lastCpo = JSON.parse('{ "obturados": ["b24","c34"], "caries":["bleche64", "c28"], "perdidos":["t46","l46","b46","r46","c46"], "ausentes":["t14","l14","b14","r14","c14"]}');
-            for (let i = 0; i < lastCpo.caries.length; i++) {
-                $(`#${lastCpo.caries[i]}`).addClass('decayed-tooth');
+            const lastCpo = JSON.parse($('#cpo_ultimo').attr('value'));
+            for (let i = 0; i < lastCpo.cariados.length; i++) {
+                console.log(lastCpo.cariados[i])
+                $(`#${lastCpo.cariados[i]}`).addClass('decayed-tooth');
             }
             for (let i = 0; i < lastCpo.obturados.length; i++) {
                 $(`#${lastCpo.obturados[i]}`).addClass('filled-tooth');
@@ -140,5 +141,9 @@
             }
 
         }
+
+        $(document).ready(function () {
+            ultimoCPO()
+        });
     </script>
 {% endblock %}
