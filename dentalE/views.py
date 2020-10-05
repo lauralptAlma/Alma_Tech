@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, ConsultaCPOForm
-from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos
+from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos, CPO
 from datetime import date
 
 
@@ -145,6 +145,12 @@ def pacientedetalles(request, paciente_id):
     return render(request, "almaFront/pacientes/paciente.html",
                   {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': ultimas_consultas_paciente})
 
+@login_required(login_url="/")
+def verCPO(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    ultimo_cpo_paciente = CPO.objects.filter(paciente_id=paciente_id).last()
+    return render(request, "almaFront/ver_cpo.html",
+                  {'patient': paciente, 'cpo': ultimo_cpo_paciente})
 
 @login_required(login_url="/")
 def pacientecambiopass(request):

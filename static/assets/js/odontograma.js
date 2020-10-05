@@ -1,6 +1,7 @@
 function replaceAll(find, replace, str) {
     return str.replace(new RegExp(find, 'g'), replace);
 }
+
 /*Crea la estructura del odontograma*/
 function createOdontogram() {
     var htmlLecheLeft = "",
@@ -90,6 +91,7 @@ function createOdontogram() {
     $("#bll").append(replaceAll('index', '7', htmlLecheLeft));
     $("#blr").append(replaceAll('index', '8', htmlLecheRight));
 }
+
 /* Cuando se carga la página, crea el odontograma y según el botón seleccionado y la pieza en que se hizo click
 * se le agrega la clase correspondiente a dicha pieza */
 $(document).ready(function () {

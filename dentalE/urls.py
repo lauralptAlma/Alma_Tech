@@ -5,6 +5,7 @@ from .views import (
     # doctor
     agregartratamiento,
     agregarCPO,
+    verCPO,
 
     # secretaria
     resumendia,
@@ -27,6 +28,7 @@ urlpatterns = [
     # doctor
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
+    url(r'^cpopaciente/(?P<paciente_id>[0-9])/$', verCPO, name="cpopaciente"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
