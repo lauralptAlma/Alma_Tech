@@ -84,7 +84,7 @@ def agregarCPO(request):
                 'CPO agregado exitosamente!'
             )
             return HttpResponseRedirect("/dentalE/agregarcpo/")
-        #En un futuro redirigirlo al historial de CPOs del paciente
+        # En un futuro redirigirlo al historial de CPOs del paciente
     return render(request, "almaFront/cpo.html", {'formCPO': formCPO})
 
 
@@ -138,7 +138,12 @@ def pacienteinicio(request):
 @login_required(login_url="/")
 def pacientedetalles(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
-    return render(request, "almaFront/pacientes/paciente.html", {'patient': paciente})
+    antecedentes_paciente = AntecedentesClinicos.objects.filter(paciente_id=paciente_id).last()
+    consultas_paciente = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
+    if consultas_paciente:
+        ultimas_consultas_paciente = consultas_paciente[:3]
+    return render(request, "almaFront/pacientes/paciente.html",
+                  {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': ultimas_consultas_paciente})
 
 
 @login_required(login_url="/")

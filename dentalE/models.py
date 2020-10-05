@@ -126,6 +126,7 @@ class Paciente(models.Model):
 
 
 class AntecedentesClinicos(models.Model):
+    creado = models.DateField(auto_now_add=True)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)  # FK
     fumador = models.CharField('Fumador* ', null=False, max_length=6, default='')
     alcohol = models.CharField('Alcohol* ', null=False, max_length=6, default='')

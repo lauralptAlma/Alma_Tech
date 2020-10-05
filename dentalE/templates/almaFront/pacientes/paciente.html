@@ -18,74 +18,142 @@
                                 <p><strong>Dirección: </strong> {{ patient.direccion }}</p>
                                 <p><strong>Celular: </strong> {{ patient.celular }}</p>
                                 <p><strong>Fecha de Nacimiento: </strong> {{ patient.fecha_nacimiento }}</p>
-                                <p><strong>Skills: </strong>
-                                    <span class="badge badge-pill badge-info">html5</span>
-                                    <span class="badge badge-pill badge-info">css3</span>
-                                    <span class="badge badge-pill badge-info">jquery</span>
-                                    <span class="badge badge-pill badge-info">bootstrap3</span>
-                                </p>
+                                {% if user.userprofile.user_tipo == 'DOCTOR' and antecedentes %}
+                                    <p><strong>Antecedentes: </strong>
+                                        {% if antecedentes.fumador != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Fumador</span>
+                                        {% endif %}
+                                        {% if antecedentes.alcohol != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Alcohol</span>
+                                        {% endif %}
+                                        {% if antecedentes.coproparasitario != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">C.P.S.</span>
+                                        {% endif %}
+                                        {% if antecedentes.aparato_digestivo != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Aparato Digestivo</span>
+                                        {% endif %}
+                                        {% if antecedentes.dermatologicos != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Dermatológicos</span>
+                                        {% endif %}
+                                        {% if antecedentes.alergias != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Alergias</span>
+                                        {% endif %}
+                                        {% if antecedentes.autoinmunes != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Autoinmunes</span>
+                                        {% endif %}
+                                        {% if antecedentes.oncologicas != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Oncológicas</span>
+                                        {% endif %}
+                                        {% if antecedentes.hematologicas != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Hematológicas</span>
+                                        {% endif %}
+                                        {% if antecedentes.intervenciones != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Intervenciones</span>
+                                        {% endif %}
+                                        {% if antecedentes.toma_medicacion != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Medicación</span>
+                                        {% endif %}
+                                        {% if antecedentes.endocrinometabolico != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Endocrinometabólico</span>
+                                        {% endif %}
+                                        {% if antecedentes.cardiovascular != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Cardiovascular</span>
+                                        {% endif %}
+                                        {% if antecedentes.nefrourologicos != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Nefrourológicos</span>
+                                        {% endif %}
+                                        {% if antecedentes.osteoarticulares != "['NO']" %}
+                                            <span class="badge badge-pill badge-info">Osteoarticular</span>
+                                        {% endif %}
+                                    </p>
+                                {% elif user.userprofile.user_tipo == 'DOCTOR' %}
+                                    <p><strong>Antecedentes: </strong>
+                                    <span class="badge badge-pill badge-danger">No existen registros</span>
+                                {% endif %}
                             </div>
-                            <div class="row justify-content-end mr-3"><a href="#" style="text-align: left;">Editar</a></div>
-                        </div>
-                    </div>
-                    <div class="card shadow">
-                        <div class="card-header py-3">
-                            <p class="text-primary m-0 font-weight-bold">Antecedentes Clínicos</p>
-                        </div>
-                        <div class="card-body">
-                            <form>
-                                <div class="form-group"><label for="address"><strong>Address</strong></label><input
-                                        class="form-control" type="text" placeholder="Sunset Blvd, 38" name="address">
-                                </div>
-                                <div class="form-row">
-                                    <div class="col">
-                                        <div class="form-group"><label for="city"><strong>City</strong></label><input
-                                                class="form-control" type="text" placeholder="Los Angeles" name="city">
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-group"><label
-                                                for="country"><strong>Country</strong></label><input
-                                                class="form-control" type="text" placeholder="USA" name="country"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-primary btn-sm" type="submit">Save&nbsp;Settings</button>
-                                </div>
-                            </form>
+                            <div class="row justify-content-end mr-3"><a href="#" style="text-align: left;">Editar</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="text-primary font-weight-bold m-0">Consultas</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col"><i class="fa fa-file-text-o" style="margin-right: 15px;"></i><a href="#">Ver
-                            historia clínica</a></div>
+        {% if user.userprofile.user_tipo == 'DOCTOR' %}
+            <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="text-primary font-weight-bold m-0">Registrar Consultas</h6>
                     </div>
-                    <div class="row">
-                        <div class="col"><i class="fas fa-tooth" style="margin-right: 15px;"></i><a href= "#">Nueva
-                            consulta
-                            general</a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col"><i class="fas fa-teeth" style="margin-right: 15px;"></i><a href="#">Nueva
-                            consulta
-                            ortodoncia</a></div>
-                    </div>
-                    <div class="row">
-                        <div class="col"><i class="fas fa-teeth-open" style="margin-right: 15px;"></i><a href="#">Nueva
-                            consulta con CPO</a></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col"><i class="fa fa-file-text-o" style="margin-right: 15px;"></i><a href="/">Ver
+                                historia clínica</a></div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><i class="fas fa-tooth" style="margin-right: 15px;"></i><a href="/dentalE/agregartratamiento/">Nueva
+                                consulta
+                                general</a></div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><i class="fas fa-teeth" style="margin-right: 15px;"></i><a href="#">Nueva
+                                consulta
+                                ortodoncia</a></div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><i class="fas fa-teeth-open" style="margin-right: 15px;"></i><a href="/dentalE/agregarcpo/">Nueva
+                                consulta con CPO</a></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div>
+    {% if user.userprofile.user_tipo == 'DOCTOR' %}
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Últimas Consultas</p>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                     aria-describedby="dataTable_info">
+                    <table class="table my-0" id="dataTable">
+                        <thead class="card-header py-3">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Diagnóstico</th>
+                            <th>Tratamiento</th>
+                            <th>Indicaciones</th>
+                            <th>Doctor</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if consultas %}
+                            {% for c in consultas %}
+                                <tr class="tr-body">
+                                    <td>{{ c.creado }}</td>
+                                    <td>{{ c.diagnostico }}</td>
+                                    <td>{{ c.tratamiento }}</td>
+                                    <td>{{ c.indicaciones }}</td>
+                                    <td>{{ c.doctor.get_full_name }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="no-data">
+                                <td colspan="20">No existen consultas registradas para este paciente en
+                                    el sistema.
+                                </td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                        <tfoot>
+                        <tr></tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 {% block page-javascript %}
 {% endblock %}
