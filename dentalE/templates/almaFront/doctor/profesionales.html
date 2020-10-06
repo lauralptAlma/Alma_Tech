@@ -1,0 +1,65 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Profesionales{% endblock %}
+{% block page-title %}Profesionales{% endblock %}
+
+{% block page-content %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="row justify-content-end">
+                <div>
+                    <form method="GET" id="search-form" autocomplete="on" >
+                        <div class="search-div input-group">{% csrf_token %}
+                            <input type="text" class="bg-light form-control border-0 small"
+                                   name="buscar"
+                                   placeholder="Buscar profesional...">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary py-0" type="submit" id="search-btn" >
+                                    <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table class="table my-0" id="dataTable">
+                    <thead class="card-header py-3">
+                    <tr>
+                        <th>Nombre Completo</th>
+                        <th>Especialidad</th>
+                        <th>Email</th>
+                        <th>Celular</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% if profesionales %}
+                        {% for prof in profesionales %}
+                            <tr class="tr-body">
+                                <td>{{ prof.user.get_full_name }}</td>
+                                <td>{{ prof.user_especialidad }}</td>
+                                <td>{{ prof.user.socialaccount_set.all.0.extra_data.email}}</td>
+                                <td>{{ prof.user_celular }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="no-data">
+                            <td colspan="20">No existen profesionales en el sistema.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                    <tfoot>
+                    <tr></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% if is_paginated %}
+        {% include "paginator.html" %}
+    {% endif %}
+{% endblock %}
+
+{% block page-javascript %}
+{% endblock %}

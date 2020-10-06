@@ -89,9 +89,16 @@ def agregarCPO(request):
 
 
 @login_required(login_url="/")
-def listadoctores(request):
-    doctors = UserProfile.objects.filter(user_type='DOCTOR')
-    return render(request, "secretaria/lista_doctores/lista_doctores.html", {'doctors': doctors})
+def listaprofesionales(request):
+    busqueda = request.GET.get("buscar")
+    profesionales = UserProfile.objects.filter(user_tipo='DOCTOR')
+    if busqueda:
+        profesionales = UserProfile.objects.filter(
+            Q(user_tipo__exact='DOCTOR') &
+            Q(user__first_name__contains=busqueda) |
+            Q(user__last_name__contains=busqueda)
+        ).distinct()
+    return render(request, "almaFront/doctor/profesionales.html", {'profesionales': profesionales})
 
 
 @login_required(login_url="/")
@@ -145,12 +152,14 @@ def pacientedetalles(request, paciente_id):
     return render(request, "almaFront/pacientes/paciente.html",
                   {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': ultimas_consultas_paciente})
 
+
 @login_required(login_url="/")
 def verCPO(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     ultimo_cpo_paciente = CPO.objects.filter(paciente_id=paciente_id).last()
     return render(request, "almaFront/ver_cpo.html",
                   {'patient': paciente, 'cpo': ultimo_cpo_paciente})
+
 
 @login_required(login_url="/")
 def pacientecambiopass(request):

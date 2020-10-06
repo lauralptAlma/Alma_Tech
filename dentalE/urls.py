@@ -9,7 +9,7 @@ from .views import (
 
     # secretaria
     resumendia,
-    listadoctores,
+    listaprofesionales,
     agregarpaciente,
     listapacientes,
     agregarcita,
@@ -32,7 +32,7 @@ urlpatterns = [
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
-    url(r'^doctorlista/$', listadoctores, name='listadoctores'),
+    url(r'^profesionales/$', listaprofesionales, name='profesionales'),
     url(r'^agregarpaciente/$', agregarpaciente, name="agregarpaciente"),
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
     url(r'^agregarcita/$', agregarcita, name="agregarcita"),
