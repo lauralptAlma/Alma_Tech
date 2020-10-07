@@ -35,7 +35,7 @@
                         {% for app in agenda_hoy %}
                             <tr class="tr-body">
                                 <td><a class="a-link"
-                                       href="/dentalE/pacientedetalles/{{ app.paciente.id }}">{{ app.paciente.nombre }} {{ app.paciente.primer_apellido }}</a>
+                                       href="/dentalE/pacientedetalles/{{ app.paciente.paciente_id }}">{{ app.paciente.nombre }} {{ app.paciente.primer_apellido }}</a>
                                 </td>
                                 <td>{{ app.doctor.get_full_name }}</td>
                                 <td>{{ app.fecha }}</td>
