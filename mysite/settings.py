@@ -277,7 +277,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        "CLIENT": {"name": 'pruebacpomdb',
+        "CLIENT": {"name": 'ensayo-prototipo',
                    "host": 'mongodb+srv://admin:almaAdmin@clusteralmatech.izim4.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true',
                    "username": 'admin',
                    "password": 'almaAdmin',
