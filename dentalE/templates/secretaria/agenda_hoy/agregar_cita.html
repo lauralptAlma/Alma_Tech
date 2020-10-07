@@ -1,39 +1,144 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "almaFront/bases/blank.html" %}
 {% load static %}
+{% block page-title %}Agregar Cita{% endblock %}
 
-<div class="add-department">
+{% block page-content %}
+    <div class="form-row">
+        <div class="form-group col-lg-10">
+            <form method="post" action="">
+                <link rel="stylesheet" href="{% static 'assets/fullcalendar-5.3.2/lib/main.css' %}">
+                <script src="{% static 'assets/fullcalendar-5.3.2/lib/main.js' %}"></script>
+                <script src="{% static 'assets/fullcalendar-5.3.2/lib/es.js' %}"></script>
+                <script>
 
- <div class="row page-head">
-  <div class="col-md-4 col-sm-4 col-xs-12">
-   <h1>agregar cita</h1>
-  </div>
-  
-  <div class="col-md-8 col-sm-8 col-xs-12">
-   <button type="button" onclick="window.location.href = '../../../resumendia/' ">atras</button>
-  </div> 
- </div>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        let calendarEl = document.getElementById('calendar');
+                        let calendar;
+                        calendar = new FullCalendar.Calendar(calendarEl, {
+                            timeZone: 'local',
+                            initialView: 'dayGridMonth',
+                            language: 'Spanish',
+                            selectable: true,
+                            editable: true,
+                            googleCalendarApiKey: 'AIzaSyCx0UP6Jprpdu4UXEOzf8lPfNeRVw6_Myo',
+                            event: {
+                                googleCalendarId: 'andrea.correa@estudiantes.utec.edu.uy',
+                                className: 'gcal-event'// an option!
+                            },
+                            headerToolbar: {
+                                right: 'dayGridMonth, timeGridWeek, timeGridDay',
+                                left: 'addEventButton',
+                                center: 'title'
+                            },
+                            customButtons: {
+                                addEventButton: {
+                                    text: 'Agregar cita...',
+                                    click: function () {
+                                        var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+                                        var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+                                        if (!isNaN(date.valueOf())) { // valid?
+                                            calendar.addEvent({
+                                                title: 'dynamic event',
+                                                start: date,
+                                                allDay: true
+                                            });
+                                            alert('Great. Now, update your database...');
+                                        } else {
+                                            alert('Invalid date.');
+                                        }
+                                    }
+                                },
+                                modalButton: {
+                                    text: "Botón",
+                                    click: function () {
+                                        alert("Hola");
+                                        $('#exampleModal').modal('toggle');
+                                    }
+                                }
+
+                            },
+                            dateClick: function (info) {
+                                $('#txtFecha').val(info.dateStr);
+                                $('#exampleModal').modal('toggle');
+                                calendar.addEvent({title: "Prueba ", date: info.dateStr});
+                            },
 
 
-<div class="row">
-  <div class="col-md-12">
-   <div class="page-form">
-   
-   <form method="post" action="">
-    	{% csrf_token %}
-    	{{ form.as_p }}
-	
-	<div class="footer">
-	 <button type="submit">Guardar</button>
-	 <button type="button" onclick="window.location.href = '../../../resumendia/' ">atrás</button>
-	</div>
-	</form>
-	
-   </div>
-  </div> 
-</div>
+                            eventClick: function (info) {
+                                console.log(info.event.title);
+                            },
+                        });
+                        calendar.setOption('locale', 'es')
+                        calendar.render();
+                        $('#btnAdd').click(function () {
+                            recolectarDatos("POST");
+                        });
+
+                        function recolectarDatos(method) {
+                            nuevoEvent = {
+                                id: $('#txtId').val(),
+                                fecha: $('#txtFecha').val(),
+                                hora: $('#txtHora').val(),
+                                paciente: $('#txtPaciente').val(),
+                                profesional: $('#txtProf').val(),
+
+                                'method': method
+                            }
+                        }
 
 
-</div><!-- add-department -->
+                    });
 
+                </script>
+                </head>
+                <body>
+                <div id='calendar'></div>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Launch demo modal
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"> Datos de la Cita</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <br/>
+                                ID:
+                                <input type="text" name="txtId" id="txtId">
+                                <br/>
+                                Fecha:
+                                <input type="text" name="txtFecha" id="txtFecha">
+                                <br/>
+                                Hora
+                                <input type="text" name="txtHora" id="txtHora">
+                                <br/>
+                                Paciente:
+                                <input type="text" name="txtPaciente" id="txtPaciente">
+                                <br/>
+                                Profesional:
+                                <input type="text" name="txtProf" id="txtProf">
+                                <br/>
+                            </div>
+                            <div class=" modal-footer">
+                                <button id="btnAdd" class="btn btn-success">Agregar</button>
+                                <button id="btnEdit" class="btn btn-warning">Modificar</button>
+                                <button id="btnDelete" class="btn btn-danger">Eliminar</button>
+                                <button id="btnCancel" class="btn btn-secondary">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </body>
+
+            </form>
+        </div>
+    </div>
 {% endblock %}
