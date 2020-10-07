@@ -96,15 +96,14 @@ class Paciente(models.Model):
     def get_validation_digit(ci):
         a = 0
         i = 0
-        if len(str(ci)) <= 6:
-            for i in range(len(ci), 7):
-                ci = '0' + ci
+        str_ci = (str(ci))
+        if len(str_ci) <= 7:
+            for i in range(len(str_ci), 8):
+                str_ci = '0' + str_ci
                 i = i + 1
-
         for i in range(0, 7):
-            a += (int("2987634"[i]) * int(str(ci)[i])) % 10
+            a += (int("2987634"[i]) * int(str_ci[i])) % 10
             i = i + 1
-
         if a % 10 == 0:
             return 0
         else:
