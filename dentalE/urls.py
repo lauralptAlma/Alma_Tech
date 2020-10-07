@@ -28,7 +28,7 @@ urlpatterns = [
     # doctor
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
-    url(r'^cpopaciente/(?P<paciente_id>[0-9])/$', verCPO, name="cpopaciente"),
+    url(r'^cpopaciente/(?P<paciente_id>\d+)/$', verCPO, name="cpopaciente"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
@@ -39,7 +39,7 @@ urlpatterns = [
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),
-    url(r'^pacientedetalles/(?P<paciente_id>[0-9])/$', pacientedetalles, name='pacientedetalles'),
+    url(r'^pacientedetalles/(?P<paciente_id>\d+)/$', pacientedetalles, name='pacientedetalles'),
     url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
     url(r'^agregarantecedentes/$', agregarantecedentes, name='agregarantecedentes'),
 
