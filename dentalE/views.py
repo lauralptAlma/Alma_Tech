@@ -35,7 +35,7 @@ def resumendia(request):
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
                       {'agenda_hoy': agenda_hoy})
     elif userprofile.user_tipo == 'DOCTOR':
-        citas_doctor_hoy = Cita.objects.filter(creado=date.today(), doctor=request.user)
+        citas_doctor_hoy = Cita.objects.filter(fecha=date.today(), doctor=request.user)
         return render(request, 'almaFront/doctor/pacientes_dia.html',
                       {'citas_doctor_hoy': citas_doctor_hoy})
     else:
