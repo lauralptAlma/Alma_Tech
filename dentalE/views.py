@@ -148,9 +148,9 @@ def pacientedetalles(request, paciente_id):
     antecedentes_paciente = AntecedentesClinicos.objects.filter(paciente_id=paciente_id).last()
     consultas_paciente = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
     if consultas_paciente:
-        ultimas_consultas_paciente = consultas_paciente[:3]
+        consultas_paciente = consultas_paciente[:3]
     return render(request, "almaFront/pacientes/paciente.html",
-                  {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': ultimas_consultas_paciente})
+                  {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': consultas_paciente})
 
 
 @login_required(login_url="/")
