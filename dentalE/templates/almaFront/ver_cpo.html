@@ -9,7 +9,7 @@
                 <div class="card shadow mb-3">
                     <div class="card-header py-3">
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <p class="text-primary m-0 font-weight-bold" style="width: 456px;">
+                            <p class="text-primary m-0 font-weight-bold">
                                 CPO {{ patient.nombre }} {{ patient.primer_apellido }} | {% if cpo %}
                                 {{ cpo.creado }} {% else %} No existen registros de CPO para paciente actual.{% endif %}</p>
                         </div>
@@ -64,31 +64,9 @@
             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <div class="card shadow mb-3">
                     <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Seleccionar Estado</p>
+                        <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Referencias</p>
                     </div>
                     <div class="card-body">
-                        <div class="row justify-content-center">
-                            <p class="text-alma">Presione el botón del estado que desea asignar, luego seleccione la
-                                pieza.</p>
-                            <!--Botones para seleccionar situación del diente-->
-                            <div id="controls">
-                                <div class="btn-group-vertical btn-group-toggle" data-toggle="buttons">
-                                    <label id="cariado" class="btn btn-cariado active">
-                                        <input type="radio" name="options" id="option1" autocomplete="off"
-                                               checked>Cariado</label>
-                                    <label id="obturado" class="btn btn-obturado">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> Obturado
-                                    </label>
-                                    <label id="perdido" class="btn btn-perdido">
-                                        <input type="radio" name="options" id="option3" autocomplete="off"> Perdido
-                                    </label>
-                                    <label id="ausente" class="btn btn-ausente">
-                                        <input type="radio" name="options" id="option4" autocomplete="off"> Ausente
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
                         <div class="row">
                             <!--Referencias-->
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

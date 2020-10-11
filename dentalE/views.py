@@ -144,13 +144,29 @@ def pacienteinicio(request):
 
 @login_required(login_url="/")
 def pacientedetalles(request, paciente_id):
+    sin_patologias = False
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     antecedentes_paciente = AntecedentesClinicos.objects.filter(paciente_id=paciente_id).last()
     consultas_paciente = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
+    if antecedentes_paciente:
+        antecedentes = [antecedentes_paciente.fumador, antecedentes_paciente.alcohol,
+                        antecedentes_paciente.coproparasitario, antecedentes_paciente.aparato_digestivo,
+                        antecedentes_paciente.dermatologicos,
+                        antecedentes_paciente.alergias, antecedentes_paciente.autoinmunes,
+                        antecedentes_paciente.oncologicas,
+                        antecedentes_paciente.hematologicas, antecedentes_paciente.intervenciones,
+                        antecedentes_paciente.toma_medicacion,
+                        antecedentes_paciente.endocrinometabolico,
+                        antecedentes_paciente.cardiovascular, antecedentes_paciente.nefrourologicos,
+                        antecedentes_paciente.osteoarticulares]
+        antecedentes_negativos = antecedentes.count("NO") + antecedentes.count("['NO']")
+        if antecedentes_negativos == 15:
+            sin_patologias = True
     if consultas_paciente:
         consultas_paciente = consultas_paciente[:3]
     return render(request, "almaFront/pacientes/paciente.html",
-                  {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': consultas_paciente})
+                  {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': consultas_paciente,
+                   'sin_patologias': sin_patologias})
 
 
 @login_required(login_url="/")
