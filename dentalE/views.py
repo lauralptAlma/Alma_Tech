@@ -42,14 +42,34 @@ def resumendia(request):
         return HttpResponseRedirect('account_logout')
 
 
-@login_required(login_url="/")
+'''@login_required(login_url="/")
 def agregarcita(request):
     form = CitaForm()
     if request.method == 'POST':
+    #if request.is_ajax():
         form = CitaForm(request.POST)
         if form.is_valid():
             cita = form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
+    return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'form': form})
+'''
+
+
+@login_required(login_url="/")
+def agregarcita(request):
+    form = CitaForm()
+    if request.POST and form.is_valid():
+        paciente = form.cleaned_data['paciente']
+        doctor = form.cleaned_data['doctor']
+        fecha = form.cleaned_data['fecha']
+        hora = form.cleaned_data['hora']
+        Cita.objects.get_or_create(
+            paciente=paciente,
+            doctor=doctor,
+            fecha=fecha,
+            hora=hora
+        )
+        return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'form': form})
 
 
