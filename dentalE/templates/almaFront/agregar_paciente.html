@@ -20,11 +20,6 @@
     </div>
 {% endblock %}
 {% block page-javascript %}
-    <script type="text/javascript">
-        $(function () {
-            $("#id_fecha_nacimiento").datetimepicker({
-                format: 'DD/MM/YYYY HH:mm',
-            });
-        });
-    </script>
+    {{ form.media }}
 {% endblock %}
+

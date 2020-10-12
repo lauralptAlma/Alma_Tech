@@ -31,13 +31,13 @@ def resumendia(request):
     except ObjectDoesNotExist:
         return render(request, 'almaFront/bases/404.html')
     if userprofile.user_tipo == 'SECRETARIA':
-        agenda_hoy = Cita.objects.filter(fecha=date.today())
+        agenda_hoy = Cita.objects.filter(fecha=date.today()).order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
                       {'agenda_hoy': agenda_hoy})
     elif userprofile.user_tipo == 'DOCTOR':
-        citas_doctor_hoy = Cita.objects.filter(fecha=date.today(), doctor=request.user)
-        return render(request, 'almaFront/doctor/pacientes_dia.html',
-                      {'citas_doctor_hoy': citas_doctor_hoy})
+        agenda_hoy = Cita.objects.filter(fecha=date.today(), doctor=request.user).order_by('hora')
+        return render(request, 'almaFront/secretaria/agenda_hoy.html',
+                      {'agenda_hoy': agenda_hoy})
     else:
         return HttpResponseRedirect('account_logout')
 
@@ -124,13 +124,13 @@ def listaprofesionales(request):
 @login_required(login_url="/")
 def listapacientes(request):
     busqueda = request.GET.get("buscar")
-    pacientes = Paciente.objects.all()
+    pacientes = Paciente.objects.all().order_by('primer_apellido')
     if busqueda:
         pacientes = Paciente.objects.filter(
             Q(nombre__icontains=busqueda) |
             Q(primer_apellido__icontains=busqueda) |
             Q(documento__icontains=busqueda)
-        ).distinct()
+        ).distinct().order_by('primer_apellido')
     return render(request, "almaFront/pacientes/pacientes.html",
                   {'patients': pacientes})
 
@@ -164,13 +164,29 @@ def pacienteinicio(request):
 
 @login_required(login_url="/")
 def pacientedetalles(request, paciente_id):
+    sin_patologias = False
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     antecedentes_paciente = AntecedentesClinicos.objects.filter(paciente_id=paciente_id).last()
     consultas_paciente = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
+    if antecedentes_paciente:
+        antecedentes = [antecedentes_paciente.fumador, antecedentes_paciente.alcohol,
+                        antecedentes_paciente.coproparasitario, antecedentes_paciente.aparato_digestivo,
+                        antecedentes_paciente.dermatologicos,
+                        antecedentes_paciente.alergias, antecedentes_paciente.autoinmunes,
+                        antecedentes_paciente.oncologicas,
+                        antecedentes_paciente.hematologicas, antecedentes_paciente.intervenciones,
+                        antecedentes_paciente.toma_medicacion,
+                        antecedentes_paciente.endocrinometabolico,
+                        antecedentes_paciente.cardiovascular, antecedentes_paciente.nefrourologicos,
+                        antecedentes_paciente.osteoarticulares]
+        antecedentes_negativos = antecedentes.count("NO") + antecedentes.count("['NO']")
+        if antecedentes_negativos == 15:
+            sin_patologias = True
     if consultas_paciente:
         consultas_paciente = consultas_paciente[:3]
     return render(request, "almaFront/pacientes/paciente.html",
-                  {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': consultas_paciente})
+                  {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': consultas_paciente,
+                   'sin_patologias': sin_patologias})
 
 
 @login_required(login_url="/")
