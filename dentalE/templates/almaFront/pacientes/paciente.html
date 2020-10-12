@@ -18,39 +18,42 @@
                                 <p><strong>Dirección: </strong> {{ patient.direccion }}</p>
                                 <p><strong>Celular: </strong> {{ patient.celular }}</p>
                                 <p><strong>Fecha de Nacimiento: </strong> {{ patient.fecha_nacimiento }}</p>
-                                {% if user.userprofile.user_tipo == 'DOCTOR' and antecedentes %}
+                                {% if user.userprofile.user_tipo == 'DOCTOR' and sin_patologias %}
                                     <p><strong>Antecedentes: </strong>
-                                        {% if antecedentes.fumador != "['NO']" %}
+                                    <span class="badge badge-pill badge-warning">Paciente no cuenta con antecedentes clínicos</span>
+                                {% elif user.userprofile.user_tipo == 'DOCTOR' and antecedentes %}
+                                    <p><strong>Antecedentes: </strong>
+                                        {% if antecedentes.fumador == 'SI' %}
                                             <span class="badge badge-pill badge-info">Fumador</span>
                                         {% endif %}
-                                        {% if antecedentes.alcohol != "['NO']" %}
+                                        {% if antecedentes.alcohol == 'SI' %}
                                             <span class="badge badge-pill badge-info">Alcohol</span>
                                         {% endif %}
-                                        {% if antecedentes.coproparasitario != "['NO']" %}
+                                        {% if antecedentes.coproparasitario == 'SI' %}
                                             <span class="badge badge-pill badge-info">C.P.S.</span>
                                         {% endif %}
-                                        {% if antecedentes.aparato_digestivo != "['NO']" %}
+                                        {% if antecedentes.aparato_digestivo == 'SI' %}
                                             <span class="badge badge-pill badge-info">Aparato Digestivo</span>
                                         {% endif %}
-                                        {% if antecedentes.dermatologicos != "['NO']" %}
+                                        {% if antecedentes.dermatologicos == 'SI' %}
                                             <span class="badge badge-pill badge-info">Dermatológicos</span>
                                         {% endif %}
-                                        {% if antecedentes.alergias != "['NO']" %}
+                                        {% if antecedentes.alergias == 'SI' %}
                                             <span class="badge badge-pill badge-info">Alergias</span>
                                         {% endif %}
-                                        {% if antecedentes.autoinmunes != "['NO']" %}
+                                        {% if antecedentes.autoinmunes == 'SI' %}
                                             <span class="badge badge-pill badge-info">Autoinmunes</span>
                                         {% endif %}
-                                        {% if antecedentes.oncologicas != "['NO']" %}
+                                        {% if antecedentes.oncologicas == 'SI' %}
                                             <span class="badge badge-pill badge-info">Oncológicas</span>
                                         {% endif %}
-                                        {% if antecedentes.hematologicas != "['NO']" %}
+                                        {% if antecedentes.hematologicas == 'SI' %}
                                             <span class="badge badge-pill badge-info">Hematológicas</span>
                                         {% endif %}
-                                        {% if antecedentes.intervenciones != "['NO']" %}
+                                        {% if antecedentes.intervenciones == 'SI' %}
                                             <span class="badge badge-pill badge-info">Intervenciones</span>
                                         {% endif %}
-                                        {% if antecedentes.toma_medicacion != "['NO']" %}
+                                        {% if antecedentes.toma_medicacion == 'SI' %}
                                             <span class="badge badge-pill badge-info">Medicación</span>
                                         {% endif %}
                                         {% if antecedentes.endocrinometabolico != "['NO']" %}
@@ -86,11 +89,13 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col"><i class="fa fa-file-text-o" style="margin-right: 15px;"></i><a href="/dentalE/cpopaciente/{{ patient.paciente_id }}">Ver
+                            <div class="col"><i class="fa fa-file-text-o" style="margin-right: 15px;"></i><a
+                                    href="/dentalE/cpopaciente/{{ patient.paciente_id }}">Ver
                                 historia clínica</a></div>
                         </div>
                         <div class="row">
-                            <div class="col"><i class="fas fa-tooth" style="margin-right: 15px;"></i><a href="/dentalE/agregartratamiento/">Nueva
+                            <div class="col"><i class="fas fa-tooth" style="margin-right: 15px;"></i><a
+                                    href="/dentalE/agregartratamiento/">Nueva
                                 consulta
                                 general</a></div>
                         </div>
@@ -100,7 +105,8 @@
                                 ortodoncia</a></div>
                         </div>
                         <div class="row">
-                            <div class="col"><i class="fas fa-teeth-open" style="margin-right: 15px;"></i><a href="/dentalE/agregarcpo/">Nueva
+                            <div class="col"><i class="fas fa-teeth-open" style="margin-right: 15px;"></i><a
+                                    href="/dentalE/agregarcpo/">Nueva
                                 consulta con CPO</a></div>
                         </div>
                     </div>

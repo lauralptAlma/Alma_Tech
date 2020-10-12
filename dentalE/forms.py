@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
+from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -31,9 +32,9 @@ class PacienteForm(ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'primer_apellido': forms.TextInput(attrs={'class': 'form-control'}),
             'segundo_apellido': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_nacimiento': forms.DateTimeInput(attrs={
-                'class': 'form-control datetimepicker-input',
-                'data-target': '#datepickerbirthdate'
+            'fecha_nacimiento': DatePickerInput(options={
+                "format": "DD/MM/YYYY",  # moment date-time format
+                "locale": 'es'
             }),
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
@@ -86,18 +87,18 @@ class AntecedenteForm(ModelForm):
         widgets = {
             'paciente': forms.Select(
                 attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'}),
-            'fumador': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'alcohol': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'coproparasitario': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'aparato_digestivo': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'fumador': forms.RadioSelect(choices=SN_OPCIONES),
+            'alcohol': forms.RadioSelect(choices=SN_OPCIONES),
+            'coproparasitario': forms.RadioSelect(choices=SN_OPCIONES),
+            'aparato_digestivo': forms.RadioSelect(choices=SN_OPCIONES),
             'desc_aparato_digestivo': forms.TextInput(attrs={'class': 'form-control'}),
-            'dermatologicos': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'alergias': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'autoinmunes': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'oncologicas': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'hematologicas': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'intervenciones': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
-            'toma_medicacion': forms.CheckboxSelectMultiple(choices=SN_OPCIONES),
+            'dermatologicos': forms.RadioSelect(choices=SN_OPCIONES),
+            'alergias': forms.RadioSelect(choices=SN_OPCIONES),
+            'autoinmunes': forms.RadioSelect(choices=SN_OPCIONES),
+            'oncologicas': forms.RadioSelect(choices=SN_OPCIONES),
+            'hematologicas': forms.RadioSelect(choices=SN_OPCIONES),
+            'intervenciones': forms.RadioSelect(choices=SN_OPCIONES),
+            'toma_medicacion': forms.RadioSelect(choices=SN_OPCIONES),
             'endocrinometabolico': forms.CheckboxSelectMultiple(choices=ENDOCRINOLOGICOS_OPCIONES),
             'cardiovascular': forms.CheckboxSelectMultiple(choices=CARDIOVASCULAR_OPCIONES),
             'nefrourologicos': forms.CheckboxSelectMultiple(choices=NEFROUROLOGICOS_OPCIONES),
