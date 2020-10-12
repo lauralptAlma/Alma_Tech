@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
+from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -31,9 +32,9 @@ class PacienteForm(ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'primer_apellido': forms.TextInput(attrs={'class': 'form-control'}),
             'segundo_apellido': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_nacimiento': forms.DateTimeInput(attrs={
-                'class': 'form-control datetimepicker-input',
-                'data-target': '#datepickerbirthdate'
+            'fecha_nacimiento': DatePickerInput(options={
+                "format": "DD/MM/YYYY",  # moment date-time format
+                "locale": 'es'
             }),
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
@@ -75,7 +76,7 @@ class ConsultaCPOForm(ModelForm):
 class AntecedenteForm(ModelForm):
     class Meta:
         model = AntecedentesClinicos
-        fields = ('paciente', 'fumador','alcohol', 'coproparasitario', 'aparato_digestivo', 'desc_aparato_digestivo',
+        fields = ('paciente', 'fumador', 'alcohol', 'coproparasitario', 'aparato_digestivo', 'desc_aparato_digestivo',
                   'dermatologicos', 'desc_dermatologicos',
                   'alergias', 'desc_alergias', 'autoinmunes', 'desc_autoinmunes', 'oncologicas', 'desc_oncologicas',
                   'hematologicas', 'desc_hematologicas', 'intervenciones', 'desc_intervenciones', 'toma_medicacion',

@@ -48,7 +48,7 @@ class Paciente(models.Model):
     primer_apellido = models.CharField('Primer Apellido* ', max_length=100, null=False, blank=False)
     segundo_apellido = models.CharField('Segundo Apellido', max_length=100, null=True, blank=True)
     direccion = models.CharField('Dirección* ', max_length=155, null=False, blank=False)
-    fecha_nacimiento = models.DateField('Fecha de nacimiento* ', help_text="ej. 01/08/2012", default=datetime.date.today,
+    fecha_nacimiento = models.DateField('Fecha de nacimiento* ', help_text="ej. 01/08/2012",
                                         null=False, blank=False)
     # Contacto
     celular_regex = RegexValidator(regex=r'^\+?1?\d{9,9}$',

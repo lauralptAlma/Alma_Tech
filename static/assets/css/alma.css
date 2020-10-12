@@ -130,6 +130,10 @@ li {
     margin-right: 0px;
 }
 
+.bootstrap-datetimepicker-widget li {
+    margin-right: 0px;
+}
+
 /*CSS CPO*/
 .diente {
     position: static;

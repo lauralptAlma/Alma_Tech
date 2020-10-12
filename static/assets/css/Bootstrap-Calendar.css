@@ -11,12 +11,12 @@
 }
 
 .month {
-  font-size: 2rem;
+  font-size: 1.042vw;
 }
 
 @media (min-width: 992px) {
   .month {
-    font-size: 3.5rem;
+    font-size: 1.042vw;
   }
 }
 
