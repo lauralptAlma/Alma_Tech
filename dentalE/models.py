@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 import datetime
 
 # USUARIO OPTIONS
-USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'), ('PACIENTE', 'PACIENTE'))
+USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'))
 USER_ESPECIALIDAD = (('ORTOPEDIA', 'ORTOPEDIA'), ('ORTODONCIA', 'ORTODONCIA'), ('GENERAL', 'GENERAL'))
 # NUCLEO OPTIONS
 NUCLEO_OPCIONES = (
@@ -33,7 +33,6 @@ class UserProfile(models.Model):
     user_celular = models.IntegerField(null=True)
     user_alta = models.DateTimeField(auto_now_add=True)
     user_especialidad = models.CharField(max_length=15, choices=USER_ESPECIALIDAD, blank=True, null=True)
-    user_calificacion = models.CharField(max_length=100, blank=True, null=True)
 
     def __unicode__(self):
         return self.user

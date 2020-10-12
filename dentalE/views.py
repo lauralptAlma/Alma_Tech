@@ -31,13 +31,13 @@ def resumendia(request):
     except ObjectDoesNotExist:
         return render(request, 'almaFront/bases/404.html')
     if userprofile.user_tipo == 'SECRETARIA':
-        agenda_hoy = Cita.objects.filter(fecha=date.today())
+        agenda_hoy = Cita.objects.filter(fecha=date.today()).order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
                       {'agenda_hoy': agenda_hoy})
     elif userprofile.user_tipo == 'DOCTOR':
-        citas_doctor_hoy = Cita.objects.filter(fecha=date.today(), doctor=request.user)
-        return render(request, 'almaFront/doctor/pacientes_dia.html',
-                      {'citas_doctor_hoy': citas_doctor_hoy})
+        agenda_hoy = Cita.objects.filter(fecha=date.today(), doctor=request.user).order_by('hora')
+        return render(request, 'almaFront/secretaria/agenda_hoy.html',
+                      {'agenda_hoy': agenda_hoy})
     else:
         return HttpResponseRedirect('account_logout')
 
@@ -104,13 +104,13 @@ def listaprofesionales(request):
 @login_required(login_url="/")
 def listapacientes(request):
     busqueda = request.GET.get("buscar")
-    pacientes = Paciente.objects.all()
+    pacientes = Paciente.objects.all().order_by('primer_apellido')
     if busqueda:
         pacientes = Paciente.objects.filter(
             Q(nombre__icontains=busqueda) |
             Q(primer_apellido__icontains=busqueda) |
             Q(documento__icontains=busqueda)
-        ).distinct()
+        ).distinct().order_by('primer_apellido')
     return render(request, "almaFront/pacientes/pacientes.html",
                   {'patients': pacientes})
 
