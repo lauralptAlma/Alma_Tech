@@ -410,7 +410,7 @@ li {
     font-family: "ralewayregular", Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 16px;
     color: #3ab7ab;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, .5)), url(/static/assets/img/background/fondo.png);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, .5)), url(/static/assets/img/background/fondo.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
