@@ -1,0 +1,40 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block page-title %}Agregar Cita{% endblock %}
+
+
+{% block page-content %}
+    <div class="footer" align="right">
+        <a class="btn btn-info" href="/dentalE/agregarcita/"> Volver </a>
+    </div>
+   <div class="form-row">
+        <div class="form-group col-lg-10">
+            <div class="row">
+                <div class="col">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Nueva Cita</p>
+                        </div>
+                        <div class="card-body" align="justify">
+                            <div>
+                                <form method="post" action="">
+                                    {% csrf_token %}
+                                    <table class="col-sm-4">
+                                        {{ form.as_table }}
+                                    </table>
+
+                                    <div class="footer" align="right">
+                                        <button type="submit" class="btn btn-info">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+{% block page-javascript %}
+    {{ form.media }}
+{% endblock %}

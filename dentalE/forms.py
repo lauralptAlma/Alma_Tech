@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
-from bootstrap_datepicker_plus import DatePickerInput
+from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -48,6 +48,18 @@ class CitaForm(ModelForm):
     class Meta:
         model = Cita
         fields = ('paciente', 'doctor', 'fecha', 'hora')
+
+        widgets = {
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'}),
+            'doctor': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar Profesional...'}),
+            'fecha': DatePickerInput(options={
+                "format": "DD/MM/YYYY",  # moment date-time format
+                "locale": 'es'
+            }),
+            'hora': TimePickerInput(attrs={'class': 'form-control'}),
+        }
 
 
 class ConsultaForm(ModelForm):

@@ -54,6 +54,22 @@ def agregarcita(request):
 
 
 @login_required(login_url="/")
+def nuevacita(request):
+    form = CitaForm()
+    if request.method == 'POST':
+        form = CitaForm(request.POST)
+        if form.is_valid():
+            Cita = form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Cita agregada exitosamente!'
+            )
+        return HttpResponseRedirect("/dentalE/resumendia/")
+    return render(request, "secretaria/agenda_hoy/nueva_cita.html", {'form': form})
+
+
+@login_required(login_url="/")
 def agregartratamiento(request):
     form = ConsultaForm()
     if request.method == 'POST':
