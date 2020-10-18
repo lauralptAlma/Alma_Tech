@@ -8,13 +8,13 @@
         <div class="card-body">
             <div class="row justify-content-end">
                 <div>
-                    <form method="GET" id="search-form" autocomplete="on" >
+                    <form method="GET" id="search-form" autocomplete="on">
                         <div class="search-div input-group">{% csrf_token %}
                             <input type="text" class="bg-light form-control border-0 small"
                                    name="buscar" value="{{ documento }}"
                                    placeholder="Buscar paciente...">
                             <div class="input-group-append">
-                                <button class="btn btn-primary py-0" type="submit" id="search-btn" >
+                                <button class="btn btn-primary py-0" type="submit" id="search-btn">
                                     <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
                             </div>
                         </div>
@@ -64,9 +64,6 @@
             </div>
         </div>
     </div>
-    {% if is_paginated %}
-        {% include "paginator.html" %}
-    {% endif %}
 {% endblock %}
 
 {% block page-javascript %}

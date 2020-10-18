@@ -55,6 +55,13 @@ class ConsultaForm(ModelForm):
         model = Consulta
         readonly_fields = 'creado'
         fields = ('paciente', 'diagnostico', 'tratamiento', 'indicaciones')
+        widgets = {
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'}),
+            'diagnostico': forms.Textarea(attrs={'class': 'form-control'}),
+            'tratamiento': forms.Textarea(attrs={'class': 'form-control'}),
+            'indicaciones': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
 
 class ConsultaCPOForm(ModelForm):
@@ -71,6 +78,7 @@ class ConsultaCPOForm(ModelForm):
             'paciente': forms.Select(
                 attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'})
         }
+
 
 
 class AntecedenteForm(ModelForm):

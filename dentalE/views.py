@@ -1,6 +1,7 @@
 import json
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
@@ -16,6 +17,8 @@ from django.views.generic import CreateView, UpdateView, ListView, DetailView, F
 from django.views.generic.detail import SingleObjectMixin
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, ConsultaCPOForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos, CPO
+from datetime import datetime
+from django.utils import formats
 from datetime import date
 
 
@@ -103,8 +106,8 @@ def listaprofesionales(request):
 
 @login_required(login_url="/")
 def listapacientes(request):
-    busqueda = request.GET.get("buscar")
     pacientes = Paciente.objects.all().order_by('primer_apellido')
+    busqueda = request.GET.get("buscar")
     if busqueda:
         pacientes = Paciente.objects.filter(
             Q(nombre__icontains=busqueda) |
@@ -170,11 +173,47 @@ def pacientedetalles(request, paciente_id):
 
 
 @login_required(login_url="/")
+def verhistoriageneral(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    consultas_list = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
+    # paginator = Paginator(consultas_list, 1)  # Show 1 cpo per page.
+    # page_number = request.GET.get('page')
+    # page_obj = paginator.get_page(page_number)
+    return render(request, "almaFront/pacientes/patient_treatments_history.html",
+                  {'patient': paciente, 'treatments': consultas_list})
+
+
+@login_required(login_url="/")
 def verCPO(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
-    ultimo_cpo_paciente = CPO.objects.filter(paciente_id=paciente_id).last()
+    cpos_list = CPO.objects.filter(paciente_id=paciente_id).order_by('-cpo_id')
+    paginator = Paginator(cpos_list, 1)  # Show 1 cpo per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    # ultimo_cpo_paciente = CPO.objects.filter(paciente_id=paciente_id).last()
     return render(request, "almaFront/ver_cpo.html",
-                  {'patient': paciente, 'cpo': ultimo_cpo_paciente})
+                  {'patient': paciente, 'page_obj': page_obj})
+
+
+@login_required(login_url="/")
+def verantecedentes(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    antecedentes_list = AntecedentesClinicos.objects.filter(paciente_id=paciente_id).last()
+    if antecedentes_list:
+        antecedentes_list.creado = formats.date_format(antecedentes_list.creado, "SHORT_DATE_FORMAT")
+        antecedentes_list.endocrinometabolico = eval(antecedentes_list.endocrinometabolico)
+        antecedentes_list.cardiovascular = eval(antecedentes_list.cardiovascular)
+        for c in antecedentes_list.cardiovascular:
+            if c == 'H.T.A.':
+                c_index = antecedentes_list.cardiovascular.index(c)
+                antecedentes_list.cardiovascular[c_index] = 'Hipertensión arterial'
+            if c == 'I.A.M':
+                c_index = antecedentes_list.cardiovascular.index(c)
+                antecedentes_list.cardiovascular[c_index] = 'Infarto agudo de miocardio'
+        antecedentes_list.nefrourologicos = eval(antecedentes_list.nefrourologicos)
+        antecedentes_list.osteoarticulares = eval(antecedentes_list.osteoarticulares)
+    return render(request, "almaFront/pacientes/patient_background.html",
+                  {'patient': paciente, 'antecedentes': antecedentes_list})
 
 
 @login_required(login_url="/")

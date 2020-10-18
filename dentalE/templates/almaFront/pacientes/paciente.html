@@ -90,7 +90,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col"><i class="fa fa-file-text-o" style="margin-right: 15px;"></i><a
-                                    href="/dentalE/cpopaciente/{{ patient.paciente_id }}">Ver
+                                    href="/dentalE/tratamientospaciente/{{ patient.paciente_id }}">Ver
                                 historia clínica</a></div>
                         </div>
                         <div class="row">
@@ -136,7 +136,7 @@
                         {% if consultas %}
                             {% for c in consultas %}
                                 <tr class="tr-body">
-                                    <td>{{ c.creado }}</td>
+                                    <td>{{ c.creado|date:"SHORT_DATE_FORMAT" }}</td>
                                     <td>{{ c.diagnostico }}</td>
                                     <td>{{ c.tratamiento }}</td>
                                     <td>{{ c.indicaciones }}</td>

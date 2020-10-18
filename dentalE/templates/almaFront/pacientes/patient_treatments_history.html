@@ -1,0 +1,78 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Odontología General{% endblock %}
+{% block page-title %}Historia Clínica {{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+{% block page-content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="text-primary font-weight-bold m-0">
+                            {% if treatments %}
+                                Odontología General {{ patient.nombre }} {{ patient.primer_apellido }}
+                            {% else %} Odontología General {{ patient.nombre }} {{ patient.primer_apellido }} |
+                                No existen registros de Antecedentes para paciente actual
+                            {% endif %}
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush border-left-info">
+                            <li class="list-group-item">
+                                <div class="row align-items-center no-gutters">
+                                    {% if treatments %}
+                                        {% for t in treatments %}
+                                            <div class="col mr-2">
+                                                <div>
+                                                    <span class="text-info font-weight-bold mb-1">Fecha: </span>
+                                                    <span> {{ t.creado|date:"SHORT_DATE_FORMAT" }} </span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-info font-weight-bold mb-1">Diagnóstico: </span>
+                                                    <span> {{ t.diagnostico }} </span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-info font-weight-bold mb-1">Tratamiento: </span>
+                                                    <span> {{ t.tratamiento }} </span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-info font-weight-bold mb-1">Indicaciones: </span>
+                                                    <span> {{ t.indicaciones }} </span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-info font-weight-bold mb-1">Profesional: </span>
+                                                    <span> {{ t.doctor.get_full_name }} </span>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr class="no-data">
+                                            <td colspan="20">No existen consultas registradas para este paciente en
+                                                el sistema.
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Alcohol: </span>
+                                            <span> {{ antecedentes.alcohol }} </span>
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Coproparasitario: </span>
+                                            <span> {{ antecedentes.coproparasitario }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+{% endblock %}
