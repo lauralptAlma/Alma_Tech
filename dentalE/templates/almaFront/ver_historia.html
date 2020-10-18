@@ -27,18 +27,6 @@
                    aria-selected="false">Ortodoncia</a>
             </li>
         </ul>
-        <div class="tab-content" id="historiaTabsContent">
-            <div class="tab-pane fade show active" id="historiaantecedentes" role="tabpanel" aria-labelledby="home-tab">
-                Hola
-            </div>
-            <div class="tab-pane fade" id="historiageneral" role="tabpanel" aria-labelledby="profile-tab">Como</div>
-            <div class="tab-pane fade" id="historiacpo" role="tabpanel" aria-labelledby="contact-tab">
-                {% include "almaFront/consultas/patient_cpos.html" %}
-            </div>
-            <div class="tab-pane fade" id="historiaortodoncia" role="tabpanel" aria-labelledby="contact-tab">Chau</div>
-        </div>
-    </div>
-
 {% endblock %}
 {% block page-javascript %}
     <script type="text/javascript" src="{% static 'assets/js/odontograma.js' %}">

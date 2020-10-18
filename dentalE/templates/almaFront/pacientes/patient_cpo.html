@@ -4,19 +4,18 @@
 {% block page-title %}Historia Clínica {{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
 {% block page-content %}
     <div class="container-fluid">
+        {% include 'almaFront/bases/clinic-history-tabs.html' %}
         <div class="row">
             <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                 <div class="card shadow mb-3">
                     <div class="card-header py-3">
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <p class="text-primary m-0 font-weight-bold">
+                            <p class="m-0 font-weight-bold">
                                 {% if page_obj %}
                                     {% for cpo in page_obj %}
-                                        CPO {{ patient.nombre }} {{ patient.primer_apellido }} |
-                                        {{ cpo.creado }}
+                                        Fecha: {{ cpo.creado }}
                                     {% endfor %}
-                                {% else %} CPO {{ patient.nombre }} {{ patient.primer_apellido }} |
-                                    No existen registros de CPO para paciente actual.
+                                {% else %} No existen registros de CPO para paciente actual.
                                 {% endif %}
                             </p>
                         </div>
@@ -111,7 +110,7 @@
                             {% endif %}
                         </div>
                         {% if page_obj %}
-                            {% include "almaFront/pagination.html" %}
+                            {% include "almaFront/bases/pagination.html" %}
                         {% endif %}
                     </div>
                 </div>

@@ -176,11 +176,11 @@ def pacientedetalles(request, paciente_id):
 def verhistoriageneral(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     consultas_list = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
-    # paginator = Paginator(consultas_list, 1)  # Show 1 cpo per page.
-    # page_number = request.GET.get('page')
-    # page_obj = paginator.get_page(page_number)
+    paginator = Paginator(consultas_list, 10)  # Show 10 treatments per page.
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
     return render(request, "almaFront/pacientes/patient_treatments_history.html",
-                  {'patient': paciente, 'treatments': consultas_list})
+                  {'patient': paciente, 'treatments': page_obj})
 
 
 @login_required(login_url="/")
@@ -188,10 +188,10 @@ def verCPO(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     cpos_list = CPO.objects.filter(paciente_id=paciente_id).order_by('-cpo_id')
     paginator = Paginator(cpos_list, 1)  # Show 1 cpo per page.
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
     # ultimo_cpo_paciente = CPO.objects.filter(paciente_id=paciente_id).last()
-    return render(request, "almaFront/ver_cpo.html",
+    return render(request, "almaFront/pacientes/patient_cpo.html",
                   {'patient': paciente, 'page_obj': page_obj})
 
 
@@ -214,6 +214,12 @@ def verantecedentes(request, paciente_id):
         antecedentes_list.osteoarticulares = eval(antecedentes_list.osteoarticulares)
     return render(request, "almaFront/pacientes/patient_background.html",
                   {'patient': paciente, 'antecedentes': antecedentes_list})
+
+
+@login_required(login_url="/")
+def historiapaciente(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    return render(request, "almaFront/ver_historia.html", {'patient': paciente})
 
 
 @login_required(login_url="/")

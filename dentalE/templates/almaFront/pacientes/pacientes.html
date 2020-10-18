@@ -9,9 +9,10 @@
             <div class="row justify-content-end">
                 <div>
                     <form method="GET" id="search-form" autocomplete="on">
-                        <div class="search-div input-group">{% csrf_token %}
+                        <div class="search-div input-group">
                             <input type="text" class="bg-light form-control border-0 small"
-                                   name="buscar" value="{{ documento }}"
+                                   id="id_buscar"
+                                   name="buscar"
                                    placeholder="Buscar paciente...">
                             <div class="input-group-append">
                                 <button class="btn btn-primary py-0" type="submit" id="search-btn">

@@ -8,6 +8,7 @@ from .views import (
     verCPO,
     verantecedentes,
     verhistoriageneral,
+    historiapaciente,
 
     # secretaria
     resumendia,
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^cpopaciente/(?P<paciente_id>\d+)/$', verCPO, name="cpopaciente"),
     url(r'^antecedentespaciente/(?P<paciente_id>\d+)/$', verantecedentes, name="antecedentespaciente"),
     url(r'^tratamientospaciente/(?P<paciente_id>\d+)/$', verhistoriageneral, name="tratamientospaciente"),
+    url(r'^historiapaciente/(?P<paciente_id>\d+)/$', historiapaciente, name="historiapaciente"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),

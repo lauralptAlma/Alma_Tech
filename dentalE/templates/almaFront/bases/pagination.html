@@ -1,0 +1,20 @@
+<div class="pagination justify-content-center">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a class="mr-2" href="?page=1{% if request.GET.buscar %}&buscar={{ request.GET.buscar }}{% endif %}">&laquo; Inicio</a>
+            <a class="mr-2" href="?page={{ page_obj.previous_page_number }}
+            {% if request.GET.buscar %}&buscar={{ request.GET.buscar }}{% endif %}">Anterior</a>
+        {% endif %}
+
+        <span class="current mr-2">
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a class="mr-2" href="?page={{ page_obj.next_page_number }}
+{% if request.GET.buscar %}&buscar={{ request.GET.buscar }}{% endif %}">Siguiente</a>
+            <a class="mr-2" href="?page={{ page_obj.paginator.num_pages }}
+{% if request.GET.buscar %}&buscar={{ request.GET.buscar }}{% endif %}">Final &raquo;</a>
+        {% endif %}
+    </span>
+</div>

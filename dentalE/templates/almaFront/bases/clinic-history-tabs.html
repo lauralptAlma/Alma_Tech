@@ -1,0 +1,28 @@
+<ul class="nav nav-tabs" id="historiaTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {% if 'antecedentespaciente' in request.path %} active {% endif %}"
+           id="antecedentes-tab" href="/dentalE/antecedentespaciente/{{ patient.paciente_id }}"
+           role="tab"
+           aria-controls="antecedentes"
+           aria-selected="true">Antecendentes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if 'tratamientospaciente' in request.path %} active {% endif %}" id="general-tab"
+           href="/dentalE/tratamientospaciente/{{ patient.paciente_id }}" role="tab"
+           aria-controls="general"
+           aria-selected="false">Odontología General</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {% if 'cpopaciente' in request.path %} active {% endif %}" id="cpo-tab"
+           href="/dentalE/cpopaciente/{{ patient.paciente_id }}"
+           role="tab"
+           aria-controls="cpo"
+           aria-selected="false">CPO</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link {% if 'tratamientosortodonciapaciente' in request.path %} active {% endif %}" id="ortodoncia-tab"
+           href="/dentalE/tratamientospaciente/{{ patient.paciente_id }}" role="tab"
+           aria-controls="ortodoncia"
+           aria-selected="false">Ortodoncia</a>
+    </li>
+</ul>
