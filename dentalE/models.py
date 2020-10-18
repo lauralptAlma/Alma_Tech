@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
-from djongo import models as djongomodels
 from django.contrib.auth.models import User
 
 import datetime
@@ -20,7 +19,8 @@ ENDOCRINOLOGICOS_OPCIONES = (
     ('NO', 'No'), ('DIABETES', 'Diabetes'), ('TIROIDES', 'Tiroides'),
     ('DISPLEMIAS BAJO TRATAMIENTO', 'Displemias bajo tratamiento'), ('OTROS', 'Otros'))
 NEFROUROLOGICOS_OPCIONES = (
-    ('NO', 'No'), ('UROLITIASIS', 'Uroliatiasis'), ('GLOMERULOPATIAS', 'Glomerulopatias'), ('MONORRENO', 'Monorreno'), ('OTROS', 'Otros'))
+    ('NO', 'No'), ('UROLITIASIS', 'Uroliatiasis'), ('GLOMERULOPATIAS', 'Glomerulopatias'), ('MONORRENO', 'Monorreno'),
+    ('OTROS', 'Otros'))
 OSTEOARTICULARES_OPCIONES = (
     ('NO', 'No'), ('LUXACIONES FRECUENTES', 'Luxaciones Frecuentes'), ('FRACTURAS', 'Fracturas'), ('OTROS', 'Otros'))
 SN_OPCIONES = (('SI', 'Sí'), ('NO', 'No'))
@@ -123,39 +123,38 @@ class Paciente(models.Model):
         return str(self.nombre)
 
 
-class AntecedentesClinicos(djongomodels.Model):
-    creado = djongomodels.DateField(auto_now_add=True)
-    paciente = djongomodels.ForeignKey(Paciente, on_delete=models.CASCADE)
-    fumador = djongomodels.CharField('Fumador*', max_length=2, choices=SN_OPCIONES, default='')
-    alcohol = djongomodels.CharField('Alcohol* ', max_length=2, choices=SN_OPCIONES, default='')
-    coproparasitario = djongomodels.CharField('Coproparasitario * ', max_length=2, choices=SN_OPCIONES, default='')
-    aparato_digestivo = djongomodels.CharField('Aparato Digestivo* ', max_length=2, choices=SN_OPCIONES, default='')
-    desc_aparato_digestivo = djongomodels.CharField('Descripción Aparato Digestivo* ', max_length=150, null=True, blank=True)
-    dermatologicos = djongomodels.CharField('Dermatológicos* ', max_length=2, choices=SN_OPCIONES, default='')
-    desc_dermatologicos = djongomodels.CharField('Descripción Dermatológicos* ', max_length=150, null=True, blank=True)
-    alergias = djongomodels.CharField('Alergias* ', max_length=2, choices=SN_OPCIONES, default='')
-    desc_alergias = djongomodels.CharField('Descripción Alergias* ', max_length=150, null=True, blank=True)
-    autoinmunes = djongomodels.CharField('Autoinmunes* ', max_length=2, choices=SN_OPCIONES, default='')
-    desc_autoinmunes = djongomodels.CharField('Descripción Autoinmunes* ', max_length=150, null=True, blank=True)
-    oncologicas = djongomodels.CharField('Oncológicas* ', max_length=2, choices=SN_OPCIONES, default='')
-    desc_oncologicas = djongomodels.CharField('Descripción Oncológicas* ', max_length=150, null=True, blank=True)
-    hematologicas = djongomodels.CharField('Hematológicas* ', max_length=2, choices=SN_OPCIONES, default='')
-    desc_hematologicas = djongomodels.CharField('Descripción Hematológicas* ', max_length=150, null=True, blank=True)
-    intervenciones = djongomodels.CharField('Intervenciones* ', max_length=2, choices=SN_OPCIONES, default='')
-    desc_intervenciones = djongomodels.CharField('Descripción Intervenciones* ', max_length=150, null=True, blank=True)
-    toma_medicacion = djongomodels.CharField('Medicación Habitual* ', max_length=2, choices=SN_OPCIONES, default='')
-    desc_medicacion = djongomodels.CharField('Descripción Medicación* ', max_length=150, null=True, blank=True)
-    endocrinometabolico = djongomodels.CharField('Endocrinometabólico* ', null=False, max_length=150, default='')
-    #endocrinometabolico = djongomodels.CharField('Endocrinometabólico* ', null=False, max_length=150, default='')
-    desc_endocrinometabolico = djongomodels.CharField('Descripción Endocrinometabólico* ', max_length=150, null=True,
+class AntecedentesClinicos(models.Model):
+    creado = models.DateField(auto_now_add=True)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    fumador = models.CharField('Fumador*', max_length=2, choices=SN_OPCIONES, default='')
+    alcohol = models.CharField('Alcohol* ', max_length=2, choices=SN_OPCIONES, default='')
+    coproparasitario = models.CharField('Coproparasitario * ', max_length=2, choices=SN_OPCIONES, default='')
+    aparato_digestivo = models.CharField('Aparato Digestivo* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_aparato_digestivo = models.CharField('Descripción Aparato Digestivo* ', max_length=150, null=True, blank=True)
+    dermatologicos = models.CharField('Dermatológicos* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_dermatologicos = models.CharField('Descripción Dermatológicos* ', max_length=150, null=True, blank=True)
+    alergias = models.CharField('Alergias* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_alergias = models.CharField('Descripción Alergias* ', max_length=150, null=True, blank=True)
+    autoinmunes = models.CharField('Autoinmunes* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_autoinmunes = models.CharField('Descripción Autoinmunes* ', max_length=150, null=True, blank=True)
+    oncologicas = models.CharField('Oncológicas* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_oncologicas = models.CharField('Descripción Oncológicas* ', max_length=150, null=True, blank=True)
+    hematologicas = models.CharField('Hematológicas* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_hematologicas = models.CharField('Descripción Hematológicas* ', max_length=150, null=True, blank=True)
+    intervenciones = models.CharField('Intervenciones* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_intervenciones = models.CharField('Descripción Intervenciones* ', max_length=150, null=True, blank=True)
+    toma_medicacion = models.CharField('Medicación Habitual* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_medicacion = models.CharField('Descripción Medicación* ', max_length=150, null=True, blank=True)
+    endocrinometabolico = models.CharField('Endocrinometabólico* ', null=False, max_length=150, default='')
+    desc_endocrinometabolico = models.CharField('Descripción Endocrinometabólico* ', max_length=150, null=True,
                                                 blank=True)
-    cardiovascular = djongomodels.CharField('Cardiovascular* ', null=False, max_length=150, default='')
-    desc_cardiovascular = djongomodels.CharField('Descripción Cardiovascular* ', max_length=150, null=True, blank=True)
-    nefrourologicos = djongomodels.CharField('Nefrourológicos* ', null=False, max_length=150, default='')
-    desc_nefrourologicos = djongomodels.CharField('Descripción Nefrourológicos* ', max_length=150, null=True, blank=True)
-    osteoarticulares = djongomodels.CharField('Osteoarticulares* ', null=False, max_length=150, default='')
-    desc_osteoarticulares = djongomodels.CharField('Descripción Osteoarticulares* ', max_length=150, null=True, blank=True)
-    observations = djongomodels.TextField('Observaciones', max_length=150, null=True, blank=True)
+    cardiovascular = models.CharField('Cardiovascular* ', null=False, max_length=150, default='')
+    desc_cardiovascular = models.CharField('Descripción Cardiovascular* ', max_length=150, null=True, blank=True)
+    nefrourologicos = models.CharField('Nefrourológicos* ', null=False, max_length=150, default='')
+    desc_nefrourologicos = models.CharField('Descripción Nefrourológicos* ', max_length=150, null=True, blank=True)
+    osteoarticulares = models.CharField('Osteoarticulares* ', null=False, max_length=150, default='')
+    desc_osteoarticulares = models.CharField('Descripción Osteoarticulares* ', max_length=150, null=True, blank=True)
+    observations = models.TextField('Observaciones', max_length=150, null=True, blank=True)
 
     def __str__(self):
         return str(self.paciente)
@@ -251,4 +250,3 @@ class Cita(models.Model):
 
     def __str__(self):
         return str(self.paciente)
-
