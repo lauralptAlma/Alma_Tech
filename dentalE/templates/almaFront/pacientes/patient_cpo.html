@@ -13,7 +13,7 @@
                             <p class="m-0 font-weight-bold">
                                 {% if page_obj %}
                                     {% for cpo in page_obj %}
-                                        Fecha: {{ cpo.creado }}
+                                        Fecha: {{ cpo.creado|date:"SHORT_DATE_FORMAT" }}
                                     {% endfor %}
                                 {% else %} No existen registros de CPO para paciente actual.
                                 {% endif %}
