@@ -58,7 +58,9 @@ class CitaForm(ModelForm):
                 "format": "DD/MM/YYYY",  # moment date-time format
                 "locale": 'es'
             }),
-            'hora': TimePickerInput(attrs={'class': 'form-control'}),
+            'hora': TimePickerInput(attrs={'class': 'form-control',
+                                           'type': 'time', 'min': '07:00', 'max': '19:00', 'step': '600'}),
+
         }
 
 

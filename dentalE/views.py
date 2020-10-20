@@ -55,8 +55,13 @@ def agregarcita(request):
 @login_required(login_url="/")
 def CalendarPage(request):
     citas = Cita.objects.all()
-
-    return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'citasList': citas})
+    form = CitaForm()
+    if request.method == 'POST':
+        form = CitaForm(request.POST)
+        if form.is_valid():
+            cita = form.save()
+            return HttpResponseRedirect("/dentalE/resumendia/")
+    return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'citasList': citas, 'form': form})
 
 
 

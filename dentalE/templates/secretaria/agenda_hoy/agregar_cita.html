@@ -11,6 +11,7 @@
                 <div id='calendar'></div>
             </form>
             <form method="post" action="">
+                {% csrf_token %}
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog">
@@ -22,28 +23,35 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <br/>
-                                ID:
-                                <input type="text" name="txtId" id="txtId">
-                                <br/>
-                                Fecha:
-                                <input type="text" name="txtFecha" id="txtFecha">
-                                <br/>
-                                Hora
-                                <input type="text" name="txtHora" id="txtHora">
-                                <br/>
-                                Paciente:
-                                <input type="text" name="txtPaciente" id="txtPaciente">
-                                <br/>
-                                Profesional:
-                                <input type="text" name="txtProf" id="txtProf">
-                                <br/>
+                                <div class="form-row">
+                                    <div class="form-group col-md-8">
+                                        <label>Paciente:</label>
+                                        {{ form.paciente }}
+                                        <!--input type="text" class="form-control" name="txtPaciente" id="txtPaciente"-->
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <label>Profesional:</label>
+                                        {{ form.doctor }}
+                                        <!--input type="text" class="form-control" name="txtProf" id="txtProf"-->
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <label>Fecha:</label>
+                                        {{ form.fecha }}
+                                        <!--input type="text" class="form-control" name="txtFecha" id="txtFecha"-->
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Hora:</label>
+                                        {{ form.hora }}
+                                        <!--input type="time" min="07:00" max="19:00" step="600"
+                                               class="form-control" name="txtHora" id="txtHora"-->
+                                    </div>
+                                </div>
                             </div>
                             <div class=" modal-footer">
-                                <button id="btnAdd" class="btn btn-success">Agregar</button>
+                                <button type="submit" id="btnAdd" class="btn btn-success">Agregar</button>
                                 <button id="btnEdit" class="btn btn-warning">Modificar</button>
                                 <button id="btnDelete" class="btn btn-danger">Eliminar</button>
-                                <button id="btnCancel" class="btn btn-secondary">Cancelar</button>
+                                <button id="btnCancel" data-dismiss="modal" class="btn btn-secondary">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -73,10 +81,42 @@
                     left: 'prev,next',
                     center: 'title'
                 },
+                slotLabelFormat: [
+                    {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        omitZeroMinute: false,
+                        meridiem: 'short'
+                    }
+                ],
+
+                eventClick: function (info) {
+                    $('#btnAdd').prop("disabled", true);
+                    $('#btnEdit').prop("disabled", false);
+                    $('#btnDelete').prop("disabled", false);
+
+                    mes = (info.event.fecha.getMonth() + 1);
+                    dia = (info.event.fecha.getDate());
+                    anio = (info.event.fecha.getFullYear());
+                    hora = (info.event.hora.getHours() + ":" + info.event.hora.getMinutes());
+
+                    mes = (mes < 10) ? "0" + mes : mes;
+                    dia = (dia < 10) ? "0" + dia : dia;
+                    $('#txtPaciente').val(info.event.paciente);
+                    $('#txtProf').val(info.event.profesional);
+                    $('#txtFecha').val(anio + "-" + mes + "_" + dia);
+                    $('#txtHora').val(hora);
+                    $('#exampleModal').modal();
+                },
+
                 dateClick: function (info) {
-                    $('#txtFecha').val(info.dateStr);
+                    limpiarFormulario();
+                    $('#id_fecha').val(info.dateStr);
+                    $('#btnAdd').prop("disabled", false);
+                    $('#btnEdit').prop("disabled", true);
+                    $('#btnDelete').prop("disabled", true);
                     $('#exampleModal').modal('toggle');
-                    calendar.addEvent({title: "Prueba ", date: info.dateStr});
+                    calendar.addEvent({title: "Consulta", date: info.dateStr});
                 },
 
 
@@ -84,7 +124,7 @@
                     {% for i in citasList %}
                         {
                             title: "{{ i.paciente.nombre}}",
-                            start: '{{ i.fecha|date:"Y-m-d" }}T{{ i.hora}}',
+                            start: '{{ i.fecha|date:"Y-m-d" }}T{{ i.hora|time:"H:i"}}',
                         },
                     {% endfor %}
 
@@ -93,6 +133,13 @@
             });
             calendar.setOption('locale', 'es')
             calendar.render();
+
+            function limpiarFormulario() {
+                $('#id_paciente').val("");
+                $('#txtProf').val("");
+                $('#txtFecha').val("");
+                $('#txtHora').val("");
+            }
         });
 
     </script>
