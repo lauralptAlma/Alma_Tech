@@ -9,6 +9,7 @@ from .views import (
     verantecedentes,
     verhistoriageneral,
     historiapaciente,
+    pacientes_render_pdf_view,
 
     # secretaria
     resumendia,
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^antecedentespaciente/(?P<paciente_id>\d+)/$', verantecedentes, name="antecedentespaciente"),
     url(r'^tratamientospaciente/(?P<paciente_id>\d+)/$', verhistoriageneral, name="tratamientospaciente"),
     url(r'^historiapaciente/(?P<paciente_id>\d+)/$', historiapaciente, name="historiapaciente"),
+    url(r'^pdf/(?P<paciente_id>\d+)/$', pacientes_render_pdf_view, name="paciente-pdf-view"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),

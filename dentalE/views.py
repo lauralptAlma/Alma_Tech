@@ -6,8 +6,8 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 # from django.core.checks import messages
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
 from django.db.models import Q
 from django.contrib.auth.models import User, Group
@@ -20,6 +20,10 @@ from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesC
 from datetime import datetime
 from django.utils import formats
 from datetime import date
+# Imports needed for pdf generation
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.views.generic import ListView
 
 
 def pruebaBaseFront(request):
@@ -109,7 +113,7 @@ def listapacientes(request):
     pacientes = Paciente.objects.all().order_by('primer_apellido')
     busqueda = request.GET.get("buscar")
     if busqueda:
-        pacientes = Paciente.objects.filter(
+        pacientes = pacientes.filter(
             Q(nombre__icontains=busqueda) |
             Q(primer_apellido__icontains=busqueda) |
             Q(documento__icontains=busqueda)
@@ -190,12 +194,38 @@ def verCPO(request, paciente_id):
     paginator = Paginator(cpos_list, 1)  # Show 1 cpo per page.
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
-    # ultimo_cpo_paciente = CPO.objects.filter(paciente_id=paciente_id).last()
     return render(request, "almaFront/pacientes/patient_cpo.html",
                   {'patient': paciente, 'page_obj': page_obj})
 
 
+# Get patitent clinical background
+def getantecedentes(paciente_id):
+    antecedentes_list = AntecedentesClinicos.objects.filter(paciente_id=paciente_id).last()
+    if antecedentes_list:
+        antecedentes_list.creado = formats.date_format(antecedentes_list.creado, "SHORT_DATE_FORMAT")
+        antecedentes_list.endocrinometabolico = eval(antecedentes_list.endocrinometabolico)
+        antecedentes_list.cardiovascular = eval(antecedentes_list.cardiovascular)
+        for c in antecedentes_list.cardiovascular:
+            if c == 'H.T.A.':
+                c_index = antecedentes_list.cardiovascular.index(c)
+                antecedentes_list.cardiovascular[c_index] = 'Hipertensión arterial'
+            if c == 'I.A.M':
+                c_index = antecedentes_list.cardiovascular.index(c)
+                antecedentes_list.cardiovascular[c_index] = 'Infarto agudo de miocardio'
+        antecedentes_list.nefrourologicos = eval(antecedentes_list.nefrourologicos)
+        antecedentes_list.osteoarticulares = eval(antecedentes_list.osteoarticulares)
+    return antecedentes_list
+
+
 @login_required(login_url="/")
+def verantecedentes(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    antecedentes_list = getantecedentes(paciente_id)
+    return render(request, "almaFront/pacientes/patient_background.html",
+                  {'patient': paciente, 'antecedentes': antecedentes_list})
+
+
+'''@login_required(login_url="/")
 def verantecedentes(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     antecedentes_list = AntecedentesClinicos.objects.filter(paciente_id=paciente_id).last()
@@ -213,7 +243,7 @@ def verantecedentes(request, paciente_id):
         antecedentes_list.nefrourologicos = eval(antecedentes_list.nefrourologicos)
         antecedentes_list.osteoarticulares = eval(antecedentes_list.osteoarticulares)
     return render(request, "almaFront/pacientes/patient_background.html",
-                  {'patient': paciente, 'antecedentes': antecedentes_list})
+                  {'patient': paciente, 'antecedentes': antecedentes_list})'''
 
 
 @login_required(login_url="/")
@@ -347,3 +377,31 @@ def agregarantecedentes(request):
 def logout_view(request):
     logout(request)
     return redirect('ingreso')
+
+
+def pacientes_render_pdf_view(request, *args, **kwargs):
+    user = request.user
+    paciente_id = kwargs.get('paciente_id')
+    patient = get_object_or_404(Paciente, paciente_id=paciente_id)
+    treatments = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
+    background = getantecedentes(paciente_id)
+    # Template that we are going to use to render the pdf
+    template_path = 'almaFront/pdf2.html'
+    context = {'patient': patient, 'treatments': treatments, 'user': user, 'background': background}
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    # If download:
+    # response['Content-Disposition'] = 'attachment; filename="historia-clínica.pdf"'
+    # If display on browser
+    response['Content-Disposition'] = 'filename="historia-clínica.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
