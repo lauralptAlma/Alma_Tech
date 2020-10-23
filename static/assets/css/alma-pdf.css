@@ -1,0 +1,43 @@
+@page {
+    size: a4 portrait;
+}
+
+@frame header_frame {
+    /* Static Frame */
+    -pdf-frame-content: header_content;
+    left: 50pt;
+    width: 512pt;
+    top: 50pt;
+    height: 40pt;
+    pdf-frame-border: 1;
+}
+
+@frame content_frame {
+    /* Content Frame */
+    left: 50pt;
+    width: 512pt;
+    top: 90pt;
+    height: 632pt;
+    pdf-frame-border: 1;
+}
+#footer_content {
+    left: 50pt;
+    width: 512pt;
+    top: 772pt;
+    height: 20pt;
+    text-align: center;
+}
+
+table {
+    -pdf-keep-with-next: true;
+}
+
+p {
+    margin: 0;
+    -pdf-keep-with-next: true;
+}
+
+p.separator {
+    -pdf-keep-with-next: false;
+    font-size: 6pt;
+}

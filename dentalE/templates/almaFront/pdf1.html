@@ -1,0 +1,55 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %} {% endblock %}</title>
+    <style>
+        @page {
+            size: a4 portrait;
+        @frame header_frame { /* Static Frame */
+            -pdf-frame-content: header_content;
+            left: 50pt;
+            width: 512pt;
+            margin-top: 20pt ;
+            height: 58pt;
+        }
+        @frame content_frame {
+            /* Content Frame */
+        left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+        }
+        @frame footer_frame {
+            /* Footer frame, it is at 7mm from the bottom of an A4 page */
+        -pdf-frame-content:footer_content;
+        left: 50pt; width: 512pt; top: 820pt; height: 20pt;
+        }
+        }
+    </style>
+</head>
+<body>
+<!-- Content for Static Frame 'header_frame' -->
+<div id="header_content" style="vertical-align: middle;">
+    <div class="row">
+
+        <div class="col">
+            Dental-E
+        </div>
+        <div class="col">
+            {% block header %}
+            {% endblock header %}
+        </div>
+    </div>
+    <hr>
+</div>
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+<!-- Content for Static Frame 'footer_frame' -->
+<div id="footer_content" style="text-align: center; vertical-align: bottom;">
+    {% block footer %} {% endblock footer %} - Página
+    <pdf:pagenumber>
+        de
+        <pdf:pagecount>
+</div>
+</body>
+</html>

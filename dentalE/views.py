@@ -1,5 +1,8 @@
 import json
+import os
+from operator import attrgetter
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import TemplateView
@@ -24,6 +27,8 @@ from datetime import date
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.views.generic import ListView
+from itertools import chain
+from django.template.loader import render_to_string
 
 
 def pruebaBaseFront(request):
@@ -379,15 +384,40 @@ def logout_view(request):
     return redirect('ingreso')
 
 
+def link_callback(uri, rel):
+    # convert URIs to absolute system paths
+    if uri.startswith(settings.MEDIA_URL):
+        path = os.path.join(settings.MEDIA_ROOT,
+                            uri.replace(settings.MEDIA_URL, ""))
+    elif uri.startswith(settings.STATIC_URL):
+        path = os.path.join(settings.STATIC_ROOT,
+                            uri.replace(settings.STATIC_URL, ""))
+    else:
+        # handle absolute uri (i.e., "http://my.tld/a.png")
+        return uri
+
+    # make sure that the local file exists
+    if not os.path.isfile(path):
+        raise Exception(
+            "Media URI must start with "
+            f"'{settings.MEDIA_URL}' or '{settings.STATIC_URL}'")
+
+    return path
+
+
 def pacientes_render_pdf_view(request, *args, **kwargs):
     user = request.user
     paciente_id = kwargs.get('paciente_id')
     patient = get_object_or_404(Paciente, paciente_id=paciente_id)
     treatments = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
+    cpos = CPO.objects.filter(paciente_id=paciente_id).order_by('-cpo_id')
+    all_ordered = sorted(
+        chain(treatments, cpos),
+        key=attrgetter('creado'), reverse=True)
     background = getantecedentes(paciente_id)
     # Template that we are going to use to render the pdf
-    template_path = 'almaFront/pdf2.html'
-    context = {'patient': patient, 'treatments': treatments, 'user': user, 'background': background}
+    template_path = 'almaFront/historiapdf/pdf2.html'
+    context = {'patient': patient, 'treatments': treatments, 'user': user, 'background': background, 'all': all_ordered}
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
     # If download:
@@ -400,8 +430,10 @@ def pacientes_render_pdf_view(request, *args, **kwargs):
 
     # create a pdf
     pisa_status = pisa.CreatePDF(
-        html, dest=response)
-    # if error then show some funy view
+        html, dest=response,
+        link_callback=link_callback)
+    # if error then show some funny view
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+

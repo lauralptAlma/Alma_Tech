@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Title</title>
+    <style>@page {
+        size: a4 portrait;@frame header_frame { /*Static Frame*/-pdf-frame-content: header_content;
+        left: 50pt;
+        width: 512pt;
+        top: 50pt;
+        height: 40pt;
+    }@frame content_frame {
+        /*Content Frame*/
+    left:50pt;width:512pt;top:90pt;height:632pt;
+    }@frame footer_frame {
+        /*Another static Frame*/
+    -pdf-frame-content:footer_content;left:50pt;width:512pt;top:772pt;height:20pt;
+    }
+    }</style>
+    <style type="text/css">
+
+        #header {
+            background-color: #02164c;
+            width: 100%;
+        }
+
+        #footer {
+            width: 100%;
+        }
+
+        .pageBreak {
+            page-break-after: always;
+        }
+
+        body {
+            font-weight: 200;
+            font-size: 14px;
+        }
+
+        .header {
+            font-size: 20px;
+            font-weight: 100;
+            text-align: center;
+            color: #007cae;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 100;
+            /* text-align: right;*/
+            padding: 10px 20px 0px 20px;
+        }
+
+        .title span {
+            color: #007cae;
+        }
+
+        .details {
+            padding: 10px 20px 0px 20px;
+            text-align: left !important;
+            /*margin-left: 40%;*/
+        }
+
+        .hrItem {
+            border: none;
+            height: 1px;
+            /* Set the hr color */
+            color: #333; /* old IE */
+            background-color: #fff; /* Modern Browsers */
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+    <div class='header'>
+        <p class='title'>Invoice # </p>
+    </div>
+    <div>
+        <div class='details'>
+            Bill to: <br/>
+            Amount: <br/>
+            Date:
+            <hr class='hrItem'/>
+        </div>
+    </div>
+    <div class="card-header sub-title" style="color: #00838f">
+        <span>Antecedentes Clínicos: </span>
+    </div>
+
+    {% if background %}
+        <div>
+            <h6 class="font-weight-bold m-0">
+                Fecha: {{ background.creado }}
+            </h6>
+        </div>
+        <ul class="list-group">
+            <li>
+                <span> <b>></b> Fumador: </span>
+                <span> {{ background.fumador }} </span>
+            </li>
+            <li>
+                <span> <b>></b> Alcohol: </span>
+                <span> {{ background.alcohol }} </span>
+            </li>
+            <li>
+                <span> <b>></b> Coproparasitario: </span>
+                <span> {{ background.coproparasitario }} </span>
+            </li>
+        </ul>
+        <ul class="list-group">
+            <li>
+                <span><b>></b> Aparato Digestivo: </span>
+                <span> {{ background.aparato_digestivo }} </span>
+                {% if background.aparato_digestivo == 'SI' %}
+                    <br>
+                    <span> <b>>></b>
+                            {{ background.desc_aparato_digestivo }}
+                        </span>
+                {% endif %}
+            </li>
+            <li>
+                <span><b>></b> Dermatológicos: </span>
+                <span> {{ background.dermatologicos }} </span>
+                {% if background.dermatologicos == 'SI' %}
+                    <br>
+                    <span><b>>></b> Descripción: {{ background.desc_dermatologicos }}
+                        </span>
+                {% endif %}
+            </li>
+            <li>
+                <span><b>></b> Alergias: </span>
+                <span> {{ background.alergias }} </span>
+                {% if background.alergias == 'SI' %}
+                    <br>
+                    <span><b>>></b> {{ background.desc_alergias }}
+                        </span>
+                {% endif %}
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center no-gutters">
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Autoinmunes: </span>
+                            <span> {{ background.autoinmunes }} </span>
+                            {% if background.autoinmunes == 'SI' %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ background.desc_autoinmunes }}
+                                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Oncológicas: </span>
+                            <span> {{ background.oncologicas }} </span>
+                            {% if background.oncologicas == 'SI' %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ background.desc_oncologicas }}
+                                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Hematológicas: </span>
+                            <span> {{ background.hematologicas }} </span>
+                            {% if background.hematologicas == 'SI' %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ background.desc_hematologicas }}
+                                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center no-gutters">
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Intervenciones: </span>
+                            <span> {{ background.intervenciones }} </span>
+                            {% if background.intervenciones == 'SI' %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ background.desc_intervenciones }}
+                                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Medicación Habitual: </span>
+                            <span> {{ background.toma_medicacion }} </span>
+                            {% if background.toma_medicacion == 'SI' %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ background.desc_medicacion }}
+                                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="list-group list-group-flush border-left-warning">
+            <li class="list-group-item">
+                <div class="row align-items-center no-gutters">
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Endocrinometabólico: </span>
+                            {% for e in background.endocrinometabolico %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
+                                    {% if e == 'OTROS' %}
+                                        : {{ background.desc_endocrinometabolico }}
+                                    {% endif %}
+                                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Cardiovascular: </span>
+                            {% for e in background.cardiovascular %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
+                                    {% if e == 'OTROS' %}
+                                        : {{ background.desc_cardiovascular }}
+                                    {% endif %}
+                                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row align-items-center no-gutters">
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Nefrourológicos: </span>
+                            {% for e in background.nefrourologicos %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
+                                    {% if e == 'OTROS' %}
+                                        : {{ background.desc_nefrourologicos }}
+                                    {% endif %}
+                                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Osteoarticulares: </span>
+                            {% for e in background.osteoarticulares %}
+                                <br>
+                                <span class="ml-4"><i
+                                        class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
+                                    {% if e == 'OTROS' %}
+                                        : {{ background.desc_osteoarticulares }}
+                                    {% endif %}
+                                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="list-group list-group-flush border-left-primary">
+            <li class="list-group-item">
+                <div class="row align-items-center no-gutters">
+                    <div class="col mr-2">
+                        <div>
+                            <span class="text-info font-weight-bold mb-1">Observaciones: </span>
+                            <br>
+                            <span class="ml-4">
+                                            {{ background.observations }}
+                                        </span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    {% else %}
+        <ul class="list-group list-group-flush border-left-danger">
+            <li class="list-group-item">
+                <div class="row align-items-center no-gutters">
+                                <span class="text-danger font-weight-bold mb-1">No existen registros de Antecedentes para paciente actual
+                                {{ patient.nombre }} {{ patient.primer_apellido }}</span>
+                </div>
+            </li>
+        </ul>
+    {% endif %}
+    <hr color="#757575">
+    <div class="card-header sub-title">
+        <span>Odontología General: </span>
+    </div>
+
+    {% if treatments %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Diagnóstico</th>
+                <th>Tratamiento</th>
+                <th>Indicaciones</th>
+                <th>Profesional</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for c in treatments %}
+                <tr class="tr-body">
+                    <td>{{ c.creado|date:"SHORT_DATE_FORMAT" }}</td>
+                    <td>{{ c.diagnostico }}</td>
+                    <td>{{ c.tratamiento }}</td>
+                    <td>{{ c.indicaciones }}</td>
+                    <td>{{ c.doctor.get_full_name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div>
+            No existen consultas registradas para este paciente en
+            el sistema.
+        </div>
+    {% endif %}
+    <hr color="#757575">
+</div>
+</body>
+</html>
