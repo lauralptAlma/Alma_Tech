@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Historia Clínica | {{ patient.nombre }} {{ patient.primer_apellido }}</title>
     <style>@page {
         size: a4 portrait;
@@ -89,6 +89,16 @@
             font-weight: bold;
         }
 
+        .item {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .item-symbol {
+            font-size: 6px;
+            font-weight: bold;
+        }
+
         .background {
             font-size: 11px;
             margin-bottom: 5px;
@@ -100,6 +110,10 @@
 
         ul li {
             list-style-type: none;
+        }
+
+        .cpo-table {
+            -pdf-keep-in-frame-mode: overflow;
         }
     </style>
 </head>
@@ -137,208 +151,152 @@
             <br>
         </div>
         <hr color="#757575">
+        <!-- Antecedentes Clínicos -->
         <div class="sub-title">
             <span>Antecedentes Clínicos: </span>
         </div>
-
         {% if background %}
-            <div>
-                <h6 class="date">
-                    Fecha: {{ background.creado }}
-                </h6>
-            </div>
-            <table class="background">
-                <tbody style="vertical-align: top;">
-                <tr>
-                    <td>
-                        <ul>
-                            <span> <b>*</b> Fumador: </span>
-                            <span> {{ background.fumador }} </span>
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Aparato Digestivo: </span>
-                            <span> {{ background.aparato_digestivo }} </span>
-                            {% if background.aparato_digestivo == 'SI' %}
-                                <br>
-                                <span><b>>></b> <i>Descripción:
-                                    {{ background.desc_aparato_digestivo | lower | capfirst }}</i>
-                                    </span>
-                            {% endif %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Autoinmunes: </span>
-                            <span> {{ background.autoinmunes }} </span>
-                            {% if background.autoinmunes == 'SI' %}
-                                <br>
-                                <span class="ml-4"><i
-                                        class="fas fa-angle-right"></i> {{ background.desc_autoinmunes }}
-                                            </span>
-                            {% endif %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Intervenciones: </span>
-                            <span> {{ background.intervenciones }} </span>
-                            {% if background.intervenciones == 'SI' %}
-                                <br>
-                                <span><b>>></b> <i>Descripción: {{ background.desc_intervenciones | lower | capfirst }}</i>
-                                    </span>
-                            {% endif %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Endocrinometabólico: </span>
-                            {% for e in background.endocrinometabolico %}
-                                <br>
-                                <span><b>> </b>{{ e | lower | capfirst }}{% if e == 'OTROS' %}:
-                                    {{ background.desc_endocrinometabolico }}
-                                {% endif %}
-                                    </span>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            <span> <b>*</b> Alcohol: </span>
-                            <span> {{ background.alcohol }} </span>
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Dermatológicos: </span>
-                            <span> {{ background.dermatologicos }} </span>
-                            {% if background.dermatologicos == 'SI' %}
-                                <br>
-                                <span><b>>></b> <i>Descripción: {{ background.desc_dermatologicos | lower | capfirst }}</i>
-                                </span>
-                            {% endif %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Oncológicas: </span>
-                            <span> {{ background.oncologicas }} </span>
-                            {% if background.oncologicas == 'SI' %}
-                                <br>
-                                <span><b>>></b> <i>Descripción: {{ background.desc_oncologicas | lower | capfirst }}</i>
-                                </span>
-                            {% endif %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Medicación Habitual: </span>
-                            <span> {{ background.toma_medicacion }} </span>
-                            {% if background.toma_medicacion == 'SI' %}
-                                <br>
-                                <span><b>>></b> <i>Descripción: {{ background.desc_medicacion | lower | capfirst }}</i>
-                                </span>
-                            {% endif %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Cardiovascular: </span>
-                            {% for e in background.cardiovascular %}
-                                <br>
-                                <span><b>> </b>{{ e | lower | capfirst }}{% if e == 'OTROS' %}:
-                                    {{ background.desc_cardiovascular }}
-                                {% endif %}
-                                    </span>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            <span> <b>*</b> Coproparasitario: </span>
-                            <span> {{ background.coproparasitario }} </span>
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Alergias: </span>
-                            <span> {{ background.alergias }} </span>
-                            {% if background.alergias == 'SI' %}
-                                <br>
-                                <span><b>>></b> <i>Descripción: {{ background.desc_alergias | lower | capfirst }}</i>
-                                </span>
-                            {% endif %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Hematológicas: </span>
-                            <span> {{ background.hematologicas }} </span>
-                            {% if background.hematologicas == 'SI' %}
-                                <br>
-                                <span><b>>></b> <i>Descripción: {{ background.desc_hematologicas }}</i>
-                                </span>
-                            {% endif %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Nefrourológicos: </span>
-                            {% for e in background.nefrourologicos %}
-                                <br>
-                                <span><b>> </b>{{ e | lower | capfirst }}{% if e == 'OTROS' %}:
-                                    {{ background.desc_nefrourologicos }}
-                                {% endif %}
-                                </span>
-                            {% endfor %}
-                        </ul>
-                        <ul>
-                            <span><b>*</b> Osteoarticulares: </span>
-                            {% for e in background.osteoarticulares %}
-                                <br>
-                                <span><b>> </b>{{ e | lower | capfirst }}{% if e == 'OTROS' %}:
-                                    {{ background.desc_osteoarticulares }}
-                                {% endif %}
-                                </span>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <ul>
-                            <span class="date"> * Observaciones: </span>
-                            <span>
-                            {{ background.observations }}
-                            </span>
-                        </ul>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            {% include 'almaFront/historiapdf/background_pdf.html' %}
         {% else %}
-            <ul class="list-group list-group-flush border-left-danger">
+            <ul class="list-group">
                 <li class="list-group-item">
-                    <div class="row align-items-center no-gutters">
-                                <span class="text-danger font-weight-bold mb-1">No existen registros de Antecedentes para paciente actual
-                                {{ patient.nombre }} {{ patient.primer_apellido }}</span>
+                    <div>
+                        <span>No existen consultas de odontolgía general para paciente
+                            {{ patient.nombre }} {{ patient.primer_apellido }}</span>
                     </div>
                 </li>
             </ul>
         {% endif %}
-
         <hr color="#757575">
+        <!-- Odontología General -->
         <div class="sub-title">
             <span>Odontología General: </span>
         </div>
-
         {% if treatments %}
-            <table class="table table-striped" repeat="1">
+            {% include 'almaFront/historiapdf/general.html' %}
+        {% else %}
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div>
+                        <span>No existen consultas de odontolgía general para paciente
+                            {{ patient.nombre }} {{ patient.primer_apellido }}</span>
+                    </div>
+                </li>
+            </ul>
+        {% endif %}
+        <hr color="#757575">
+        <!-- CPOs -->
+        <div class="sub-title">
+            <span>CPO: </span>
+        </div>
+        {% if cpo %}
+            {% for c in cpo %}
+                <span class="date">Fecha: {{ c.creado|date:"SHORT_DATE_FORMAT" }}</span><br>
+                <span class="date">CeoD:
+                    {% if c.ceod %}
+                        {{ c.ceod }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </span><br>
+                <span class="date">CeoS:
+                    {% if c.ceos %}
+                        {{ c.ceos }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </span><br>
+                <span class="date">CpoD:
+                    {% if c.cpod %}
+                        {{ c.cpod }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </span><br>
+                <span class="date">CpoS:
+                    {% if c.cpos %}
+                        {{ c.cpos }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </span><br>
+                <table class="table cpo-table" repeat="2">
                 <thead>
                 <tr>
-                    <th>Fecha</th>
-                    <th>Diagnóstico</th>
-                    <th>Tratamiento</th>
-                    <th>Indicaciones</th>
-                    <th>Profesional</th>
+                    <th>Estado</th>
+                    <th>Pieza</th>
+                    <th>Cara</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for c in treatments %}
-                    <tr class="tr-body">
-                        <td>{{ c.creado|date:"SHORT_DATE_FORMAT" }}</td>
-                        <td>{{ c.diagnostico }}</td>
-                        <td>{{ c.tratamiento }}</td>
-                        <td>{{ c.indicaciones }}</td>
-                        <td>{{ c.doctor.get_full_name }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                {% if c.caries %}
+                    {% for c in c.caries %}
+                        <tr>
+                            <td>Cariado
+                            </td>
+                            <td>
+                                {{ c.1 }}{{ c.2 }}
+                            </td>
+                            <td>
+                                {{ c.0 }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if c.obturaciones %}
+                    {% for o in c.obturaciones %}
+                        <tr>
+                            <td>
+                                {{ o.1 }}{{ o.2 }}
+                            </td>
+                            <td>
+                                {{ o.0 }}
+                            </td>
+                            <td>Obturación
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if c.perdidos %}
+                    {% for p in c.perdidos %}
+                        <tr>
+                            <td>
+                                {{ p }}
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>Perdido
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if c.ausentes %}
+                    {% for a in c.ausentes %}
+                        <tr>
+                            <td>
+                                {{ a }}
+                            </td>
+                            <td>
+                                -
+                            </td>
+                            <td>Ausente
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </tbody>
+        </table>
         {% else %}
-            <div>
-                No existen consultas registradas para este paciente en
-                el sistema.
-            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div>
+                        <span>No existen consultas de odontolgía general para paciente
+                            {{ patient.nombre }} {{ patient.primer_apellido }}</span>
+                    </div>
+                </li>
+            </ul>
         {% endif %}
         <hr color="#757575">
         <div class="card-header sub-title">
@@ -356,10 +314,14 @@
                 {% endif %}
             {% endfor %}
         {% else %}
-            <div>
-                No existen consultas registradas para este paciente en
-                el sistema.
-            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div>
+                        <span>No existen consultas de odontolgía general para paciente
+                            {{ patient.nombre }} {{ patient.primer_apellido }}</span>
+                    </div>
+                </li>
+            </ul>
         {% endif %}
 
     </div>

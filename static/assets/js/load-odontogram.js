@@ -13,8 +13,6 @@ function ultimoCPO() {
     for (let i = 0; i < lastCpo.ausentes.length; i++) {
         $(`#${lastCpo.ausentes[i]}`).addClass('lacking-tooth');
     }
-
-
 }
 
 $(document).ready(function () {

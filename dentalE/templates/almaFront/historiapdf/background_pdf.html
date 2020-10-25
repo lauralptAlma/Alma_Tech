@@ -1,0 +1,154 @@
+<div>
+    <h6 class="date">
+        Fecha: {{ background.creado }}
+    </h6>
+</div>
+<table class="background">
+    <tbody style="vertical-align: top;">
+    <tr>
+        <td>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Fumador: </span>
+                <span> {{ background.fumador }} </span>
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Aparato Digestivo: </span>
+                <span> {{ background.aparato_digestivo }} </span>
+                {% if background.aparato_digestivo == 'SI' %}
+                    <br>
+                    <span><b>>></b> <i>Descripción:
+                        {{ background.desc_aparato_digestivo | lower | capfirst }}</i>
+                                    </span>
+                {% endif %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Autoinmunes: </span>
+                <span> {{ background.autoinmunes }} </span>
+                {% if background.autoinmunes == 'SI' %}
+                    <br>
+                    <span><b>>></b> <i>{{ background.desc_autoinmunes | lower | capfirst }}</i>
+                                </span>
+                {% endif %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Intervenciones: </span>
+                <span> {{ background.intervenciones }} </span>
+                {% if background.intervenciones == 'SI' %}
+                    <br>
+                    <span><b>>></b> <i>Descripción: {{ background.desc_intervenciones | lower | capfirst }}</i>
+                                    </span>
+                {% endif %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Endocrinometabólico: </span>
+                {% for e in background.endocrinometabolico %}
+                    <br>
+                    <span class="description"><b>> </b>{{ e | lower | capfirst }}
+                        {% if e == 'OTROS' %}
+                            :
+                            {{ background.desc_endocrinometabolico }}
+                        {% endif %}
+                                </span>
+                {% endfor %}
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Alcohol: </span>
+                <span> {{ background.alcohol }} </span>
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Dermatológicos: </span>
+                <span> {{ background.dermatologicos }} </span>
+                {% if background.dermatologicos == 'SI' %}
+                    <br>
+                    <span><b>>></b> <i>Descripción: {{ background.desc_dermatologicos | lower | capfirst }}</i>
+                                </span>
+                {% endif %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Oncológicas: </span>
+                <span> {{ background.oncologicas }} </span>
+                {% if background.oncologicas == 'SI' %}
+                    <br>
+                    <span><b>>></b> <i>Descripción: {{ background.desc_oncologicas | lower | capfirst }}</i>
+                                </span>
+                {% endif %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Medicación Habitual: </span>
+                <span> {{ background.toma_medicacion }} </span>
+                {% if background.toma_medicacion == 'SI' %}
+                    <br>
+                    <span><b>>></b> <i>Descripción: {{ background.desc_medicacion | lower | capfirst }}</i>
+                                </span>
+                {% endif %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Cardiovascular: </span>
+                {% for e in background.cardiovascular %}
+                    <br>
+                    <span><b>> </b>{{ e | lower | capfirst }}{% if e == 'OTROS' %}:
+                        {{ background.desc_cardiovascular }}
+                    {% endif %}
+                                    </span>
+                {% endfor %}
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Coproparasitario: </span>
+                <span> {{ background.coproparasitario }} </span>
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Alergias: </span>
+                <span> {{ background.alergias }} </span>
+                {% if background.alergias == 'SI' %}
+                    <br>
+                    <span><b>>></b> <i>Descripción: {{ background.desc_alergias | lower | capfirst }}</i>
+                                </span>
+                {% endif %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Hematológicas: </span>
+                <span> {{ background.hematologicas }} </span>
+                {% if background.hematologicas == 'SI' %}
+                    <br>
+                    <span><b>>></b> <i>Descripción: {{ background.desc_hematologicas }}</i>
+                                </span>
+                {% endif %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Nefrourológicos: </span>
+                {% for e in background.nefrourologicos %}
+                    <br>
+                    <span><b>> </b>{{ e | lower | capfirst }}{% if e == 'OTROS' %}:
+                        {{ background.desc_nefrourologicos }}
+                    {% endif %}
+                                </span>
+                {% endfor %}
+            </ul>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="item"> Osteoarticulares: </span>
+                {% for e in background.osteoarticulares %}
+                    <br>
+                    <span><b>> </b>{{ e | lower | capfirst }}{% if e == 'OTROS' %}:
+                        {{ background.desc_osteoarticulares }}
+                    {% endif %}
+                                </span>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <ul>
+                <span class="item-symbol">&#x25CF; </span><span class="date"> Observaciones: </span>
+                <span>
+                            {{ background.observations }}
+                            </span>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>

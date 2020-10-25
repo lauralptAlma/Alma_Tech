@@ -1,0 +1,22 @@
+<table class="table table-striped" repeat="1">
+    <thead>
+    <tr>
+        <th>Fecha</th>
+        <th>Diagnóstico</th>
+        <th>Tratamiento</th>
+        <th>Indicaciones</th>
+        <th>Profesional</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for c in treatments %}
+        <tr class="tr-body">
+            <td>{{ c.creado|date:"SHORT_DATE_FORMAT" }}</td>
+            <td>{{ c.diagnostico }}</td>
+            <td>{{ c.tratamiento }}</td>
+            <td>{{ c.indicaciones }}</td>
+            <td>{{ c.doctor.get_full_name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

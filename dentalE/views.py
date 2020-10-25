@@ -384,6 +384,119 @@ def logout_view(request):
     return redirect('ingreso')
 
 
+def build_clean_teeth_dic(teeth_list, status):
+    list_clean = {}
+    if teeth_list:
+        for teeth in teeth_list:
+            cara_list = teeth[0]
+            pieza_list = teeth[-2] + teeth[-1]
+            list_dic = dict(cara=[cara_list], pieza=pieza_list)
+            if pieza_list in list_clean:
+                existing_list_caras = list_clean[pieza_list][status].get('cara')
+                existing_list_caras.append(cara_list)
+                list_clean[pieza_list][status] = dict(cara=existing_list_caras,
+                                                      pieza=pieza_list)
+            else:
+                list_clean[pieza_list] = {status: list_dic}
+    return list_clean
+
+
+def merge(a, b, path=None):
+    # merges b into a
+    if path is None:
+        path = []
+    for key in b:
+        if key in a:
+            if isinstance(a[key], dict) and isinstance(b[key], dict):
+                merge(a[key], b[key], path + [str(key)])
+            elif a[key] == b[key]:
+                pass  # same leaf value
+            else:
+                raise Exception('Conflict at %s' % '.'.join(path + [str(key)]))
+        else:
+            a[key] = b[key]
+    return a
+
+
+'''def getcpo(patient):
+    cpos = CPO.objects.filter(paciente_id=patient).order_by('-cpo_id')
+    if cpos:
+        cpo_clean = {}
+        for c in cpos:
+            c.contenido_cpo = eval(c.contenido_cpo)
+            caries = c.contenido_cpo['cariados']
+            caries_clean = build_clean_teeth_dic(caries, 'caries')
+            obturaciones = c.contenido_cpo['obturados']
+            obturaciones_clean = build_clean_teeth_dic(obturaciones, 'obturados')
+            perdidos = c.contenido_cpo['perdidos']
+            perdidas_clean = {}
+            ausentes = c.contenido_cpo['ausentes']
+            ausentes_clean = {}
+            if perdidos:
+                for p in perdidos:
+                    pieza_perdida = p[-2] + p[-1]
+                    perdidas_dic = dict(pieza=pieza_perdida)
+                    perdidas_clean[pieza_perdida] = {'perdidas': perdidas_dic}
+            if ausentes:
+                for a in ausentes:
+                    pieza_ausente = a[-2] + a[-1]
+                    ausentes_dic = dict(pieza=pieza_ausente)
+                    ausentes_clean[pieza_ausente] = {'ausentes': ausentes_dic}
+            z = merge(caries_clean, obturaciones_clean)
+            cpo = z.copy()
+            cpo.update(perdidas_clean)
+            cpo.update(ausentes_clean)
+            c.contenido_cpo = cpo
+    return cpos'''
+
+
+def clean_tooth(teeth):
+    list_clean = []
+    if teeth:
+        for t in teeth:
+            tooth = t[-2] + t[-1]
+            if tooth in list_clean:
+                pass
+            else:
+                list_clean.append(tooth)
+    return list_clean
+
+
+def getcpo(patient):
+    cpos = CPO.objects.filter(paciente_id=patient).order_by('-cpo_id')
+    if cpos:
+        cpo_clean = {}
+        for c in cpos:
+            c.contenido_cpo = eval(c.contenido_cpo)
+            caries = c.contenido_cpo['cariados']
+            obturaciones = c.contenido_cpo['obturados']
+            perdidos = c.contenido_cpo['perdidos']
+            perdidos_clean = clean_tooth(perdidos)
+            ausentes = c.contenido_cpo['ausentes']
+            ausentes_clean = clean_tooth(ausentes)
+            caries_clean = []
+            list_clean= {}
+            for teeth in caries:
+                cara_list = teeth[0]
+                pieza_list = teeth[-2] + teeth[-1]
+                list_dic = dict(cara=[cara_list], pieza=pieza_list)
+                if pieza_list in list_clean:
+                    existing_list_caras = list_clean[pieza_list].get('cara')
+                    existing_list_caras.append(cara_list)
+                    list_clean[pieza_list] = dict(cara=existing_list_caras,
+                                                          pieza=pieza_list)
+                else:
+                    list_clean[pieza_list] = {'cariados': list_dic}
+                caries_clean.append([list_clean[pieza_list]['cariados']['pieza'], list_clean[pieza_list]['cariados']['cara']])
+            c.caries = caries_clean
+            c.obturaciones = obturaciones
+            c.perdidos = perdidos_clean
+            c.ausentes = ausentes_clean
+            print('AHORA TAAAAA')
+            print(caries_clean)
+    return cpos
+
+
 def link_callback(uri, rel):
     # convert URIs to absolute system paths
     if uri.startswith(settings.MEDIA_URL):
@@ -410,14 +523,16 @@ def pacientes_render_pdf_view(request, *args, **kwargs):
     paciente_id = kwargs.get('paciente_id')
     patient = get_object_or_404(Paciente, paciente_id=paciente_id)
     treatments = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
-    cpos = CPO.objects.filter(paciente_id=paciente_id).order_by('-cpo_id')
+    # cpos = CPO.objects.filter(paciente_id=paciente_id).order_by('-cpo_id')
+    cpos = getcpo(paciente_id)
     all_ordered = sorted(
         chain(treatments, cpos),
         key=attrgetter('creado'), reverse=True)
     background = getantecedentes(paciente_id)
     # Template that we are going to use to render the pdf
     template_path = 'almaFront/historiapdf/pdf2.html'
-    context = {'patient': patient, 'treatments': treatments, 'user': user, 'background': background, 'all': all_ordered}
+    context = {'patient': patient, 'treatments': treatments, 'user': user, 'background': background, 'cpo': cpos,
+               'all': all_ordered}
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
     # If download:
@@ -436,4 +551,3 @@ def pacientes_render_pdf_view(request, *args, **kwargs):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
-
