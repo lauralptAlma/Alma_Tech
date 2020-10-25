@@ -1,0 +1,189 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Historia Clínica | {{ patient.nombre }} {{ patient.primer_apellido }}</title>
+    <style>@page {
+        size: a4 portrait;
+        @frame header_frame { /*Static Frame*/-pdf-frame-content: header_content;
+        left: 50pt;
+        width: 512pt;
+        top: 20pt;
+        height: 40pt;
+    }@frame content_frame {
+        /*Content Frame*/
+    left:50pt;width:512pt;top:70pt;height:731pt;
+    }@frame footer_frame {
+        /*Another static Frame*/
+    -pdf-frame-content:footer_content;left:50pt;width:512pt;top:811pt;height:20pt;
+    }
+    }</style>
+    <style type="text/css">
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 5px;
+            font-family: "Roboto Black";
+        }
+
+        .table th,
+        .table td {
+            padding: 5px;
+            vertical-align: top;
+            border-bottom: 1px solid #e3e6f0;
+            text-align: left;
+        }
+
+        .table thead th {
+            vertical-align: middle;
+            border-top: 2px solid #e3e6f0;
+            border-bottom: 2px solid #e3e6f0;
+            background-color: #f8f9fc;
+            color: #757575;
+            font-size: 12px;
+        }
+
+        .table tbody + tbody {
+            border-top: 2px solid #e3e6f0;
+        }
+
+        .table-striped tbody tr:nth-child(odd) td,
+        .table-striped tbody tr:nth-child(odd) th {
+            background-color: #f9f9f9;
+        }
+
+        .list-group {
+            display: block;
+            width: 100%;
+            list-style: none;
+        }
+
+        .list-group p {
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            list-style: none;
+            font-size: 12px;
+            font-family: "Roboto Medium";
+        }
+
+        .card-header {
+            font-family: "Roboto Black";
+            font-size: 12px;
+        }
+
+        .title {
+            font-family: "Roboto Medium";
+            font-size: 20px;
+        }
+
+        .sub-title {
+            color: #00838f;
+            font-size: 16px;
+            padding-top: 10px;
+        }
+
+        .date {
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .item {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .item-symbol {
+            font-size: 6px;
+            font-weight: bold;
+        }
+
+        .background {
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        table .background td {
+            vertical-align: top;
+        }
+
+        ul li {
+            list-style-type: none;
+        }
+
+        .cpo-table {
+            -pdf-keep-in-frame-mode: truncate;
+        }
+
+        p.separator {
+            -pdf-keep-with-next: false;
+            font-size: 6pt;
+        }
+    </style>
+</head>
+<body>
+<div id="header_content">
+    <table style='-pdf-keep-in-frame-mode: none;'>
+        <tbody>
+        <tr>
+            <td>
+                <span> <b>Consultorio:</b> Dental-e </span>
+                <br>
+                <span> <b>Dirección: </b> El Espacio Exterior, 1432</span>
+                <br>
+                <span> <b>Contacto: </b> (+598) 99 458 712</span>
+            </td>
+            <td style="text-align: right">
+                <img src="static/assets/img/logos/logoDentalPdf.jpg"
+                     alt="Dental-e" name="Logo" height="50px" width="249.5px">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <div class="card">
+        <hr color="#757575">
+        <div class="title">
+            <span>Historia Clínica Dental</span>
+        </div>
+        <div class="card-header">
+            <span> <b>Paciente:</b> {{ patient.nombre }} {{ patient.primer_apellido }} </span>
+            <br>
+            <span> <b>Documento: </b> {{ patient.documento }} </span>
+            <br>
+        </div>
+        <hr color="#757575">
+        <!-- Antecedentes Clínicos -->
+        {% include 'almaFront/historiapdf/background_pdf.html' %}
+        {% if all %}
+            {% for c in all %}
+                {% if c.contenido_cpo %}
+                    {% include 'almaFront/historiapdf/cpo_pdf.html' %}
+                {% elif c.diagnostico %}
+                    {% include 'almaFront/historiapdf/general.html' %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div>
+                        <span>No existen registros para paciente
+                            {{ patient.nombre }} {{ patient.primer_apellido }}</span>
+                    </div>
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+</div>
+<div id="footer_content" style="text-align: center; vertical-align: bottom;">
+    Historia Clínica Dental <b>{{ patient.nombre }} {{ patient.primer_apellido }}</b> | Generada
+    el <b>{% now "SHORT_DATE_FORMAT" %} </b> por <b>{{ user.get_full_name }} - Página
+    <pdf:pagenumber>
+        de
+        <pdf:pagecount>
+</div>
+</body>
+</html>

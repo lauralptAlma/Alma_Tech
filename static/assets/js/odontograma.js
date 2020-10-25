@@ -12,11 +12,11 @@ function createOdontogram() {
     for (var i = 9 - 1; i >= 1; i--) {
         //Dientes Definitivos Cuandrante Derecho (Superior/Inferior)
         let claseDiente = "diente";
-        if (i == 8 || i == 1) {
+        if (i == 8) {
             claseDiente = "primer-diente";
         }
         htmlRight += '<div data-name="value" id="dienteindex' + i + '" class=' + claseDiente + '>' +
-            '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
+            '<span style="margin-left: -0.2vw; margin-bottom:1vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
             '<div id="tindex' + i + '" class="cuadro click">' +
             '</div>' +
             '<div id="lindex' + i + '" class="cuadro izquierdo click">' +
@@ -30,7 +30,7 @@ function createOdontogram() {
             '</div>';
         //Dientes Definitivos Cuandrante Izquierdo (Superior/Inferior)
         htmlLeft += '<div id="dienteindex' + a + '" class=' + claseDiente + '>' +
-            '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + a + '</span>' +
+            '<span style="margin-left: -0.2vw; margin-bottom:1vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + a + '</span>' +
             '<div id="tindex' + a + '" class="cuadro click">' +
             '</div>' +
             '<div id="lindex' + a + '" class="cuadro izquierdo click">' +
@@ -43,8 +43,12 @@ function createOdontogram() {
             '</div>' +
             '</div>';
         if (i <= 5) {
+            let claseDienteLeche = "diente-leche";
+            if (i == 5) {
+                claseDienteLeche = "primer-diente-leche";
+            }
             //Dientes Temporales Cuandrante Derecho (Superior/Inferior)
-            htmlLecheRight += '<div id="dienteLindex' + i + '" style="left: -25%;" class="diente-leche">' +
+            htmlLecheRight += '<div id="dienteLindex' + i + '" style="left: -25%;" class=' + claseDienteLeche + '>' +
                 '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill label-alma">index' + i + '</span>' +
                 '<div id="tindex' + i + '" class="cuadro-leche top-leche click">' +
                 '</div>' +

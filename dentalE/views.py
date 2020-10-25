@@ -462,6 +462,16 @@ def clean_tooth(teeth):
     return list_clean
 
 
+def clean_decayed_filled(decayed_filled_teeth):
+    decayed_filled_list = []
+    for id, info in decayed_filled_teeth.items():
+        pieza = id
+        for key in info:
+            caras = info[key]['cara']
+        decayed_filled_list.append([pieza, caras])
+    return decayed_filled_list
+
+
 def getcpo(patient):
     cpos = CPO.objects.filter(paciente_id=patient).order_by('-cpo_id')
     if cpos:
@@ -469,31 +479,20 @@ def getcpo(patient):
         for c in cpos:
             c.contenido_cpo = eval(c.contenido_cpo)
             caries = c.contenido_cpo['cariados']
+            caries_dic = build_clean_teeth_dic(caries, 'cariados')
+            caries_clean = clean_decayed_filled(caries_dic)
             obturaciones = c.contenido_cpo['obturados']
+            obturaciones_dic = build_clean_teeth_dic(obturaciones, 'obturados')
+            obturaciones_clean = clean_decayed_filled(obturaciones_dic)
             perdidos = c.contenido_cpo['perdidos']
             perdidos_clean = clean_tooth(perdidos)
             ausentes = c.contenido_cpo['ausentes']
             ausentes_clean = clean_tooth(ausentes)
-            caries_clean = []
-            list_clean= {}
-            for teeth in caries:
-                cara_list = teeth[0]
-                pieza_list = teeth[-2] + teeth[-1]
-                list_dic = dict(cara=[cara_list], pieza=pieza_list)
-                if pieza_list in list_clean:
-                    existing_list_caras = list_clean[pieza_list].get('cara')
-                    existing_list_caras.append(cara_list)
-                    list_clean[pieza_list] = dict(cara=existing_list_caras,
-                                                          pieza=pieza_list)
-                else:
-                    list_clean[pieza_list] = {'cariados': list_dic}
-                caries_clean.append([list_clean[pieza_list]['cariados']['pieza'], list_clean[pieza_list]['cariados']['cara']])
+
             c.caries = caries_clean
-            c.obturaciones = obturaciones
+            c.obturaciones = obturaciones_clean
             c.perdidos = perdidos_clean
             c.ausentes = ausentes_clean
-            print('AHORA TAAAAA')
-            print(caries_clean)
     return cpos
 
 
@@ -523,14 +522,14 @@ def pacientes_render_pdf_view(request, *args, **kwargs):
     paciente_id = kwargs.get('paciente_id')
     patient = get_object_or_404(Paciente, paciente_id=paciente_id)
     treatments = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
-    # cpos = CPO.objects.filter(paciente_id=paciente_id).order_by('-cpo_id')
+    background = getantecedentes(paciente_id)
     cpos = getcpo(paciente_id)
     all_ordered = sorted(
         chain(treatments, cpos),
         key=attrgetter('creado'), reverse=True)
-    background = getantecedentes(paciente_id)
+
     # Template that we are going to use to render the pdf
-    template_path = 'almaFront/historiapdf/pdf2.html'
+    template_path = 'almaFront/historiapdf/pdf2_2510.html'
     context = {'patient': patient, 'treatments': treatments, 'user': user, 'background': background, 'cpo': cpos,
                'all': all_ordered}
     # Create a Django response object, and specify content_type as pdf

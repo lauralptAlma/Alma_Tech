@@ -113,7 +113,12 @@
         }
 
         .cpo-table {
-            -pdf-keep-in-frame-mode: overflow;
+            -pdf-keep-in-frame-mode: truncate;
+        }
+
+        p.separator {
+            -pdf-keep-with-next: false;
+            font-size: 6pt;
         }
     </style>
 </head>
@@ -152,26 +157,19 @@
         </div>
         <hr color="#757575">
         <!-- Antecedentes Clínicos -->
-        <div class="sub-title">
-            <span>Antecedentes Clínicos: </span>
-        </div>
         {% if background %}
             {% include 'almaFront/historiapdf/background_pdf.html' %}
         {% else %}
             <ul class="list-group">
                 <li class="list-group-item">
                     <div>
-                        <span>No existen consultas de odontolgía general para paciente
+                        <span>No existen registros para paciente
                             {{ patient.nombre }} {{ patient.primer_apellido }}</span>
                     </div>
                 </li>
             </ul>
         {% endif %}
-        <hr color="#757575">
         <!-- Odontología General -->
-        <div class="sub-title">
-            <span>Odontología General: </span>
-        </div>
         {% if treatments %}
             {% include 'almaFront/historiapdf/general.html' %}
         {% else %}
@@ -184,146 +182,144 @@
                 </li>
             </ul>
         {% endif %}
-        <hr color="#757575">
         <!-- CPOs -->
         <div class="sub-title">
             <span>CPO: </span>
         </div>
         {% if cpo %}
             {% for c in cpo %}
-                <span class="date">Fecha: {{ c.creado|date:"SHORT_DATE_FORMAT" }}</span><br>
-                <span class="date">CeoD:
-                    {% if c.ceod %}
-                        {{ c.ceod }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </span><br>
-                <span class="date">CeoS:
-                    {% if c.ceos %}
-                        {{ c.ceos }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </span><br>
-                <span class="date">CpoD:
-                    {% if c.cpod %}
-                        {{ c.cpod }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </span><br>
-                <span class="date">CpoS:
-                    {% if c.cpos %}
-                        {{ c.cpos }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </span><br>
-                <table class="table cpo-table" repeat="2">
-                <thead>
-                <tr>
-                    <th>Estado</th>
-                    <th>Pieza</th>
-                    <th>Cara</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% if c.caries %}
-                    {% for c in c.caries %}
-                        <tr>
-                            <td>Cariado
-                            </td>
-                            <td>
-                                {{ c.1 }}{{ c.2 }}
-                            </td>
-                            <td>
-                                {{ c.0 }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
-                {% if c.obturaciones %}
-                    {% for o in c.obturaciones %}
-                        <tr>
-                            <td>
-                                {{ o.1 }}{{ o.2 }}
-                            </td>
-                            <td>
-                                {{ o.0 }}
-                            </td>
-                            <td>Obturación
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
-                {% if c.perdidos %}
-                    {% for p in c.perdidos %}
-                        <tr>
-                            <td>
-                                {{ p }}
-                            </td>
-                            <td>
+                <p class="separator">&nbsp;</p>
+                <table class="cpo-table" repeat="1">
+                    <tbody>
+                    <tr>
+                        <td class="date">
+                            Fecha: {{ c.creado|date:"SHORT_DATE_FORMAT" }}
+                        </td>
+                        <td>
+                            CeoD:{% if c.ceod %}
+                            {{ c.ceod }}
+                        {% else %}
+                            -
+                        {% endif %}
+                            <br>
+                            CeoS:{% if c.ceos %}
+                            {{ c.ceos }}
+                        {% else %}
+                            -
+                        {% endif %}
+                        </td>
+                        <td>
+                            CpoD:{% if c.cpod %}
+                            {{ c.cpod }}
+                        {% else %}
+                            -
+                        {% endif %}
+                            <br>
+                            CpoS:
+                            {% if c.cpos %}
+                                {{ c.cpos }}
+                            {% else %}
                                 -
-                            </td>
-                            <td>Perdido
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
-                {% if c.ausentes %}
-                    {% for a in c.ausentes %}
+                            {% endif %}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                {% if c.caries or c.obturaciones or c.ausentes or c.perdidos %}
+                    <table class="table cpo-table" repeat="2">
+                        <thead>
                         <tr>
-                            <td>
-                                {{ a }}
-                            </td>
-                            <td>
-                                -
-                            </td>
-                            <td>Ausente
-                            </td>
+                            <th>Pieza</th>
+                            <th>Cara</th>
+                            <th>Estado</th>
                         </tr>
-                    {% endfor %}
+                        </thead>
+                        <tbody>
+                        {% if c.caries %}
+                            {% for c in c.caries %}
+                                <tr>
+                                    <td>
+                                        {{ c.0 }}
+                                    </td>
+                                    <td>
+                                        {{ c.1 }}
+                                    </td>
+                                    <td>Carie
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        {% if c.obturaciones %}
+                            {% for o in c.obturaciones %}
+                                <tr>
+                                    <td>
+                                        {{ o.0 }}
+                                    </td>
+                                    <td>
+                                        {{ o.1 }}
+                                    </td>
+                                    <td>Obturación
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        {% if c.perdidos %}
+                            {% for p in c.perdidos %}
+                                <tr>
+                                    <td>
+                                        {{ p }}
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                    <td>Perdido
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        {% if c.ausentes %}
+                            {% for a in c.ausentes %}
+                                <tr>
+                                    <td>
+                                        {{ a }}
+                                    </td>
+                                    <td>
+                                        -
+                                    </td>
+                                    <td>Ausente
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <table>
+                        <tr></tr>
+                        <tr>
+                            <td class="date" style="text-align: center"> ------- Dentadura sana -------</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <p class="separator">&nbsp;</p>
+                    <br>
                 {% endif %}
             {% endfor %}
-        </tbody>
-        </table>
+            <p class="separator">&nbsp;</p>
         {% else %}
             <ul class="list-group">
                 <li class="list-group-item">
                     <div>
-                        <span>No existen consultas de odontolgía general para paciente
+                        <span>No existen registros CPO para paciente
                             {{ patient.nombre }} {{ patient.primer_apellido }}</span>
                     </div>
                 </li>
             </ul>
         {% endif %}
-        <hr color="#757575">
-        <div class="card-header sub-title">
-            <span>Todo: </span>
-        </div>
-
-        {% if all %}
-            {% for c in all %}
-                {% if c.contenido_cpo %}
-                    <span> CPO: {{ c.creado|date:"SHORT_DATE_FORMAT" }}</span>
-                    <span> {{ c.contenido_cpo }}</span>
-                {% elif c.diagnostico %}
-                    <span> General Fecha: {{ c.creado|date:"SHORT_DATE_FORMAT" }}</span>
-                    <span> General Diagnóstico: {{ c.diagnostico }}</span>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <div>
-                        <span>No existen consultas de odontolgía general para paciente
-                            {{ patient.nombre }} {{ patient.primer_apellido }}</span>
-                    </div>
-                </li>
-            </ul>
-        {% endif %}
-
     </div>
 </div>
 <div id="footer_content" style="text-align: center; vertical-align: bottom;">

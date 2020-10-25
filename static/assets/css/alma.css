@@ -134,9 +134,13 @@ li {
 }
 
 /*CSS CPO*/
+.cpo-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
 .diente {
     position: static;
-    width: 0px;
+    width: 0vw;
     height: auto;
     margin-left: 3.255vw;
     display: inline-block;
@@ -144,33 +148,33 @@ li {
 
 .primer-diente {
     position: static;
-    width: 0px;
+    width: 0vw;
     height: auto;
-    margin-left: 0px;
+    /*margin-left: 3.255vw;*/
     display: inline-block;
 }
 
 .cuadro {
+    top: -0.5vw;
     background-color: #FFFFFF;
     border: 0.065vw solid #7F7F7F;
     position: relative;
-    width: 1.628vw;
-    height: 0.977vw;
-    left: 2.930vw;
-    -webkit-border-radius: 5.208vw 5.208vw 0px 0.977vw;
-    -moz-border-radius: 5.208vw 5.208vw 0px 0.977vw;
-    border-radius: 5.208vw 5.208vw 0px 0.977vw;
+    width: 1.4vw;
+    height: 0.84vw;
+    left: 0vw;
+    -webkit-border-radius: 5.208vw 5.208vw 0vw 0.977vw;
+    -moz-border-radius: 5.208vw 5.208vw 0vw 0.977vw;
+    border-radius: 5.208vw 5.208vw 0vw 0.977vw;
 }
 
 .cuadro:hover {
     /*background: rgba(117, 198, 243, 0.4);*/
-
     cursor: pointer;
 }
 
 .izquierdo {
-    top: 0.065vw !important;
-    left: 1.823vw !important;
+    top: -0.39vw !important;
+    left: -1.000vw !important;
     -webkit-transform: rotate(270deg);
     -moz-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
@@ -179,8 +183,8 @@ li {
 }
 
 .debajo {
-    top: 0.130vw !important;
-    left: 2.930vw !important;
+    top: -0.2vw !important;
+    /*left: 2.930vw !important;*/
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
@@ -189,8 +193,8 @@ li {
 }
 
 .derecha {
-    top: -1.888vw !important;
-    left: 3.971vw !important;
+    top: -2.08vw !important;
+    left: 1.000vw !important;
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
@@ -201,17 +205,16 @@ li {
 .centro {
     background: #F3F3F3;
     border: 0.065vw solid #7F7F7F;
-    width: 1.628vw;
-    height: 1.628vw;
+    width: 1.4vw;
+    height: 1.4vw;
     top: -3.190vw;
-    left: 2.930vw;
+    /*left: 2.930vw;*/
     position: relative;
 }
 
 .centro:hover {
     border: 0.065vw solid rgba(117, 198, 243, 0.4);
     /*background-color: rgba(117, 198, 243, 0.4);*/
-
     cursor: pointer;
 }
 
@@ -255,7 +258,7 @@ li {
     position: relative;
     width: 0px;
     height: auto;
-    margin-left: 0px;
+    margin-left: -1.5vw;
     display: inline-block;
 }
 
