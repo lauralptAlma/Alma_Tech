@@ -1,5 +1,4 @@
 from django.conf.urls import url
-from django.contrib import admin
 from .views import (
 
     # doctor
@@ -26,7 +25,8 @@ from .views import (
 urlpatterns = [
 
     # doctor
-    url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
+    url(r'^agregartratamiento/$', agregartratamiento,
+        name="agregartratamiento"),
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
     url(r'^cpopaciente/(?P<paciente_id>\d+)/$', verCPO, name="cpopaciente"),
 
@@ -39,9 +39,12 @@ urlpatterns = [
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),
-    url(r'^pacientedetalles/(?P<paciente_id>\d+)/$', pacientedetalles, name='pacientedetalles'),
-    url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
-    url(r'^agregarantecedentes/$', agregarantecedentes, name='agregarantecedentes'),
+    url(r'^pacientedetalles/(?P<paciente_id>\d+)/$', pacientedetalles,
+        name='pacientedetalles'),
+    url(r'^pacientecambiopass/$', pacientecambiopass,
+        name='pacientecambiopass'),
+    url(r'^agregarantecedentes/$', agregarantecedentes,
+        name='agregarantecedentes'),
 
     url(r'^pruebafront/$', pruebaBaseFront),
 ]
