@@ -19,6 +19,7 @@ from .views import (
     pacientecambiopass,
     agregarantecedentes,
     pruebaBaseFront,
+    edit_patient,
 
 )
 
@@ -45,6 +46,7 @@ urlpatterns = [
         name='pacientecambiopass'),
     url(r'^agregarantecedentes/$', agregarantecedentes,
         name='agregarantecedentes'),
-
+    url(r'^editarpaciente/(?P<paciente_id>\d+)/$', edit_patient,
+        name='editarpaciente'),
     url(r'^pruebafront/$', pruebaBaseFront),
 ]

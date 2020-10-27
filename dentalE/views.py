@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # from django.core.checks import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.views import View
 from django.db.models import Q
@@ -144,6 +144,34 @@ def agregarpaciente(request):
             )
             return HttpResponseRedirect("/dentalE/agregarpaciente/")
     return render(request, "almaFront/agregar_paciente.html", {'form': form})
+
+
+@login_required(login_url="/")
+def edit_patient(request, paciente_id):
+    paciente = get_object_or_404(Paciente, paciente_id=paciente_id)
+    template = 'almaFront/agregar_paciente.html'
+    if request.method == "POST":
+        form = PacienteForm(request.POST, instance=paciente)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    'Paciente editado exitosamente!'
+                )
+        except Exception as e:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                'Error al editar paciente, error: {}'.format(e)
+            )
+    else:
+        form = PacienteForm(instance=paciente)
+    context = {'form': form,
+               'paciente': paciente
+               }
+    return render(request, template, context)
 
 
 # paciente
