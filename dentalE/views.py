@@ -7,7 +7,7 @@ from django.contrib import messages, auth
 # from django.core.checks import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from django.views import View
+from django.views import View, generic
 from django.db.models import Q
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
@@ -52,6 +52,7 @@ def agregarcita(request):
             return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'form': form})
 
+
 @login_required(login_url="/")
 def CalendarPage(request):
     citas = Cita.objects.all()
@@ -60,26 +61,17 @@ def CalendarPage(request):
         form = CitaForm(request.POST)
         if form.is_valid():
             cita = form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Cita agregada exitosamente!'
+            )
             return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'citasList': citas, 'form': form})
 
 
 
 
-@login_required(login_url="/")
-def nuevacita(request):
-    form = CitaForm()
-    if request.method == 'POST':
-        form = CitaForm(request.POST)
-        if form.is_valid():
-            Cita = form.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                'Cita agregada exitosamente!'
-            )
-        return HttpResponseRedirect("/dentalE/resumendia/")
-    return render(request, "secretaria/agenda_hoy/nueva_cita.html", {'form': form})
 
 
 @login_required(login_url="/")

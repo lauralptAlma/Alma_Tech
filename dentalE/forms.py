@@ -10,7 +10,7 @@ import datetime
 from django.forms.widgets import SelectDateWidget
 from django.forms import ModelForm, Form
 from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos, CPO, \
-    CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES
+    CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, PATIENT_GENDER
 
 
 class IngresoForm(ModelForm):
@@ -23,7 +23,7 @@ class PacienteForm(ModelForm):
     class Meta:
         model = Paciente
         fields = (
-            'documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'direccion', 'fecha_nacimiento', 'email',
+            'documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'genero', 'direccion', 'ciudad','fecha_nacimiento', 'email',
             'celular',
             'nucleo_activo')
 
@@ -32,11 +32,13 @@ class PacienteForm(ModelForm):
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'primer_apellido': forms.TextInput(attrs={'class': 'form-control'}),
             'segundo_apellido': forms.TextInput(attrs={'class': 'form-control'}),
+            'genero': forms.RadioSelect(choices=PATIENT_GENDER),
             'fecha_nacimiento': DatePickerInput(options={
                 "format": "DD/MM/YYYY",  # moment date-time format
                 "locale": 'es'
             }),
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+            'ciudad': forms.Select(attrs={'class': 'form-control mdb-select md-form'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'celular': forms.TextInput(attrs={'class': 'form-control'}),
             'nucleo_activo': forms.CheckboxInput(attrs={'type': 'checkbox', 'class': 'custom-checkbox'}),
@@ -54,11 +56,8 @@ class CitaForm(ModelForm):
                 attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'}),
             'doctor': forms.Select(
                 attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar Profesional...'}),
-            'fecha': DatePickerInput(options={
-                "format": "DD/MM/YYYY",  # moment date-time format
-                "locale": 'es'
-            }),
-            'hora': TimePickerInput(attrs={'class': 'form-control',
+            'fecha': forms.TextInput(attrs={'class': 'form-control'}),
+            'hora': forms.TextInput(attrs={'class': 'form-control',
                                            'type': 'time', 'min': '07:00', 'max': '19:00', 'step': '600'}),
 
         }

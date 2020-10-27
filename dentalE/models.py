@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
-
 from django.contrib.auth.models import User
 
 import datetime
@@ -9,6 +8,13 @@ import datetime
 # USUARIO OPTIONS
 USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'))
 USER_ESPECIALIDAD = (('ORTOPEDIA', 'ORTOPEDIA'), ('ORTODONCIA', 'ORTODONCIA'), ('GENERAL', 'GENERAL'))
+# PACIENTE OPTIONS
+PATIENT_CITY = (('ARTIGAS', 'Artigas'), ('CANELONES', 'Canelones'), ('CERRO LARGO','Cerro Largo'), ('COLONIA', 'Colonia'),
+                ('DURAZNO','Durazno'), ('FLORES', 'Flores'), ('FLORIDA', 'Florida'), ('LAVALLEJA','Lavalleja' ),
+                ('MALDONADO', 'Maldonado'), ('MONTEVIDEO','Montevideo'),('PAYSANDÚ', 'Paysandú'), ('RÍO NEGRO', 'Río Negro'),
+                ('RIVERA', 'Rivera'), ('ROCHA', 'Rocha'), ('SALTO','Salto'), ('SAN JOSÉ', 'San José'), ('SORIANO','Soriano'),
+                ('TACUAREMBÓ','Tacuarembó'), ('TRENTA Y TRES', 'Treinta y Tres'))
+PATIENT_GENDER = (('FEMENINO', 'F'), ('MASCULINO', 'M'), ('OTRO', 'Otro'))
 # NUCLEO OPTIONS
 NUCLEO_OPCIONES = (
     ('CONYUGE', 'CONYUGE'), ('MADRE', 'MADRE'), ('PADRE', 'PADRE'), ('HIJO', 'HIJO'),)
@@ -46,7 +52,9 @@ class Paciente(models.Model):
     nombre = models.CharField('Nombre* ', max_length=100, null=False, blank=False)
     primer_apellido = models.CharField('Primer Apellido* ', max_length=100, null=False, blank=False)
     segundo_apellido = models.CharField('Segundo Apellido', max_length=100, null=True, blank=True)
+    genero = models.CharField('Género*', max_length=10, choices=PATIENT_GENDER, default='')
     direccion = models.CharField('Dirección* ', max_length=155, null=False, blank=False)
+    ciudad = models.CharField(max_length=15, choices=PATIENT_CITY, blank=True, null=True)
     fecha_nacimiento = models.DateField('Fecha de nacimiento* ', help_text="ej. 01/08/2012",
                                         null=False, blank=False)
     # Contacto
