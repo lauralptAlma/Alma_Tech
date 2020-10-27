@@ -1,7 +1,8 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
 {% block tab-title %}Detalles Paciente{% endblock %}
-{% block page-title %}{{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+{% block page-title %}{{ patient.nombre }}
+    {{ patient.primer_apellido }}{% endblock %}
 
 {% block page-content %}
     <div class="row mb-3">
@@ -10,18 +11,27 @@
                 <div class="col">
                     <div class="card shadow mb-3">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Información</p>
+                            <p class="text-primary m-0 font-weight-bold"
+                               style="width: 456px;">Información</p>
                         </div>
                         <div class="card-body">
                             <div>
-                                <p><strong>Documento: </strong> {{ patient.documento }}</p>
-                                <p><strong>Dirección: </strong> {{ patient.direccion }}</p>
-                                <p><strong>Celular: </strong> {{ patient.celular }}</p>
-                                <p><strong>Fecha de Nacimiento: </strong> {{ patient.fecha_nacimiento }}</p>
+                                <p>
+                                    <strong>Documento: </strong> {{ patient.documento }}
+                                </p>
+                                <p>
+                                    <strong>Dirección: </strong> {{ patient.direccion }}
+                                </p>
+                                <p>
+                                    <strong>Celular: </strong> {{ patient.celular }}
+                                </p>
+                                <p><strong>Fecha de
+                                    Nacimiento: </strong> {{ patient.fecha_nacimiento }}
+                                </p>
                                 {% if user.userprofile.user_tipo == 'DOCTOR' and sin_patologias %}
                                     <p><strong>Antecedentes: </strong>
-                                    <span class="badge badge-pill badge-warning">Paciente no cuenta con antecedentes clínicos</span>
-                                {% elif user.userprofile.user_tipo == 'DOCTOR' and antecedentes %}
+                                        <span class="badge badge-pill badge-warning">Paciente no cuenta con antecedentes clínicos</span>
+                                        {% elif user.userprofile.user_tipo == 'DOCTOR' and antecedentes %}
                                     <p><strong>Antecedentes: </strong>
                                         {% if antecedentes.fumador == 'SI' %}
                                             <span class="badge badge-pill badge-info">Fumador</span>
@@ -74,7 +84,9 @@
                                     <span class="badge badge-pill badge-danger">No existen registros</span>
                                 {% endif %}
                             </div>
-                            <div class="row justify-content-end mr-3"><a href="#" style="text-align: left;">Editar</a>
+                            <div class="row justify-content-end mr-3"><a
+                                    href="#"
+                                    style="text-align: left;">Editar</a>
                             </div>
                         </div>
                     </div>
@@ -85,27 +97,33 @@
             <div class="col-lg-4">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="text-primary font-weight-bold m-0">Registrar Consultas</h6>
+                        <h6 class="text-primary font-weight-bold m-0">Registrar
+                            Consultas</h6>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col"><i class="fa fa-file-text-o" style="margin-right: 15px;"></i><a
+                            <div class="col"><i class="fa fa-file-text-o"
+                                                style="margin-right: 15px;"></i><a
                                     href="/dentalE/cpopaciente/{{ patient.paciente_id }}">Ver
                                 historia clínica</a></div>
                         </div>
                         <div class="row">
-                            <div class="col"><i class="fas fa-tooth" style="margin-right: 15px;"></i><a
+                            <div class="col"><i class="fas fa-tooth"
+                                                style="margin-right: 15px;"></i><a
                                     href="/dentalE/agregartratamiento/">Nueva
                                 consulta
                                 general</a></div>
                         </div>
                         <div class="row">
-                            <div class="col"><i class="fas fa-teeth" style="margin-right: 15px;"></i><a href="#">Nueva
+                            <div class="col"><i class="fas fa-teeth"
+                                                style="margin-right: 15px;"></i><a
+                                    href="#">Nueva
                                 consulta
                                 ortodoncia</a></div>
                         </div>
                         <div class="row">
-                            <div class="col"><i class="fas fa-teeth-open" style="margin-right: 15px;"></i><a
+                            <div class="col"><i class="fas fa-teeth-open"
+                                                style="margin-right: 15px;"></i><a
                                     href="/dentalE/agregarcpo/">Nueva
                                 consulta con CPO</a></div>
                         </div>
@@ -117,10 +135,12 @@
     {% if user.userprofile.user_tipo == 'DOCTOR' %}
         <div class="card shadow">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">Últimas Consultas</p>
+                <p class="text-primary m-0 font-weight-bold">Últimas
+                    Consultas</p>
             </div>
             <div class="card-body">
-                <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                <div class="table-responsive table mt-2" id="dataTable"
+                     role="grid"
                      aria-describedby="dataTable_info">
                     <table class="table my-0" id="dataTable">
                         <thead class="card-header py-3">
@@ -145,7 +165,8 @@
                             {% endfor %}
                         {% else %}
                             <tr class="no-data">
-                                <td colspan="20">No existen consultas registradas para este paciente en
+                                <td colspan="20">No existen consultas
+                                    registradas para este paciente en
                                     el sistema.
                                 </td>
                             </tr>
