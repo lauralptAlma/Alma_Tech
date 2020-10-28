@@ -201,6 +201,7 @@ class Consulta(models.Model):
     tratamiento = models.TextField(max_length=250, default='', blank=False, null=False)
     indicaciones = models.TextField(max_length=250, default='', blank=False, null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
+
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
     def __str__(self):

@@ -3,22 +3,26 @@
 {% block page-title %}Agregar Cita{% endblock %}
 
 {% block page-content %}
-    <a class="btn btn-info right mr-2" href="/dentalE/nuevacita/"> Agregar cita </a>
     <div class="form-row">
         <div class="form-group col-lg-10">
             <form method="post" action="">
-                <link rel="stylesheet" href="{% static 'assets/fullcalendar-5.3.2/lib/main.css' %}">
+                <link rel="stylesheet"
+                      href="{% static 'assets/fullcalendar-5.3.2/lib/main.css' %}">
                 <div id='calendar'></div>
             </form>
             <form method="post" action="">
                 {% csrf_token %}
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                <div class="modal fade" id="exampleModal" tabindex="-1"
+                     aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel"> Datos de la Cita</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    Datos de la Cita</h5>
+                                <button type="button" class="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -48,10 +52,18 @@
                                 </div>
                             </div>
                             <div class=" modal-footer">
-                                <button type="submit" id="btnAdd" class="btn btn-success">Agregar</button>
-                                <button id="btnEdit" class="btn btn-warning">Modificar</button>
-                                <button id="btnDelete" class="btn btn-danger">Eliminar</button>
-                                <button id="btnCancel" data-dismiss="modal" class="btn btn-secondary">Cancelar</button>
+                                <button type="submit" id="btnAdd"
+                                        class="btn btn-success">Agregar
+                                </button>
+                                <button id="btnEdit" class="btn btn-warning">
+                                    Modificar
+                                </button>
+                                <button id="btnDelete" class="btn btn-danger">
+                                    Eliminar
+                                </button>
+                                <button id="btnCancel" data-dismiss="modal"
+                                        class="btn btn-secondary">Cancelar
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -66,7 +78,6 @@
     <script src="{% static 'assets/fullcalendar-5.3.2/lib/es.js' %}"></script>
 
     <script>
-
         document.addEventListener('DOMContentLoaded', function () {
             let calendarEl = document.getElementById('calendar');
             let calendar;
@@ -90,23 +101,18 @@
                     }
                 ],
 
+                events: [
+                    {% for i in citasList %}
+                        {
+                            title: "{{ i.paciente.nombre}}",
+                            start: '{{ i.fecha|date:"Y-m-d" }}T{{ i.hora|time:"H:i"}}',
+                            id: '{{ i.id }}',
+                        },
+                    {% endfor %}
+                ],
+
                 eventClick: function (info) {
-                    $('#btnAdd').prop("disabled", true);
-                    $('#btnEdit').prop("disabled", false);
-                    $('#btnDelete').prop("disabled", false);
-
-                    mes = (info.event.fecha.getMonth() + 1);
-                    dia = (info.event.fecha.getDate());
-                    anio = (info.event.fecha.getFullYear());
-                    hora = (info.event.hora.getHours() + ":" + info.event.hora.getMinutes());
-
-                    mes = (mes < 10) ? "0" + mes : mes;
-                    dia = (dia < 10) ? "0" + dia : dia;
-                    $('#txtPaciente').val(info.event.paciente);
-                    $('#txtProf').val(info.event.profesional);
-                    $('#txtFecha').val(anio + "-" + mes + "_" + dia);
-                    $('#txtHora').val(hora);
-                    $('#exampleModal').modal();
+                    location.href = `/dentalE/editarcita/${info.event.id}`;
                 },
 
                 dateClick: function (info) {
@@ -116,19 +122,7 @@
                     $('#btnEdit').prop("disabled", true);
                     $('#btnDelete').prop("disabled", true);
                     $('#exampleModal').modal('toggle');
-                    calendar.addEvent({title: "Consulta", date: info.dateStr});
-                },
-
-
-                events: [
-                    {% for i in citasList %}
-                        {
-                            title: "{{ i.paciente.nombre}}",
-                            start: '{{ i.fecha|date:"Y-m-d" }}T{{ i.hora|time:"H:i"}}',
-                        },
-                    {% endfor %}
-
-                ]
+                }
 
             });
             calendar.setOption('locale', 'es')
@@ -141,6 +135,15 @@
                 $('#txtHora').val("");
             }
         });
-
+    </script>
+    <script>
+        $(document).ready(function () {
+            if (location.href.includes('editarcita')) {
+                $('#btnAdd').prop("disabled", true);
+                $('#btnEdit').prop("disabled", false);
+                $('#btnDelete').prop("disabled", false);
+                $('#exampleModal').modal();
+            }
+        });
     </script>
 {% endblock %}
