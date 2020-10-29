@@ -10,7 +10,6 @@
                 <script src="{% static 'assets/fullcalendar-5.3.2/lib/main.js' %}"></script>
                 <script src="{% static 'assets/fullcalendar-5.3.2/lib/es.js' %}"></script>
                 <script>
-
                     document.addEventListener('DOMContentLoaded', function () {
                         let calendarEl = document.getElementById('calendar');
                         let calendar;
@@ -27,68 +26,99 @@
                             },
                             headerToolbar: {
                                 right: 'dayGridMonth, timeGridWeek, timeGridDay',
-                                left: 'addEventButton',
+                                left: '',
                                 center: 'title'
                             },
-                            customButtons: {
-                                addEventButton: {
-                                    text: 'Agregar cita...',
-                                    click: function () {
-                                        var dateStr = prompt('Enter a date in YYYY-MM-DD format');
-                                        var date = new Date(dateStr + 'T00:00:00'); // will be in local time
-                                        if (!isNaN(date.valueOf())) { // valid?
-                                            calendar.addEvent({
-                                                title: 'dynamic event',
-                                                start: date,
-                                                allDay: true
-                                            });
-                                            alert('Great. Now, update your database...');
-                                        } else {
-                                            alert('Invalid date.');
-                                        }
-                                    }
-                                },
-                                modalButton: {
-                                    text: "Botón",
-                                    click: function () {
-                                        alert("Hola");
-                                        $('#exampleModal').modal('toggle');
-                                    }
-                                }
-
-                            },
-                            dateClick: function (info) {
-                                $('#txtFecha').val(info.dateStr);
-                                $('#exampleModal').modal('toggle');
-                                calendar.addEvent({title: "Consulta ", date: info.dateStr});
-                            },
-
 
                             eventClick: function (info) {
-                                console.log(info.event.title);
+                                $('#btnAdd').prop("disabled", true);
+                                $('#btnEdit').prop("disabled", false);
+                                $('#btnDelete').prop("disabled", false);
+
+                                mes = (info.event.fecha.getMonth() + 1);
+                                dia = (info.event.fecha.getDate());
+                                anio = (info.event.fecha.getFullYear());
+                                hora = (info.event.hora.getHours() + ":" + info.event.hora.getMinutes());
+
+                                mes = (mes < 10) ? "0" + mes : mes;
+                                dia = (dia < 10) ? "0" + dia : dia;
+                                $('#txtPaciente').val(info.event.paciente);
+                                $('#txtProf').val(info.event.profesional);
+                                $('#txtFecha').val(anio + "-" + mes + "_" + dia);
+                                $('#txtHora').val(hora);
+                                $('#exampleModal').modal();
                             },
+
+                            dateClick: function (info) {
+                                limpiarFormulario();
+                                $('#txtFecha').val(info.dateStr);
+                                $('#btnAdd').prop("disabled", false);
+                                $('#btnEdit').prop("disabled", true);
+                                $('#btnDelete').prop("disabled", true);
+                                $('#exampleModal').modal('toggle');
+                                calendar.addEvent({title: "Consulta", date: info.dateStr});
+                            },
+
                         });
                         calendar.setOption('locale', 'es')
                         calendar.render();
+
                         $('#btnAdd').click(function () {
-                            recolectarDatos("POST");
+                            ObjEvento = recolectarDatos('POST');
+                            SendInfo('', ObjEvento);
                         });
 
-                        /*function recolectarDatos(method) {
+                        $('#btnDelete').click(function () {
+                            ObjEvento = recolectarDatos("DELETE");
+                            SendInfo('', ObjEvento);
+                        });
+
+                        $('#btnEdit').click(function () {
+                            ObjEvento = recolectarDatos("PATCH");
+                            SendInfo('', ObjEvento);
+                        });
+
+
+                        function recolectarDatos(method) {
                             nuevoEvent = {
-                                id: $('#txtId').val(),
-                                fecha: $('#txtFecha').val(),
-                                hora: $('#txtHora').val(),
                                 paciente: $('#txtPaciente').val(),
                                 profesional: $('#txtProf').val(),
+                                fecha: $('#txtFecha').val(),
+                                hora: $('#txtHora').val(),
 
                                 'method': method
                             }
-                        }*/
+                            return (nuevoEvent);
+                        }
 
+
+                        function SendInfo(accion, objEvento) {
+                            $.ajax(
+                                {
+                                    type: 'POST',
+                                    url: '',
+                                    dataType: 'json',
+                                    data: objEvento,
+                                    success: function (msg) {
+                                        console.log((msg));
+                                        $('#exampleModal').modal('toggle');
+                                        calendar.refetchEvents();
+                                    },
+                                    error: function () {
+                                        alert("Hay un error");
+                                    }
+                                }
+                            );
+                        }
+
+                        function limpiarFormulario() {
+                            $('#txtPaciente').val("");
+                            $('#txtProf').val("");
+                            $('#txtFecha').val("");
+                            $('#txtHora').val("");
+                        }
 
                     });
-
                 </script>
                 </head>
                 <body>
@@ -110,28 +140,31 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <br/>
-                                ID:
-                                <input type="text" name="txtId" id="txtId">
-                                <br/>
-                                Fecha:
-                                <input type="text" name="txtFecha" id="txtFecha">
-                                <br/>
-                                Hora
-                                <input type="text" name="txtHora" id="txtHora">
-                                <br/>
-                                Paciente:
-                                <input type="text" name="txtPaciente" id="txtPaciente">
-                                <br/>
-                                Profesional:
-                                <input type="text" name="txtProf" id="txtProf">
-                                <br/>
+                                <div class="form-row">
+                                    <div class="form-group col-md-8">
+                                        <label>Paciente:</label>
+                                        <input type="text" class="form-control" name="txtPaciente" id="txtPaciente">
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <label>Profesional:</label>
+                                        <input type="text" class="form-control" name="txtProf" id="txtProf">
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <label>Fecha:</label>
+                                        <input type="text" class="form-control" name="txtFecha" id="txtFecha">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Hora:</label>
+                                        <input type="time" min="07:00" max="19:00" step="600"
+                                               class="form-control" name="txtHora" id="txtHora">
+                                    </div>
+                                </div>
                             </div>
                             <div class=" modal-footer">
                                 <button id="btnAdd" class="btn btn-success">Agregar</button>
                                 <button id="btnEdit" class="btn btn-warning">Modificar</button>
                                 <button id="btnDelete" class="btn btn-danger">Eliminar</button>
-                                <button id="btnCancel" class="btn btn-secondary">Cancelar</button>
+                                <button id="btnCancel" data-dismiss="modal" class="btn btn-secondary">Cancelar</button>
                             </div>
                         </div>
                     </div>
