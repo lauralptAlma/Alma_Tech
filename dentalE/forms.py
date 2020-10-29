@@ -3,12 +3,6 @@ from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
-import datetime
-from django.forms.widgets import SelectDateWidget
-from django.forms import ModelForm, Form
 from .models import Paciente, Cita, Consulta, Nucleo, Integrante, \
     AntecedentesClinicos, CPO, \
     CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, \
@@ -63,7 +57,8 @@ class ConsultaForm(ModelForm):
         fields = ('paciente', 'diagnostico', 'tratamiento', 'indicaciones')
         widgets = {
             'paciente': forms.Select(
-                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'}),
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'}),
             'diagnostico': forms.Textarea(attrs={'class': 'form-control'}),
             'tratamiento': forms.Textarea(attrs={'class': 'form-control'}),
             'indicaciones': forms.Textarea(attrs={'class': 'form-control'}),
@@ -86,7 +81,6 @@ class ConsultaCPOForm(ModelForm):
                 attrs={'class': 'form-control mdb-select md-form',
                        'searchable': 'Buscar paciente...'})
         }
-
 
 
 class AntecedenteForm(ModelForm):

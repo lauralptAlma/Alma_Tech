@@ -3,7 +3,7 @@
     "test": {
       "scripts": {
         "test-setup": "flake8 dentalE",
-        "test": "bandit dentalE"
+        "test": "bandit -r dentalE"
       }
     }
   }
