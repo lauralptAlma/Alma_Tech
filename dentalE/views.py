@@ -1,21 +1,20 @@
-import json
-
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages, auth
+from django.contrib import messages
 # from django.core.checks import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.views import View
 from django.db.models import Q
-from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, ListView, DetailView, FormView, TemplateView
+from django.views.generic import CreateView, ListView, \
+    DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
-from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, ConsultaCPOForm
-from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, AntecedentesClinicos, CPO
+from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
+    ConsultaCPOForm
+from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
+    AntecedentesClinicos, CPO
 from datetime import date
 
 
@@ -35,7 +34,8 @@ def resumendia(request):
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
                       {'agenda_hoy': agenda_hoy})
     elif userprofile.user_tipo == 'DOCTOR':
-        agenda_hoy = Cita.objects.filter(fecha=date.today(), doctor=request.user).order_by('hora')
+        agenda_hoy = Cita.objects.filter(fecha=date.today(),
+                                         doctor=request.user).order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
                       {'agenda_hoy': agenda_hoy})
     else:
@@ -57,7 +57,8 @@ def agregarcita(request):
             hora=hora
         )
         return HttpResponseRedirect("/dentalE/resumendia/")
-    return render(request, "secretaria/agenda_hoy/agregar_cita.html", {'form': form})
+    return render(request, "secretaria/agenda_hoy/agregar_cita.html",
+                  {'form': form})
 
 
 @login_required(login_url="/")
@@ -67,14 +68,15 @@ def agregartratamiento(request):
         form = ConsultaForm(request.POST)
         if form.is_valid():
             form.instance.doctor = request.user
-            consulta = form.save()
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 'Consulta agregada exitosamente!'
             )
             return HttpResponseRedirect("/dentalE/agregartratamiento/")
-    return render(request, "almaFront/consultas/agregar_tratamiento.html", {'form': form})
+    return render(request, "almaFront/consultas/agregar_tratamiento.html",
+                  {'form': form})
 
 
 @login_required(login_url="/")
@@ -84,7 +86,7 @@ def agregarCPO(request):
         formCPO = ConsultaCPOForm(request.POST)
         if formCPO.is_valid():
             formCPO.instance.doctor = request.user
-            consulta_cpo = formCPO.save()
+            formCPO.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -105,7 +107,8 @@ def listaprofesionales(request):
             Q(user__first_name__contains=busqueda) |
             Q(user__last_name__contains=busqueda)
         ).distinct()
-    return render(request, "almaFront/doctor/profesionales.html", {'profesionales': profesionales})
+    return render(request, "almaFront/doctor/profesionales.html",
+                  {'profesionales': profesionales})
 
 
 @login_required(login_url="/")
@@ -133,7 +136,7 @@ def agregarpaciente(request):
     if request.method == 'POST':
         form = PacienteForm(request.POST)
         if form.is_valid():
-            patient = form.save()
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -141,6 +144,34 @@ def agregarpaciente(request):
             )
             return HttpResponseRedirect("/dentalE/agregarpaciente/")
     return render(request, "almaFront/agregar_paciente.html", {'form': form})
+
+
+@login_required(login_url="/")
+def edit_patient(request, paciente_id):
+    paciente = get_object_or_404(Paciente, paciente_id=paciente_id)
+    template = 'almaFront/agregar_paciente.html'
+    if request.method == "POST":
+        form = PacienteForm(request.POST, instance=paciente)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    'Paciente editado exitosamente!'
+                )
+        except Exception as e:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                'Error al editar paciente, error: {}'.format(e)
+            )
+    else:
+        form = PacienteForm(instance=paciente)
+    context = {'form': form,
+               'paciente': paciente
+               }
+    return render(request, template, context)
 
 
 # paciente
@@ -153,26 +184,35 @@ def pacienteinicio(request):
 def pacientedetalles(request, paciente_id):
     sin_patologias = False
     paciente = Paciente.objects.get(paciente_id=paciente_id)
-    antecedentes_paciente = AntecedentesClinicos.objects.filter(paciente_id=paciente_id).last()
-    consultas_paciente = Consulta.objects.filter(paciente_id=paciente_id).order_by('-id')
+    antecedentes_paciente = AntecedentesClinicos.objects.filter(
+        paciente_id=paciente_id).last()
+    consultas_paciente = Consulta.objects.filter(
+        paciente_id=paciente_id).order_by('-id')
     if antecedentes_paciente:
-        antecedentes = [antecedentes_paciente.fumador, antecedentes_paciente.alcohol,
-                        antecedentes_paciente.coproparasitario, antecedentes_paciente.aparato_digestivo,
+        antecedentes = [antecedentes_paciente.fumador,
+                        antecedentes_paciente.alcohol,
+                        antecedentes_paciente.coproparasitario,
+                        antecedentes_paciente.aparato_digestivo,
                         antecedentes_paciente.dermatologicos,
-                        antecedentes_paciente.alergias, antecedentes_paciente.autoinmunes,
+                        antecedentes_paciente.alergias,
+                        antecedentes_paciente.autoinmunes,
                         antecedentes_paciente.oncologicas,
-                        antecedentes_paciente.hematologicas, antecedentes_paciente.intervenciones,
+                        antecedentes_paciente.hematologicas,
+                        antecedentes_paciente.intervenciones,
                         antecedentes_paciente.toma_medicacion,
                         antecedentes_paciente.endocrinometabolico,
-                        antecedentes_paciente.cardiovascular, antecedentes_paciente.nefrourologicos,
+                        antecedentes_paciente.cardiovascular,
+                        antecedentes_paciente.nefrourologicos,
                         antecedentes_paciente.osteoarticulares]
-        antecedentes_negativos = antecedentes.count("NO") + antecedentes.count("['NO']")
+        antecedentes_negativos = antecedentes.count("NO") + antecedentes.count(
+            "['NO']")
         if antecedentes_negativos == 15:
             sin_patologias = True
     if consultas_paciente:
         consultas_paciente = consultas_paciente[:3]
     return render(request, "almaFront/pacientes/paciente.html",
-                  {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': consultas_paciente,
+                  {'patient': paciente, 'antecedentes': antecedentes_paciente,
+                   'consultas': consultas_paciente,
                    'sin_patologias': sin_patologias})
 
 
@@ -277,11 +317,14 @@ def ingreso(request):
             login(request, user)
             userprofile = UserProfile.objects.get(user=user)
             if userprofile.user_tipo == 'SECRETARIA':
-                return HttpResponseRedirect('/dentalE/resumendia/', {'user': userprofile})
+                return HttpResponseRedirect('/dentalE/resumendia/',
+                                            {'user': userprofile})
             elif userprofile.user_tipo == 'DOCTOR':
-                return HttpResponseRedirect('/dentalE/pacientesdeldia/', {'user': userprofile})
+                return HttpResponseRedirect('/dentalE/pacientesdeldia/',
+                                            {'user': userprofile})
             else:
-                return HttpResponseRedirect('/dentalE/pacienteincio', {'user': userprofile})
+                return HttpResponseRedirect('/dentalE/pacienteincio',
+                                            {'user': userprofile})
     return render(request, 'almaFront/index.html')
 
 
@@ -296,14 +339,15 @@ def agregarantecedentes(request):
     if request.method == 'POST':
         form = AntecedenteForm(request.POST)
         if form.is_valid():
-            patient = form.save()
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 'Atencedentes guardados exitosamente!'
             )
             return HttpResponseRedirect("/dentalE/agregarantecedentes/")
-    return render(request, "almaFront/agregar_antecedentes_clinicos.html", {'form': form})
+    return render(request, "almaFront/agregar_antecedentes_clinicos.html",
+                  {'form': form})
 
 
 def logout_view(request):

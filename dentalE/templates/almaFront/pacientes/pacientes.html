@@ -45,7 +45,7 @@
                                 <td>{{ pat.email }}</td>
                                 <td>{{ pat.celular }}</td>
                                 <td>
-                                    <a href="{% url 'pacientedetalles' pat.paciente_id %}">
+                                    <a href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">
                                         <span><i class="fas fa-pencil-alt"></i></span></a>
                                 </td>
                             </tr>
