@@ -1,0 +1,10 @@
+{
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "flake8 dentalE",
+        "test": "bandit dentalE"
+      }
+    }
+  }
+}
