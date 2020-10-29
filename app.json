@@ -2,7 +2,8 @@
   "environments": {
     "test": {
       "scripts": {
-        "test": ["flake8 dentalE", "bandit dentalE"]
+        "test": "flake8 dentalE",
+        "testBandit":"bandit dentalE"
       }
     }
   }
