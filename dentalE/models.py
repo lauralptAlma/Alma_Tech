@@ -303,9 +303,6 @@ class Cita(models.Model):
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
-    def __str__(self):
-        return str(self.paciente.nombre)
-
     class Meta:
         ordering = ('fecha',)
 
