@@ -353,3 +353,18 @@ def agregarantecedentes(request):
 def logout_view(request):
     logout(request)
     return redirect('ingreso')
+
+
+def sayname():
+    fname = input('what is your name? ::')
+    return fname
+
+
+sayname()
+
+
+def hello():
+    try:
+        sayname()
+    except Exception:
+        pass
