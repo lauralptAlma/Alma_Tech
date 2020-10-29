@@ -358,12 +358,3 @@ def logout_view(request):
 def sayname():
     fname = input('what is your name? ::')
     return fname
-
-
-sayname()
-
-def hello():
-    try:
-        sayname()
-    except Exception:
-        pass
