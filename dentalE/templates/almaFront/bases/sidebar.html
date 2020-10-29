@@ -16,6 +16,13 @@
                        style="color: white" {% endif %}></i>
                     <span class={% if 'resumendia' in request.path or 'pacientesdeldia' in request.path %} actual-page {% endif %}>Agenda</span></a>
             </li>
+          <li class="nav-item">
+                <a class="nav-link" href="/dentalE/agregarcita/">
+                    <i class="far fa-calendar-check-o"
+                            {% if 'agregarcita' in request.path %}
+                       style="color: white" {% endif %}></i>
+                    <span class={% if 'agregarcita' in request.path or 'pacientesdeldia' in request.path %} actual-page {% endif %}>Agregar Cita</span></a>
+            </li>
             <li class="nav-item"><a class="nav-link" href="/dentalE/listapacientes/">
                 <i class="fas fa-user" {% if 'listapacientes' in request.path %} style="color: white" {% endif %}></i>
                 <span class={% if 'listapacientes' in request.path %} actual-page {% endif %}>Pacientes</span></a>
@@ -42,14 +49,14 @@
                     <span class={% if 'agregarcpo' in request.path %} actual-page {% endif %}>Agregar CPO</span></a>
                 </li>
             {% endif %}
-            <li class="nav-item"><a class="nav-link" href="nucleos-familiares.html">
+            <!--li class="nav-item"><a class="nav-link" href="nucleos-familiares.html">
                 <i class="fas fa-users" {% if 'listanucleos' in request.path %} style="color: white" {% endif %}></i>
                 <span class={% if 'listanucleos' in request.path %} actual-page {% endif %}>Núcleos Familiares</span></a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="/dentalE/listadoctores/"><i
+            </li-->
+            <li class="nav-item"><a class="nav-link" href="/dentalE/profesionales/"><i
                     class="fas fa-user-md" {% if 'listadoctores' in request.path %}
                     style="color: white" {% endif %}></i>
-                <span {% if 'listadoctores' in request.path %} actual-page {% endif %}>Doctores</span></a></li>
+                <span {% if 'listadoctores' in request.path %} actual-page {% endif %}>Profesionales</span></a></li>
         </ul>
         <div class="text-center d-none d-md-inline">
             <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>

@@ -1,0 +1,127 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}CPO{% endblock %}
+{% block page-title %}Ver Consulta{% endblock %}
+{% block page-content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                <div class="card shadow mb-3">
+                    <div class="card-header py-3">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <p class="text-primary m-0 font-weight-bold">
+                                CPO {{ patient.nombre }} {{ patient.primer_apellido }} | {% if cpo %}
+                                {{ cpo.creado }} {% else %} No existen registros de CPO para paciente actual.{% endif %}</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Estructura necesaria para armar el CPO -->
+                        <div class="container pt-3">
+                            <div class="row">
+                                <div id="tr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                                <div id="tl" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                                <div id="tlr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                </div>
+                                <div id="tll" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="blr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                </div>
+                                <div id="bll" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                                <div id="br" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                                <div id="bl" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <!-- Sección formulario -->
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <div class="row">
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                </div>
+                            </form>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <!--div class="row justify-content-end">
+                                    <button type="" class="btn btn-info mt-2 mr-3" onclick="ultimoCPO()"
+                                    >Guardar
+                                    </button>
+                                </div-->
+                                <div id="cpo_ultimo" value= {{ cpo.contenido_cpo }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sección lateral de botones y referencias -->
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <div class="card shadow mb-3">
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Referencias</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!--Referencias-->
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div style="height: 20px; width:20px; display:inline-block;"
+                                     class="decayed-tooth-ref"></div>
+                                = Cariado
+                                <br>
+                                <div style="height: 20px; width:20px; display:inline-block;"
+                                     class="filled-tooth-ref"></div>
+                                = Obturación
+                                <br>
+                                <div>
+                                    <img class="referencia"
+                                         src="{% static 'assets/img/CPO/ausente.svg' %}"> =
+                                    <span style="display:inline-block;">Ausente</span>
+                                </div>
+
+                                <div>
+                                    <img class="referencia"
+                                         src="{% static 'assets/img/CPO/perdido.svg' %}"> =
+                                    <span style="display:inline-block;">Perdido</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+    <script type="text/javascript" src="{% static 'assets/js/odontograma.js' %}">
+    </script>
+    <script>
+
+        function ultimoCPO() {
+            const lastCpo = JSON.parse($('#cpo_ultimo').attr('value'));
+            for (let i = 0; i < lastCpo.cariados.length; i++) {
+                console.log(lastCpo.cariados[i])
+                $(`#${lastCpo.cariados[i]}`).addClass('decayed-tooth');
+            }
+            for (let i = 0; i < lastCpo.obturados.length; i++) {
+                $(`#${lastCpo.obturados[i]}`).addClass('filled-tooth');
+            }
+            for (let i = 0; i < lastCpo.perdidos.length; i++) {
+                $(`#${lastCpo.perdidos[i]}`).addClass('missing-tooth');
+            }
+            for (let i = 0; i < lastCpo.ausentes.length; i++) {
+                $(`#${lastCpo.ausentes[i]}`).addClass('lacking-tooth');
+            }
+
+        }
+
+        $(document).ready(function () {
+            ultimoCPO()
+        });
+    </script>
+{% endblock %}

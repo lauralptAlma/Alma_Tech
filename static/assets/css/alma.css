@@ -53,11 +53,22 @@ a {
     background-color: transparent;
 }
 
+li {
+    list-style: none;
+    margin-right: 12px;
+}
+
 .page-item.active .page-link {
     z-index: 3;
     color: #fff;
     background-color: #0097a7;
     border-color: #0097a7;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #00ACC1;
+    border-color: #00ACC1;
 }
 
 .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
@@ -74,12 +85,6 @@ a {
     color: #fff;
     background-color: #0097A7;
     border-color: #0097A7;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #00ACC1;
-    border-color: #00ACC1;
 }
 
 .warning {
@@ -110,7 +115,7 @@ a {
 @media only screen and (min-width: 767px) {
     #logo {
         content: url("/static/assets/img/logos/LogoHAlma.png");
-         width: 100%;
+        width: 100%;
 
     }
 }
@@ -121,12 +126,20 @@ a {
     color: white;
 }
 
+.navbar li {
+    margin-right: 0px;
+}
+
+.bootstrap-datetimepicker-widget li {
+    margin-right: 0px;
+}
+
 /*CSS CPO*/
 .diente {
     position: static;
     width: 0px;
     height: auto;
-    margin-left: 50px;
+    margin-left: 3.255vw;
     display: inline-block;
 }
 
@@ -140,14 +153,14 @@ a {
 
 .cuadro {
     background-color: #FFFFFF;
-    border: 1px solid #7F7F7F;
+    border: 0.065vw solid #7F7F7F;
     position: relative;
-    width: 25px;
-    height: 15px;
-    left: 45px;
-    -webkit-border-radius: 80px 80px 0px 15px;
-    -moz-border-radius: 80px 80px 0px 15px;
-    border-radius: 80px 80px 0px 15px;
+    width: 1.628vw;
+    height: 0.977vw;
+    left: 2.930vw;
+    -webkit-border-radius: 5.208vw 5.208vw 0px 0.977vw;
+    -moz-border-radius: 5.208vw 5.208vw 0px 0.977vw;
+    border-radius: 5.208vw 5.208vw 0px 0.977vw;
 }
 
 .cuadro:hover {
@@ -157,8 +170,8 @@ a {
 }
 
 .izquierdo {
-    top: 1px !important;
-    left: 28px !important;
+    top: 0.065vw !important;
+    left: 1.823vw !important;
     -webkit-transform: rotate(270deg);
     -moz-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
@@ -167,8 +180,8 @@ a {
 }
 
 .debajo {
-    top: 2px !important;
-    left: 45px !important;
+    top: 0.130vw !important;
+    left: 2.930vw !important;
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
@@ -177,8 +190,8 @@ a {
 }
 
 .derecha {
-    top: -29px !important;
-    left: 61px !important;
+    top: -1.888vw !important;
+    left: 3.971vw !important;
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
@@ -188,56 +201,21 @@ a {
 
 .centro {
     background: #F3F3F3;
-    border: 1px solid #7F7F7F;
-    width: 25px;
-    height: 25px;
-    top: -49px;
-    left: 45px;
+    border: 0.065vw solid #7F7F7F;
+    width: 1.628vw;
+    height: 1.628vw;
+    top: -3.190vw;
+    left: 2.930vw;
     position: relative;
 }
 
 .centro:hover {
-    border: 1px solid rgba(117, 198, 243, 0.4);
+    border: 0.065vw solid rgba(117, 198, 243, 0.4);
     /*background-color: rgba(117, 198, 243, 0.4);*/
 
     cursor: pointer;
 }
 
-/*
-#tlr {
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-}
-
-#tr {
-    border-right: 1px solid black;
-}
-
-#tll {
-    border-bottom: 1px solid black;
-    border-left: 1px solid black;
-}
-
-#tl {
-    border-left: 1px solid black;
-}
-
-#blr {
-    border-right: 1px solid black;
-}
-
-#br {
-    border-right: 1px solid black;
-}
-
-#bl {
-    border-left: 1px solid black;
-}
-
-#bll {
-    border-left: 1px solid black;
-}
-*/
 .decayed-tooth {
     background-color: #D32F2F !important;
 }
@@ -270,7 +248,7 @@ a {
     position: relative;
     width: 0px;
     height: auto;
-    margin-left: 50px;
+    margin-left: 3.255vw;
     display: inline-block;
 }
 
@@ -283,14 +261,14 @@ a {
 }
 
 .cuadro-leche {
-    border: 1px solid #7F7F7F;
+    border: 0.065vw solid #7F7F7F;
     position: relative;
-    width: 13px;
-    height: 13px;
-    left: 45px;
-    -webkit-border-radius: 80px 80px 0px 15px;
-    -moz-border-radius: 80px 80px 0px 15px;
-    border-radius: 80px 80px 0px 15px;
+    width: 0.846vw;
+    height: 0.846vw;
+    left: 2.930vw;
+    -webkit-border-radius: 5.208vw 5.208vw 0px 0.977vw;
+    -moz-border-radius: 5.208vw 5.208vw 0px 0.977vw;
+    border-radius: 5.208vw 5.208vw 0px 0.977vw;
 }
 
 .cuadro-leche:hover {
@@ -299,8 +277,8 @@ a {
 }
 
 .izquierdo-leche {
-    top: -4px !important;
-    left: 37px !important;
+    top: -0.260vw !important;
+    left: 2.409vw !important;
     -webkit-transform: rotate(270deg);
     -moz-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
@@ -309,14 +287,14 @@ a {
 }
 
 .top-leche {
-    width: 15px;
-    left: 47px;
+    width: 0.977vw;
+    left: 3.060vw;
 }
 
 .debajo-leche {
-    width: 15px;
-    top: -8px !important;
-    left: 47px !important;
+    width: 0.977vw;
+    top: -0.521vw !important;
+    left: 3.060vw !important;
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
@@ -325,8 +303,8 @@ a {
 }
 
 .derecha-leche {
-    top: -30px !important;
-    left: 58px !important;
+    top: -1.953vw !important;
+    left: 3.776vw !important;
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
@@ -336,16 +314,16 @@ a {
 
 .centro-leche {
     background: #F3F3F3;
-    border: 1px solid #7F7F7F;
-    width: 15px;
-    height: 13px;
-    top: -43px;
-    left: 47px;
+    border: 0.065vw solid #7F7F7F;
+    width: 0.977vw;
+    height: 0.846vw;
+    top: -2.799vw;
+    left: 3.060vw;
     position: relative;
 }
 
 .centro-leche:hover {
-    border: 1px solid rgba(117, 198, 243, 0.4);
+    border: 0.065vw solid rgba(117, 198, 243, 0.4);
     /*background-color: rgba(117, 198, 243, 0.4);*/
 
     cursor: pointer;
@@ -432,7 +410,7 @@ a {
     font-family: "ralewayregular", Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 16px;
     color: #3ab7ab;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, .5)), url(/static/assets/img/background/fondo.png);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, .5)), url(/static/assets/img/background/fondo.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;

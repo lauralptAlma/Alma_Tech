@@ -8,6 +8,7 @@
     <link rel="shortcut icon" type="image/ico" href="{% static 'assets/img/logos/favicon.ico' %}"/>
     <title>{% block tab-title %}ALMA Tech{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/alma.css' %}">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,400">
@@ -16,7 +17,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome5-overrides.min.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/alma.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/Bootstrap-Calendar.css' %}">
 </head>
 
@@ -51,10 +51,10 @@
                             <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
                                                                        data-toggle="dropdown" aria-expanded="false"
                                                                        href="#">
-                                <span class="d-none d-lg-inline mr-2 text-gray-600 small"> {{ user.get_full_name }}
+                                <span class="d-none d-lg-inline mr-2 text-gray-600"> {{ user.get_full_name }}
                                     <br></span><img
                                     class="border rounded-circle img-profile"
-                                    src="{% static 'assets/img/avatars/avatar3.jpeg' %}"></a>
+                                    src="{{ user.socialaccount_set.all.0.get_avatar_url }}"></a>
                                 <!--Dropdown en perfil de usuario-->
                                 <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a

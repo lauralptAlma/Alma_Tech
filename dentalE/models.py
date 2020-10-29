@@ -7,23 +7,23 @@ from django.contrib.auth.models import User
 import datetime
 
 # USUARIO OPTIONS
-USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'), ('PACIENTE', 'PACIENTE'))
+USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'))
 USER_ESPECIALIDAD = (('ORTOPEDIA', 'ORTOPEDIA'), ('ORTODONCIA', 'ORTODONCIA'), ('GENERAL', 'GENERAL'))
 # NUCLEO OPTIONS
 NUCLEO_OPCIONES = (
     ('CONYUGE', 'CONYUGE'), ('MADRE', 'MADRE'), ('PADRE', 'PADRE'), ('HIJO', 'HIJO'),)
 # ANTECEDENTES OPTIONS
 CARDIOVASCULAR_OPCIONES = (
-    ('NO', 'NO'), ('H.T.A.', 'HIPERTENSION'), ('ARRITMIAS', 'ARRITMIAS'), ('I.A.M', 'INFARTO MIOCARDIO'),
-    ('OTROS', 'OTROS'))
+    ('NO', 'No'), ('H.T.A.', 'Hipertensión'), ('ARRITMIAS', 'Arritmias'), ('I.A.M', 'Infarto Miocardio'),
+    ('OTROS', 'Otros'))
 ENDOCRINOLOGICOS_OPCIONES = (
-    ('NO', 'NO'), ('DIABETES', 'DIABETES'), ('TIROIDES', 'TIROIDES'),
-    ('DISPLEMIAS BAJO TRATAMIENTO', 'DISPLEMIAS BAJO TRATAMIENTO'), ('OTROS', 'OTROS'))
+    ('NO', 'No'), ('DIABETES', 'Diabetes'), ('TIROIDES', 'Tiroides'),
+    ('DISPLEMIAS BAJO TRATAMIENTO', 'Displemias bajo tratamiento'), ('OTROS', 'Otros'))
 NEFROUROLOGICOS_OPCIONES = (
-    ('NO', 'NO'), ('UROLITIASIS', 'UROLITIASIS'), ('GLOMERULOPATIAS', 'GLOMERULOPATIAS'), ('MONORRENO', 'MONORRENO'))
+    ('NO', 'No'), ('UROLITIASIS', 'Uroliatiasis'), ('GLOMERULOPATIAS', 'Glomerulopatias'), ('MONORRENO', 'Monorreno'), ('OTROS', 'Otros'))
 OSTEOARTICULARES_OPCIONES = (
-    ('NO', 'NO'), ('LUXACIONES', 'LUXACIONES'), ('FRACTURAS', 'FRACTURAS'), ('OTROS', 'OTROS'))
-SN_OPCIONES = (('NO', 'NO'), ('SI', 'SI'))
+    ('NO', 'No'), ('LUXACIONES FRECUENTES', 'Luxaciones Frecuentes'), ('FRACTURAS', 'Fracturas'), ('OTROS', 'Otros'))
+SN_OPCIONES = (('SI', 'Sí'), ('NO', 'No'))
 
 
 # MODELOS
@@ -31,9 +31,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_tipo = models.CharField(max_length=15, choices=USER_TIPO, default='')
     user_celular = models.IntegerField(null=True)
-    user_alta = models.DateField(blank=True, null=True)
+    user_alta = models.DateTimeField(auto_now_add=True)
     user_especialidad = models.CharField(max_length=15, choices=USER_ESPECIALIDAD, blank=True, null=True)
-    user_calificacion = models.CharField(max_length=100, blank=True, null=True)
 
     def __unicode__(self):
         return self.user
@@ -42,20 +41,20 @@ class UserProfile(models.Model):
 class Paciente(models.Model):
     # Informacion
     paciente_id = models.AutoField(primary_key=True)
-    documento = models.CharField('Documento', max_length=8, unique=True, help_text="Sin puntos ni guión", null=False,
+    documento = models.CharField('Documento* ', max_length=8, unique=True, help_text="Sin puntos ni guión", null=False,
                                  blank=False)
-    nombre = models.CharField('Nombre', max_length=100, null=False, blank=False)
-    primer_apellido = models.CharField('Primer Apellido', max_length=100, null=False, blank=False)
+    nombre = models.CharField('Nombre* ', max_length=100, null=False, blank=False)
+    primer_apellido = models.CharField('Primer Apellido* ', max_length=100, null=False, blank=False)
     segundo_apellido = models.CharField('Segundo Apellido', max_length=100, null=True, blank=True)
-    direccion = models.CharField('Dirección', max_length=155, null=False, blank=False)
-    fecha_nacimiento = models.DateField('Fecha de nacimiento', help_text="ej. 01/08/2012", default=datetime.date.today,
+    direccion = models.CharField('Dirección* ', max_length=155, null=False, blank=False)
+    fecha_nacimiento = models.DateField('Fecha de nacimiento* ', help_text="ej. 01/08/2012",
                                         null=False, blank=False)
     # Contacto
     celular_regex = RegexValidator(regex=r'^\+?1?\d{9,9}$',
                                    message="El número debe ser del formato: '+XXXXXXXXX'. 9 digitos admitidos.")
-    celular = models.CharField("Número de teléfono celular", validators=[celular_regex], max_length=9, unique=True,
+    celular = models.CharField("Número de teléfono celular* ", validators=[celular_regex], max_length=9, unique=True,
                                null=False, blank=False)  # validators should be a list
-    email = models.EmailField('Email', max_length=200, unique=True, blank=True)
+    email = models.EmailField('Email', max_length=200, blank=True)
     # Nucleo
     alta = models.DateTimeField(auto_now_add=True),
     nucleo_activo = models.BooleanField('Núcleo Activo', default=True)
@@ -96,15 +95,14 @@ class Paciente(models.Model):
     def get_validation_digit(ci):
         a = 0
         i = 0
-        if len(str(ci)) <= 6:
-            for i in range(len(ci), 7):
-                ci = '0' + ci
+        str_ci = (str(ci))
+        if len(str_ci) <= 7:
+            for i in range(len(str_ci), 8):
+                str_ci = '0' + str_ci
                 i = i + 1
-
         for i in range(0, 7):
-            a += (int("2987634"[i]) * int(str(ci)[i])) % 10
+            a += (int("2987634"[i]) * int(str_ci[i])) % 10
             i = i + 1
-
         if a % 10 == 0:
             return 0
         else:
@@ -126,35 +124,37 @@ class Paciente(models.Model):
 
 
 class AntecedentesClinicos(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)  # FK
-    fumador = models.CharField('Tabaco', max_length=2, choices=SN_OPCIONES, default='')
-    alcohol = models.CharField('Alcohol', max_length=2, choices=SN_OPCIONES, default='')
-    coproparasitario = models.CharField('Coproparasitario', max_length=2, choices=SN_OPCIONES, default='')
-    aparato_digestivo = models.CharField('Ap.Digestivo', max_length=2, choices=SN_OPCIONES, default='')
-    desc_aparato_digestivo = models.CharField('Descripción Ap.Digestivo', max_length=150, null=True, blank=True)
-    dermatologicos = models.CharField('Dermatológicos', max_length=2, choices=SN_OPCIONES, default='')
-    desc_dermatologicos = models.CharField('Descripción Dermatológicos', max_length=150, null=True, blank=True)
-    alergias = models.CharField('Alergias', max_length=2, choices=SN_OPCIONES, default='')
-    desc_alergias = models.CharField('Descripción Alergias', max_length=150, null=True, blank=True)
-    autoinmnunes = models.CharField('Autoinmunes', max_length=2, choices=SN_OPCIONES, default='')
-    desc_autoinmnunes = models.CharField('Descripción Autoinmunes', max_length=150, null=True, blank=True)
-    oncologicas = models.CharField('Oncológicas', max_length=2, choices=SN_OPCIONES, default='')
-    desc_oncologicas = models.CharField('Descripción Oncológicas', max_length=150, null=True, blank=True)
-    hematologicas = models.CharField('Hematológicas', max_length=2, choices=SN_OPCIONES, default='')
-    desc_hematologicas = models.CharField('Descripción Hematológicas', max_length=150, null=True, blank=True)
-    intervenciones = models.CharField('Intervenciones', max_length=2, choices=SN_OPCIONES, default='')
-    desc_intervenciones = models.CharField('Descripción Intervenciones', max_length=150, null=True, blank=True)
-    toma_medicacion = models.CharField('Medicación Habitual', max_length=2, choices=SN_OPCIONES, default='')
-    desc_medicacion = models.CharField('Descripción Medicación', max_length=150, null=True, blank=True)
-    endocrinometabolico = models.CharField('Endocrinometabólico', max_length=27, choices=ENDOCRINOLOGICOS_OPCIONES,
-                                           default='')
-    desc_endocrinometabolico = models.CharField('Descripción Endocrinometabólico', max_length=150, null=True,
+    creado = models.DateField(auto_now_add=True)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    fumador = models.CharField('Fumador*', max_length=2, choices=SN_OPCIONES, default='')
+    alcohol = models.CharField('Alcohol* ', max_length=2, choices=SN_OPCIONES, default='')
+    coproparasitario = models.CharField('Coproparasitario * ', max_length=2, choices=SN_OPCIONES, default='')
+    aparato_digestivo = models.CharField('Aparato Digestivo* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_aparato_digestivo = models.CharField('Descripción Aparato Digestivo* ', max_length=150, null=True, blank=True)
+    dermatologicos = models.CharField('Dermatológicos* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_dermatologicos = models.CharField('Descripción Dermatológicos* ', max_length=150, null=True, blank=True)
+    alergias = models.CharField('Alergias* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_alergias = models.CharField('Descripción Alergias* ', max_length=150, null=True, blank=True)
+    autoinmunes = models.CharField('Autoinmunes* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_autoinmunes = models.CharField('Descripción Autoinmunes* ', max_length=150, null=True, blank=True)
+    oncologicas = models.CharField('Oncológicas* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_oncologicas = models.CharField('Descripción Oncológicas* ', max_length=150, null=True, blank=True)
+    hematologicas = models.CharField('Hematológicas* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_hematologicas = models.CharField('Descripción Hematológicas* ', max_length=150, null=True, blank=True)
+    intervenciones = models.CharField('Intervenciones* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_intervenciones = models.CharField('Descripción Intervenciones* ', max_length=150, null=True, blank=True)
+    toma_medicacion = models.CharField('Medicación Habitual* ', max_length=2, choices=SN_OPCIONES, default='')
+    desc_medicacion = models.CharField('Descripción Medicación* ', max_length=150, null=True, blank=True)
+    endocrinometabolico = models.CharField('Endocrinometabólico* ', null=False, max_length=150, default='')
+    desc_endocrinometabolico = models.CharField('Descripción Endocrinometabólico* ', max_length=150, null=True,
                                                 blank=True)
-    cardiovascular = models.CharField('Cardiovascular', max_length=27, choices=CARDIOVASCULAR_OPCIONES, default='')
-    desc_cardiovascular = models.CharField('Descripción Cardiovascular', max_length=150, null=True, blank=True)
-    nefrourologicos = models.CharField('Nefrourológicos', max_length=27, choices=NEFROUROLOGICOS_OPCIONES, default='')
-    desc_nefrourologicos = models.CharField('Descripción Cardiovascular', max_length=150, null=True, blank=True)
-    observations = models.TextField('Observaciones', null=True, blank=True)
+    cardiovascular = models.CharField('Cardiovascular* ', null=False, max_length=150, default='')
+    desc_cardiovascular = models.CharField('Descripción Cardiovascular* ', max_length=150, null=True, blank=True)
+    nefrourologicos = models.CharField('Nefrourológicos* ', null=False, max_length=150, default='')
+    desc_nefrourologicos = models.CharField('Descripción Nefrourológicos* ', max_length=150, null=True, blank=True)
+    osteoarticulares = models.CharField('Osteoarticulares* ', null=False, max_length=150, default='')
+    desc_osteoarticulares = models.CharField('Descripción Osteoarticulares* ', max_length=150, null=True, blank=True)
+    observations = models.TextField('Observaciones', max_length=150, null=True, blank=True)
 
     def __str__(self):
         return str(self.paciente)
@@ -189,7 +189,7 @@ class Integrante(models.Model):
 class Consulta(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='consulta_doctor', on_delete=models.CASCADE)
-    diagnostico = models.TextField(max_length=250, default='', blank=False, null=False)
+    diagnostico = models.TextField('Diagnóstico', max_length=250, default='', blank=False, null=False)
     tratamiento = models.TextField(max_length=250, default='', blank=False, null=False)
     indicaciones = models.TextField(max_length=250, default='', blank=False, null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
@@ -222,10 +222,10 @@ class CPO(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     cpo_id = models.AutoField(primary_key=True)
     contenido_cpo = models.TextField()
-    ceod = models.IntegerField()
-    ceos = models.IntegerField()
-    cpod = models.IntegerField()
-    cpos = models.IntegerField()
+    ceod = models.IntegerField(blank=True, null=True)
+    ceos = models.IntegerField(blank=True, null=True)
+    cpod = models.IntegerField(blank=True, null=True)
+    cpos = models.IntegerField(blank=True, null=True)
 
     class Meta:
         db_table = "dentalE_CPOs"

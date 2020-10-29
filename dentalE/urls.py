@@ -5,10 +5,11 @@ from .views import (
     # doctor
     agregartratamiento,
     agregarCPO,
+    verCPO,
 
     # secretaria
     resumendia,
-    listadoctores,
+    listaprofesionales,
     agregarpaciente,
     listapacientes,
     agregarcita,
@@ -27,17 +28,18 @@ urlpatterns = [
     # doctor
     url(r'^agregartratamiento/$', agregartratamiento, name="agregartratamiento"),
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
+    url(r'^cpopaciente/(?P<paciente_id>\d+)/$', verCPO, name="cpopaciente"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
-    url(r'^doctorlista/$', listadoctores, name='listadoctores'),
+    url(r'^profesionales/$', listaprofesionales, name='profesionales'),
     url(r'^agregarpaciente/$', agregarpaciente, name="agregarpaciente"),
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
     url(r'^agregarcita/$', agregarcita, name="agregarcita"),
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),
-    url(r'^pacientedetalles/(?P<paciente_id>[0-9])/$', pacientedetalles, name='pacientedetalles'),
+    url(r'^pacientedetalles/(?P<paciente_id>\d+)/$', pacientedetalles, name='pacientedetalles'),
     url(r'^pacientecambiopass/$', pacientecambiopass, name='pacientecambiopass'),
     url(r'^agregarantecedentes/$', agregarantecedentes, name='agregarantecedentes'),
 

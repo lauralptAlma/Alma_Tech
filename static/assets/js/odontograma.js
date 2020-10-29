@@ -1,6 +1,7 @@
 function replaceAll(find, replace, str) {
     return str.replace(new RegExp(find, 'g'), replace);
 }
+
 /*Crea la estructura del odontograma*/
 function createOdontogram() {
     var htmlLecheLeft = "",
@@ -15,7 +16,7 @@ function createOdontogram() {
             claseDiente = "primer-diente";
         }
         htmlRight += '<div data-name="value" id="dienteindex' + i + '" class=' + claseDiente + '>' +
-            '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
+            '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
             '<div id="tindex' + i + '" class="cuadro click">' +
             '</div>' +
             '<div id="lindex' + i + '" class="cuadro izquierdo click">' +
@@ -29,7 +30,7 @@ function createOdontogram() {
             '</div>';
         //Dientes Definitivos Cuandrante Izquierdo (Superior/Inferior)
         htmlLeft += '<div id="dienteindex' + a + '" class=' + claseDiente + '>' +
-            '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill badge-info">index' + a + '</span>' +
+            '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + a + '</span>' +
             '<div id="tindex' + a + '" class="cuadro click">' +
             '</div>' +
             '<div id="lindex' + a + '" class="cuadro izquierdo click">' +
@@ -44,7 +45,7 @@ function createOdontogram() {
         if (i <= 5) {
             //Dientes Temporales Cuandrante Derecho (Superior/Inferior)
             htmlLecheRight += '<div id="dienteLindex' + i + '" style="left: -25%;" class="diente-leche">' +
-                '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill label-alma">index' + i + '</span>' +
+                '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill label-alma">index' + i + '</span>' +
                 '<div id="tlecheindex' + i + '" class="cuadro-leche top-leche click">' +
                 '</div>' +
                 '<div id="llecheindex' + i + '" class="cuadro-leche izquierdo-leche click">' +
@@ -64,7 +65,7 @@ function createOdontogram() {
             }
             //Dientes Temporales Cuandrante Izquierdo (Superior/Inferior)
             htmlLecheLeft += '<div id="dienteLindex' + a + '" class=' + claseDienteLeche + '>' +
-                '<span style="margin-left: 45px; margin-bottom:5px; display: inline-block !important; border-radius: 10px !important;" class="badge badge-pill label-alma">index' + a + '</span>' +
+                '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill label-alma">index' + a + '</span>' +
                 '<div id="tlecheindex' + a + '" class="cuadro-leche top-leche click">' +
                 '</div>' +
                 '<div id="llecheindex' + a + '" class="cuadro-leche izquierdo-leche click">' +
@@ -90,6 +91,7 @@ function createOdontogram() {
     $("#bll").append(replaceAll('index', '7', htmlLecheLeft));
     $("#blr").append(replaceAll('index', '8', htmlLecheRight));
 }
+
 /* Cuando se carga la página, crea el odontograma y según el botón seleccionado y la pieza en que se hizo click
 * se le agrega la clase correspondiente a dicha pieza */
 $(document).ready(function () {
@@ -196,32 +198,41 @@ $(document).ready(function () {
 * a cariado, obturado, perdido o ausente y los almacena en un string con formato JSON. Al finalizar quita
 * la última coma y le asigna el valor del CPO al elemento correspondiente para ser almacenado. */
 function obtenerCPO() {
-    let dientes = '{';
+    //let dientes = '{"cariados":[';
+    const caries = [];
     const cariados = $('.decayed-tooth');
     cariados.each(function (index, element) {
-        let idCarie = $(element).attr('id');
-        dientes += '"' + idCarie + '"' + ':"cariado",'
-        console.log($(element).attr('id'))
+        let idCarie = `"${$(element).attr('id')}"`;
+        caries.push(idCarie);
+        //dientes += '"' + idCarie + '"' + ','
     });
+    //dientes += '],"obturados":[';
+    const obturaciones = [];
     const obturados = $('.filled-tooth');
     obturados.each(function (index, element) {
-        let idObturado = $(element).attr('id');
-        dientes += '"' + idObturado + '"' + ':"obturado",'
-        console.log($(element).attr('id'))
+        let idObturado = `"${$(element).attr('id')}"`;
+        //dientes += '"' + idObturado + '"' + ','
+        obturaciones.push(idObturado)
     });
+    //dientes += '],"perdidos":[';
+    const perdidas = [];
     const perdidos = $('.missing-tooth');
     perdidos.each(function (index, element) {
-        let idPerdido = $(element).attr('id');
-        dientes += '"' + idPerdido + '"' + ':"perdido",'
-        console.log($(element).attr('id'))
+        let idPerdido = `"${$(element).attr('id')}"`;
+        //dientes += '"' + idPerdido + '"' + ','
+        perdidas.push(idPerdido)
     });
+    //dientes += '],"ausentes":[';
+    const ausente = [];
     const ausentes = $('.lacking-tooth');
     ausentes.each(function (index, element) {
-        let idAusente = $(element).attr('id');
-        dientes += '"' + idAusente + '"' + ':"ausente",'
-        console.log($(element).attr('id'))
+        let idAusente = `"${$(element).attr('id')}"`;
+        //dientes += '"' + idAusente + '"' + ','
+        ausente.push(idAusente)
     });
-    dientes = dientes.substring(0, dientes.length - 1);
-    dientes += '}'
+    //dientes = dientes.substring(0, dientes.length - 1);
+    //dientes += ']}'
+    let dientes = `{"cariados":[${caries}],"obturados":[${obturaciones}],"perdidos":[${perdidas}],"ausentes":[${ausente}]}`;
     $("#id_contenido_cpo").val(dientes)
+    console.log(dientes)
 }
