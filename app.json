@@ -2,8 +2,8 @@
   "environments": {
     "test": {
       "scripts": {
-        "test": "flake8 dentalE",
-        "testBandit":"bandit dentalE"
+        "test-setup": "flake8 dentalE",
+        "test": "bandit dentalE"
       }
     }
   }
