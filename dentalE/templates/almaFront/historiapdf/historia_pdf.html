@@ -131,9 +131,9 @@
             <td>
                 <span> <b>Consultorio:</b> Dental-e </span>
                 <br>
-                <span> <b>Dirección: </b> El Espacio Exterior, 1432</span>
+                <span> <b>Dirección: </b> Colegio Hogwarts de Magia y Hechicería, 1432</span>
                 <br>
-                <span> <b>Contacto: </b> (+598) 99 458 712</span>
+                <span> <b>Contacto: </b> (+123) 456 7891</span>
             </td>
             <td style="text-align: right">
                 <img src="static/assets/img/logos/logoDentalPdf.jpg"
@@ -328,6 +328,22 @@
                 <li class="list-group-item">
                     <div>
                         <span>No existen registros CPO para paciente
+                            {{ patient.nombre }} {{ patient.primer_apellido }}</span>
+                    </div>
+                </li>
+            </ul>
+        {% endif %}
+        <!-- Ortodoncia/Ortopedia -->
+        <div class="sub-title">
+            <span>Ortodoncia/Ortopedia: </span>
+        </div>
+        {% if treatments %}
+            {% include 'almaFront/historiapdf/general_pdf.html' %}
+        {% else %}
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div>
+                        <span>No existen consultas de ortodoncia/ortopedia para paciente
                             {{ patient.nombre }} {{ patient.primer_apellido }}</span>
                     </div>
                 </li>
