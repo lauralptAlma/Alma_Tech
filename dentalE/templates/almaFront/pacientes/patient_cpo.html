@@ -1,7 +1,8 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
 {% block tab-title %}CPO{% endblock %}
-{% block page-title %}Historia Clínica {{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+{% block page-title %}Historia Clínica {{ patient.nombre }}
+    {{ patient.primer_apellido }}{% endblock %}
 {% block page-content %}
     <div class="container-fluid">
         {% include 'almaFront/bases/clinic-history-tabs.html' %}
@@ -13,9 +14,13 @@
                             <p class="m-0 font-weight-bold">
                                 {% if page_obj %}
                                     {% for cpo in page_obj %}
-                                        Fecha: {{ cpo.creado|date:"SHORT_DATE_FORMAT" }}
+                                        Fecha:
+                                        {{ cpo.creado|date:"SHORT_DATE_FORMAT" }}
                                     {% endfor %}
-                                {% else %} No existen registros de CPO para paciente actual.
+                                {% else %}
+                                    No existen consultas CPO registradas para este
+                                    paciente en
+                                    el sistema.
                                 {% endif %}
                             </p>
                         </div>
@@ -24,23 +29,31 @@
                         <!-- Estructura necesaria para armar el CPO -->
                         <div class="container pt-3">
                             <div class="row">
-                                <div id="tr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="tr"
+                                     class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 </div>
-                                <div id="tl" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="tl"
+                                     class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 </div>
-                                <div id="tlr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                <div id="tlr"
+                                     class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
                                 </div>
-                                <div id="tll" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="tll"
+                                     class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 </div>
                             </div>
                             <div class="row">
-                                <div id="blr" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                                <div id="blr"
+                                     class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
                                 </div>
-                                <div id="bll" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="bll"
+                                     class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 </div>
-                                <div id="br" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="br"
+                                     class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 </div>
-                                <div id="bl" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="bl"
+                                     class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 </div>
                             </div>
                         </div>
@@ -53,7 +66,8 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">CeoD</span>
                                                 </div>
-                                                <div type="text" class="form-control">
+                                                <div type="text"
+                                                     class="form-control">
                                                     {% if cpo.ceod %}
                                                         {{ cpo.ceod }}
                                                     {% else %}
@@ -66,7 +80,8 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">CeoS</span>
                                                 </div>
-                                                <div type="text" class="form-control">
+                                                <div type="text"
+                                                     class="form-control">
                                                     {% if cpo.ceos %}
                                                         {{ cpo.ceos }}
                                                     {% else %}
@@ -80,7 +95,8 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">CpoD</span>
                                                 </div>
-                                                <div type="text" class="form-control">
+                                                <div type="text"
+                                                     class="form-control">
                                                     {% if cpo.cpod %}
                                                         {{ cpo.cpod }}
                                                     {% else %}
@@ -92,7 +108,8 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">CpoS</span>
                                                 </div>
-                                                <div type="text" class="form-control">
+                                                <div type="text"
+                                                     class="form-control">
                                                     {% if cpo.cpos %}
                                                         {{ cpo.cpos }}
                                                     {% else %}
@@ -103,7 +120,8 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                        <div id="cpo_ultimo" value= {{ cpo.contenido_cpo }}>
+                                        <div id="cpo_ultimo"
+                                             value= {{ cpo.contenido_cpo }}>
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -119,7 +137,8 @@
             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <div class="card shadow mb-3">
                     <div class="card-header py-3">
-                        <p class="text-primary m-0 font-weight-bold" style="width: 456px;">Referencias</p>
+                        <p class="text-primary m-0 font-weight-bold"
+                           style="width: 456px;">Referencias</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -135,13 +154,15 @@
                                 <br>
                                 <div>
                                     <img class="referencia"
-                                         src="{% static 'assets/img/CPO/ausente.svg' %}"> =
+                                         src="{% static 'assets/img/CPO/ausente.svg' %}">
+                                    =
                                     <span style="display:inline-block;">Ausente</span>
                                 </div>
 
                                 <div>
                                     <img class="referencia"
-                                         src="{% static 'assets/img/CPO/perdido.svg' %}"> =
+                                         src="{% static 'assets/img/CPO/perdido.svg' %}">
+                                    =
                                     <span style="display:inline-block;">Perdido</span>
                                 </div>
                             </div>
@@ -153,8 +174,10 @@
     </div>
 {% endblock %}
 {% block page-javascript %}
-    <script type="text/javascript" src="{% static 'assets/js/odontograma.js' %}">
+    <script type="text/javascript"
+            src="{% static 'assets/js/odontograma.js' %}">
     </script>
-    <script type="text/javascript" src="{% static 'assets/js/load-odontogram.js' %}">
+    <script type="text/javascript"
+            src="{% static 'assets/js/load-odontogram.js' %}">
     </script>
 {% endblock %}

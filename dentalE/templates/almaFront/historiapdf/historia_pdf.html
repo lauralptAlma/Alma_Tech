@@ -3,7 +3,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Historia Clínica | {{ patient.nombre }} {{ patient.primer_apellido }}</title>
+    <title>Historia Clínica
+        | {{ patient.nombre }} {{ patient.primer_apellido }}</title>
     <style>@page {
         size: a4 portrait;
         @frame header_frame { /*Static Frame*/-pdf-frame-content: header_content;
@@ -157,19 +158,25 @@
         </div>
         <hr color="#757575">
         <!-- Antecedentes Clínicos -->
+        <div class="sub-title">
+            <span>Antecedentes Clínicos: </span>
+        </div>
         {% if background %}
             {% include 'almaFront/historiapdf/background_pdf.html' %}
         {% else %}
             <ul class="list-group">
                 <li class="list-group-item">
                     <div>
-                        <span>No existen registros para paciente
+                        <span>No existen registros de antecedentes para paciente
                             {{ patient.nombre }} {{ patient.primer_apellido }}</span>
                     </div>
                 </li>
             </ul>
         {% endif %}
         <!-- Odontología General -->
+        <div class="sub-title">
+            <span>Odontología General: </span>
+        </div>
         {% if treatments %}
             {% include 'almaFront/historiapdf/general_pdf.html' %}
         {% else %}
@@ -246,7 +253,9 @@
                                         {{ c.0 }}
                                     </td>
                                     <td>
-                                        {{ c.1 }}
+                                        {% for cara in c.1 %}
+                                            <span>{{ cara }} </span>
+                                        {% endfor %}
                                     </td>
                                     <td>Carie
                                     </td>
@@ -260,7 +269,9 @@
                                         {{ o.0 }}
                                     </td>
                                     <td>
-                                        {{ o.1 }}
+                                        {% for cara in o.1 %}
+                                            <span>{{ cara }} </span>
+                                        {% endfor %}
                                     </td>
                                     <td>Obturación
                                     </td>
@@ -301,7 +312,9 @@
                     <table>
                         <tr></tr>
                         <tr>
-                            <td class="date" style="text-align: center"> ------- Dentadura sana -------</td>
+                            <td class="date" style="text-align: center">
+                                ------- Dentadura sana -------
+                            </td>
                             <td></td>
                         </tr>
                     </table>
@@ -323,8 +336,10 @@
     </div>
 </div>
 <div id="footer_content" style="text-align: center; vertical-align: bottom;">
-    Historia Clínica Dental <b>{{ patient.nombre }} {{ patient.primer_apellido }}</b> | Generada
-    el <b>{% now "SHORT_DATE_FORMAT" %} </b> por <b>{{ user.get_full_name }} - Página
+    Historia Clínica Dental
+    <b>{{ patient.nombre }} {{ patient.primer_apellido }}</b> | Generada
+    el <b>{% now "SHORT_DATE_FORMAT" %} </b> por <b>{{ user.get_full_name }} -
+    Página
     <pdf:pagenumber>
         de
         <pdf:pagecount>

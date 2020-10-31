@@ -415,13 +415,18 @@ def logout_view(request):
 # Historia clínica paciente
 # Limpieza de cpo
 
-
 def build_clean_teeth_dic(teeth_list, status):
     list_clean = {}
+    maxilla = ['1', '2', '5', '6']
+    lower_jaw = ['3', '4', '7', '8']
     if teeth_list:
         for teeth in teeth_list:
-            cara_list = teeth[0]
+            cara_list = cara(teeth[0])
             pieza_list = teeth[-2] + teeth[-1]
+            if pieza_list[0] in maxilla and cara_list == 'Lingual/Paladino':
+                cara_list = 'Paladino'
+            if pieza_list[0] in lower_jaw and cara_list == 'Lingual/Paladino':
+                cara_list = 'Lingual'
             list_dic = dict(cara=[cara_list], pieza=pieza_list)
             if pieza_list in list_clean:
                 existing_list_caras = list_clean[pieza_list][status].get(
@@ -432,6 +437,17 @@ def build_clean_teeth_dic(teeth_list, status):
             else:
                 list_clean[pieza_list] = {status: list_dic}
     return list_clean
+
+
+def cara(argument):
+    switcher = {
+        't': "Vestibular",
+        'l': "Distal",
+        'b': "Lingual/Paladino",
+        'r': "Mesial",
+        'c': "Oclusal",
+    }
+    return switcher.get(argument, "Cara de diente no válida")
 
 
 def clean_tooth(teeth):
