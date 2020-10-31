@@ -260,3 +260,15 @@ class Cita(models.Model):
     def __str__(self):
         return str(self.paciente)
 
+class Contacto(models.Model):
+    nombre = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(max_length=50, blank=True, null=True)
+    asunto = models.CharField(max_length=50, blank=True, null=True)
+    mensaje = models.TextField(max_length=200, blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Contacto"
+
+    def __str__(self):
+        return self.name + "-" +  self.email

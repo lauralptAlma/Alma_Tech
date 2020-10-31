@@ -7,6 +7,9 @@ from .views import (
     agregarCPO,
     verCPO,
 
+    # contacto
+    contacto,
+
     # secretaria
     resumendia,
     listaprofesionales,
@@ -15,6 +18,7 @@ from .views import (
     agregarcita,
     CalendarPage,
     edit_cita,
+    delete_cita,
 
     # paciente
     pacienteinicio,
@@ -33,6 +37,10 @@ urlpatterns = [
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
     url(r'^cpopaciente/(?P<paciente_id>\d+)/$', verCPO, name="cpopaciente"),
 
+    # contacto
+    url(r'^contacto/$', contacto,
+        name="contacto"),
+
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
     url(r'^profesionales/$', listaprofesionales, name='profesionales'),
@@ -40,6 +48,7 @@ urlpatterns = [
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
     url(r'^agregarcita/$', CalendarPage, name="agregarcita"),
     url(r'^editarcita/(?P<cita_id>\d+)/$', edit_cita, name="editarcita"),
+    url(r'^borrarcita/(?P<cita_id>\d+)/$', delete_cita, name="deletecita"),
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),

@@ -1,0 +1,70 @@
+<{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Contacto{% endblock %}
+{% block page-title %}Contacto{% endblock %}
+
+{% block page-content %}
+    <div class="container-fluid">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="well well-sm">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Nombre </label>
+                                                {{ form.nombre }}
+                                            </div>
+                                            <div class="form-group">
+                                                <label> Email </label>
+                                                {{ form.email }}
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Asunto</label>
+                                                {{ form.asunto }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label> Mensaje </label>
+                                                {{ form.mensaje }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary pull-right"
+                                                    id="btnContactUs">
+                                                Enviar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-4">
+                                <form>
+                                    <legend><span class="glyphicon glyphicon-globe"></span>Nuestra Oficina </legend>
+                                    <address>
+                                        <br>
+                                        Montevideo, Uruguay<br>
+                                        <i class="fa fa-phone" aria-hidden="true"></i>
+                                        <abbr title="Phone"></abbr> (123) 456-7890
+                                    </address>
+                                    <address>
+                                        <strong>Alma Tech, Software Factory.</strong><br>
+                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                        <a href="mailto:#">almatech20@gmail.com</a>
+                                    </address>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+

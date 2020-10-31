@@ -4,6 +4,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
+from django.core.mail import send_mail
+from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
@@ -16,7 +18,7 @@ from django.views.generic import CreateView, UpdateView, ListView, DetailView, \
     FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
-    ConsultaCPOForm
+    ConsultaCPOForm, ContactoForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO
 from datetime import date
@@ -91,6 +93,7 @@ def edit_cita(request, cita_id):
                     messages.SUCCESS,
                     'Cita editada exitosamente!'
                 )
+            return HttpResponseRedirect("/dentalE/agregarcita")
         except Exception as e:
             messages.add_message(
                 request,
@@ -104,6 +107,26 @@ def edit_cita(request, cita_id):
                'citasList': citas
                }
     return render(request, template, context)
+
+
+@login_required(login_url="/")
+def delete_cita(request, cita_id):
+    cita = get_object_or_404(Cita, id=cita_id)
+    citas = Cita.objects.all()
+    template = 'secretaria/agenda_hoy/agregar_cita.html'
+    if request.method == 'POST':
+        form = CitaForm(request.POST, instance=cita)
+        if form.is_valid():
+            cita = form.save()
+            cita.delete()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Cita eliminada exitosamente!'
+            )
+            return HttpResponseRedirect("/dentalE/agregarcita")
+    return render(request, "secretaria/agenda_hoy/agregar_cita.html",
+                  {'citasList': citas, 'form': form})
 
 
 @login_required(login_url="/")
@@ -239,6 +262,27 @@ def verCPO(request, paciente_id):
     ultimo_cpo_paciente = CPO.objects.filter(paciente_id=paciente_id).last()
     return render(request, "almaFront/ver_cpo.html",
                   {'patient': paciente, 'cpo': ultimo_cpo_paciente})
+
+
+@login_required(login_url="/")
+def contacto(request):
+    form = ContactoForm()
+    if request.method == 'POST':
+        form = ContactoForm(request.POST)
+        if form.is_valid():
+            contacto = form.save()
+            subject = request.POST['asunto'] + "  Usuario:  " + request.POST['nombre']
+            message = request.POST['mensaje'] + " Email:  " + request.POST['email']
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = ['andrea.correa@estudiantes.utec.edu.uy']
+            send_mail(subject, message, email_from, recipient_list)
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Mensaje enviado exitosamente!'
+            )
+        return redirect("/dentalE/resumendia/")
+    return render(request, "almaFront/bases/contacto.html", {'form': form})
 
 
 @login_required(login_url="/")

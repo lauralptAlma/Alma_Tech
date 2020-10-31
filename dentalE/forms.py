@@ -7,9 +7,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 import datetime
-from django.forms.widgets import SelectDateWidget
+from django.forms.widgets import SelectDateWidget, EmailInput
 from django.forms import ModelForm, Form
-from .models import Paciente, Cita, Consulta, Nucleo, Integrante, AntecedentesClinicos, CPO, \
+from .models import Paciente, Cita, Consulta, Nucleo, Integrante, Contacto, AntecedentesClinicos, CPO, \
     CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, PATIENT_GENDER
 
 
@@ -129,6 +129,23 @@ class AntecedenteForm(ModelForm):
             'desc_osteoarticulares': forms.TextInput(attrs={'class': 'form-control'}),
             'observations': forms.Textarea(attrs={'class': 'form-control'}),
         }
+
+
+class ContactoForm(forms.ModelForm):
+
+    class Meta:
+        model = Contacto
+        fields = ('nombre', 'email', 'asunto', 'mensaje')
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': EmailInput(attrs={'class': 'form-control'}),
+            'asunto': forms.TextInput(attrs={'class': 'form-control'}),
+            'mensaje': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+
+
+
 
 
 PacienteIntegranteFormset = inlineformset_factory(
