@@ -17,10 +17,8 @@ from .views import (
     listaprofesionales,
     agregarpaciente,
     listapacientes,
-    agregarcita,
     CalendarPage,
     edit_cita,
-    delete_cita,
 
     # paciente
     pacienteinicio,
@@ -45,7 +43,7 @@ urlpatterns = [
     url(r'^generarhistoriapdf/(?P<paciente_id>\d+)/$',
         patient_render_background_pdf,
         name="paciente-pdf-view"),
-    
+
     # contacto
     url(r'^contacto/$', contacto,
         name="contacto"),
@@ -57,7 +55,6 @@ urlpatterns = [
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
     url(r'^agregarcita/$', CalendarPage, name="agregarcita"),
     url(r'^editarcita/(?P<cita_id>\d+)/$', edit_cita, name="editarcita"),
-    url(r'^borrarcita/(?P<cita_id>\d+)/$', delete_cita, name="deletecita"),
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),

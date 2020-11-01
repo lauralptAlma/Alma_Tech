@@ -3,17 +3,18 @@ from operator import attrgetter
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages, auth
+from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.views import View, generic
+from django.views import View
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, ListView, DetailView, \
+from django.utils import formats
+from django.views.generic import CreateView, ListView, DetailView, \
     FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
@@ -52,7 +53,7 @@ def agregarcita(request):
     if request.method == 'POST':
         form = CitaForm(request.POST)
         if form.is_valid():
-            cita = form.save()
+            form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_cita.html",
                   {'form': form})
@@ -65,13 +66,13 @@ def CalendarPage(request):
     if request.method == 'POST':
         form = CitaForm(request.POST)
         if form.is_valid():
-            cita = form.save()
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 'Cita agregada exitosamente!'
             )
-            return HttpResponseRedirect("/dentalE/resumendia/")
+            return HttpResponseRedirect("/dentalE/agregarcita")
     return render(request, "secretaria/agenda_hoy/agregar_cita.html",
                   {'citasList': citas, 'form': form})
 
@@ -80,8 +81,20 @@ def CalendarPage(request):
 def edit_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id)
     citas = Cita.objects.all()
+    eliminar = request.POST.get('eliminar')
+    cancelar = request.POST.get('cancelar')
     template = 'secretaria/agenda_hoy/agregar_cita.html'
-    if request.method == "POST":
+    if request.method == "POST" and cancelar:
+        return HttpResponseRedirect("/dentalE/agregarcita")
+    elif request.method == "POST" and eliminar:
+        cita.delete()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            'Cita eliminada exitosamente!'
+        )
+        return HttpResponseRedirect("/dentalE/agregarcita")
+    elif request.method == "POST":
         form = CitaForm(request.POST, instance=cita)
         try:
             if form.is_valid():
@@ -105,26 +118,6 @@ def edit_cita(request, cita_id):
                'citasList': citas
                }
     return render(request, template, context)
-
-
-@login_required(login_url="/")
-def delete_cita(request, cita_id):
-    cita = get_object_or_404(Cita, id=cita_id)
-    citas = Cita.objects.all()
-    template = 'secretaria/agenda_hoy/agregar_cita.html'
-    if request.method == 'POST':
-        form = CitaForm(request.POST, instance=cita)
-        if form.is_valid():
-            cita = form.save()
-            cita.delete()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                'Cita eliminada exitosamente!'
-            )
-            return HttpResponseRedirect("/dentalE/agregarcita")
-    return render(request, "secretaria/agenda_hoy/agregar_cita.html",
-                  {'citasList': citas, 'form': form})
 
 
 @login_required(login_url="/")
@@ -508,3 +501,40 @@ def patient_render_background_pdf(request, *args, **kwargs):
         return response
     else:
         return HttpResponseRedirect('account_logout')
+
+
+@login_required(login_url="/")
+def contacto(request):
+    form = ContactoForm()
+    if request.method == 'POST':
+        form = ContactoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            subject = "Usuario " + request.POST['nombre'] + ": " + \
+                      request.POST['asunto']
+            remitente = "\nEmail remitente:  " + request.POST['email']
+            message = request.POST['mensaje'] + remitente
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = ['almatech20@gmail.com']
+            try:
+                send_mail(subject, message, email_from, recipient_list)
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    'Mensaje enviado exitosamente!'
+                )
+                return redirect("/dentalE/resumendia/")
+            except Exception as e:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    'Error al enviar la consulta, error: {}'.format(e)
+                )
+        else:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                'Hubo un error al enviar su mensaje, '
+                'por favor intente nuevamente.'
+            )
+    return render(request, "almaFront/bases/contacto.html", {'form': form})

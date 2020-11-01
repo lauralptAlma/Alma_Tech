@@ -58,12 +58,19 @@
                                 <button id="btnEdit" class="btn btn-warning">
                                     Modificar
                                 </button>
-                                <button id="btnDelete" class="btn btn-danger">
-                                    Eliminar
-                                </button>
-                                <button id="btnCancel" data-dismiss="modal"
-                                        class="btn btn-secondary">Cancelar
-                                </button>
+                                <input id="btnDelete" class="btn btn-danger"
+                                       type="submit" name="eliminar"
+                                       value="Eliminar"/>
+                                {% if 'editarcita' in request.path %}
+                                    <input id="btnCancel"
+                                           class="btn btn-secondary"
+                                           type="submit" name="cancelar"
+                                           value="Cancelar"/>
+                                {% else %}
+                                    <button id="btnCancel" data-dismiss="modal"
+                                            class="btn btn-secondary">Cancelar
+                                    </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

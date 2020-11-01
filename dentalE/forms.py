@@ -1,17 +1,14 @@
-from django.forms import ModelForm, Form
+from django.forms import ModelForm
 from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
-from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
+from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
-import datetime
-from django.forms.widgets import SelectDateWidget, EmailInput
+from django.forms.widgets import EmailInput
 from .models import Paciente, Cita, Consulta, Nucleo, Integrante, \
     Contacto, AntecedentesClinicos, CPO, \
     CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, \
-    NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, PATIENT_GENDER
+    NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, \
+    PATIENT_GENDER
 
 
 class IngresoForm(ModelForm):
@@ -33,15 +30,18 @@ class PacienteForm(ModelForm):
         widgets = {
             'documento': forms.TextInput(attrs={'class': 'form-control'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-            'primer_apellido': forms.TextInput(attrs={'class': 'form-control'}),
-            'segundo_apellido': forms.TextInput(attrs={'class': 'form-control'}),
+            'primer_apellido': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'segundo_apellido': forms.TextInput(
+                attrs={'class': 'form-control'}),
             'genero': forms.RadioSelect(choices=PATIENT_GENDER),
             'fecha_nacimiento': DatePickerInput(options={
                 "format": "DD/MM/YYYY",  # moment date-time format
                 "locale": 'es'
             }),
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
-            'ciudad': forms.Select(attrs={'class': 'form-control mdb-select md-form'}),
+            'ciudad': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'celular': forms.TextInput(attrs={'class': 'form-control'}),
             'nucleo_activo': forms.CheckboxInput(
@@ -57,12 +57,15 @@ class CitaForm(ModelForm):
 
         widgets = {
             'paciente': forms.Select(
-                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'}),
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'}),
             'doctor': forms.Select(
-                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar Profesional...'}),
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar Profesional...'}),
             'fecha': forms.TextInput(attrs={'class': 'form-control'}),
             'hora': forms.TextInput(attrs={'class': 'form-control',
-                                           'type': 'time', 'min': '07:00', 'max': '19:00', 'step': '600'}),
+                                           'type': 'time', 'min': '07:00',
+                                           'max': '19:00', 'step': '600'}),
 
         }
 
@@ -167,7 +170,6 @@ class AntecedenteForm(ModelForm):
 
 
 class ContactoForm(forms.ModelForm):
-
     class Meta:
         model = Contacto
         fields = ('nombre', 'email', 'asunto', 'mensaje')
@@ -177,10 +179,6 @@ class ContactoForm(forms.ModelForm):
             'asunto': forms.TextInput(attrs={'class': 'form-control'}),
             'mensaje': forms.Textarea(attrs={'class': 'form-control'}),
         }
-
-
-
-
 
 
 PacienteIntegranteFormset = inlineformset_factory(
