@@ -6,136 +6,23 @@
     <div class="form-row">
         <div class="form-group col-lg-10">
             <form method="post" action="">
-                <link rel="stylesheet" href="{% static 'assets/fullcalendar-5.3.2/lib/main.css' %}">
-                <script src="{% static 'assets/fullcalendar-5.3.2/lib/main.js' %}"></script>
-                <script src="{% static 'assets/fullcalendar-5.3.2/lib/es.js' %}"></script>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        let calendarEl = document.getElementById('calendar');
-                        let calendar;
-                        calendar = new FullCalendar.Calendar(calendarEl, {
-                            timeZone: 'local',
-                            initialView: 'dayGridMonth',
-                            language: 'Spanish',
-                            selectable: true,
-                            editable: true,
-                            googleCalendarApiKey: 'AIzaSyCx0UP6Jprpdu4UXEOzf8lPfNeRVw6_Myo',
-                            event: {
-                                googleCalendarId: 'andrea.correa@estudiantes.utec.edu.uy',
-                                className: 'gcal-event'// an option!
-                            },
-                            headerToolbar: {
-                                right: 'dayGridMonth, timeGridWeek, timeGridDay',
-                                left: '',
-                                center: 'title'
-                            },
-
-                            eventClick: function (info) {
-                                $('#btnAdd').prop("disabled", true);
-                                $('#btnEdit').prop("disabled", false);
-                                $('#btnDelete').prop("disabled", false);
-
-                                mes = (info.event.fecha.getMonth() + 1);
-                                dia = (info.event.fecha.getDate());
-                                anio = (info.event.fecha.getFullYear());
-                                hora = (info.event.hora.getHours() + ":" + info.event.hora.getMinutes());
-
-                                mes = (mes < 10) ? "0" + mes : mes;
-                                dia = (dia < 10) ? "0" + dia : dia;
-                                $('#txtPaciente').val(info.event.paciente);
-                                $('#txtProf').val(info.event.profesional);
-                                $('#txtFecha').val(anio + "-" + mes + "_" + dia);
-                                $('#txtHora').val(hora);
-                                $('#exampleModal').modal();
-                            },
-
-                            dateClick: function (info) {
-                                limpiarFormulario();
-                                $('#txtFecha').val(info.dateStr);
-                                $('#btnAdd').prop("disabled", false);
-                                $('#btnEdit').prop("disabled", true);
-                                $('#btnDelete').prop("disabled", true);
-                                $('#exampleModal').modal('toggle');
-                                calendar.addEvent({title: "Consulta", date: info.dateStr});
-                            },
-
-                        });
-                        calendar.setOption('locale', 'es')
-                        calendar.render();
-
-                        $('#btnAdd').click(function () {
-                            ObjEvento = recolectarDatos('POST');
-                            SendInfo('', ObjEvento);
-                        });
-
-                        $('#btnDelete').click(function () {
-                            ObjEvento = recolectarDatos("DELETE");
-                            SendInfo('', ObjEvento);
-                        });
-
-                        $('#btnEdit').click(function () {
-                            ObjEvento = recolectarDatos("PATCH");
-                            SendInfo('', ObjEvento);
-                        });
-
-
-                        function recolectarDatos(method) {
-                            nuevoEvent = {
-                                paciente: $('#txtPaciente').val(),
-                                profesional: $('#txtProf').val(),
-                                fecha: $('#txtFecha').val(),
-                                hora: $('#txtHora').val(),
-
-                                'method': method
-                            }
-                            return (nuevoEvent);
-                        }
-
-
-                        function SendInfo(accion, objEvento) {
-                            $.ajax(
-                                {
-                                    type: 'POST',
-                                    url: '',
-                                    dataType: 'json',
-                                    data: objEvento,
-                                    success: function (msg) {
-                                        console.log((msg));
-                                        $('#exampleModal').modal('toggle');
-                                        calendar.refetchEvents();
-                                    },
-                                    error: function () {
-                                        alert("Hay un error");
-                                    }
-                                }
-                            );
-                        }
-
-                        function limpiarFormulario() {
-                            $('#txtPaciente').val("");
-                            $('#txtProf').val("");
-                            $('#txtFecha').val("");
-                            $('#txtHora').val("");
-                        }
-
-                    });
-                </script>
-                </head>
-                <body>
+                <link rel="stylesheet"
+                      href="{% static 'assets/fullcalendar-5.3.2/lib/main.css' %}">
                 <div id='calendar'></div>
-                <!-- Button trigger modal -->
-                <!--button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Launch demo modal
-                </button-->
-
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            </form>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="modal fade" id="exampleModal" tabindex="-1"
+                     aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel"> Datos de la Cita</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    Datos de la Cita</h5>
+                                <button type="button" class="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -143,35 +30,127 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
                                         <label>Paciente:</label>
-                                        <input type="text" class="form-control" name="txtPaciente" id="txtPaciente">
+                                        {{ form.paciente }}
+                                        <!--input type="text" class="form-control" name="txtPaciente" id="txtPaciente"-->
                                     </div>
                                     <div class="form-group col-md-8">
                                         <label>Profesional:</label>
-                                        <input type="text" class="form-control" name="txtProf" id="txtProf">
+                                        {{ form.doctor }}
+                                        <!--input type="text" class="form-control" name="txtProf" id="txtProf"-->
                                     </div>
                                     <div class="form-group col-md-8">
                                         <label>Fecha:</label>
-                                        <input type="text" class="form-control" name="txtFecha" id="txtFecha">
+                                        {{ form.fecha }}
+                                        <!--input type="text" class="form-control" name="txtFecha" id="txtFecha"-->
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Hora:</label>
-                                        <input type="time" min="07:00" max="19:00" step="600"
-                                               class="form-control" name="txtHora" id="txtHora">
+                                        {{ form.hora }}
+                                        <!--input type="time" min="07:00" max="19:00" step="600"
+                                               class="form-control" name="txtHora" id="txtHora"-->
                                     </div>
                                 </div>
                             </div>
                             <div class=" modal-footer">
-                                <button id="btnAdd" class="btn btn-success">Agregar</button>
-                                <button id="btnEdit" class="btn btn-warning">Modificar</button>
-                                <button id="btnDelete" class="btn btn-danger">Eliminar</button>
-                                <button id="btnCancel" data-dismiss="modal" class="btn btn-secondary">Cancelar</button>
+                                <button type="submit" id="btnAdd"
+                                        class="btn btn-success">Agregar
+                                </button>
+                                <button id="btnEdit" class="btn btn-warning">
+                                    Modificar
+                                </button>
+                                <input id="btnDelete" class="btn btn-danger"
+                                       type="submit" name="eliminar"
+                                       value="Eliminar"/>
+                                {% if 'editarcita' in request.path %}
+                                    <input id="btnCancel"
+                                           class="btn btn-secondary"
+                                           type="submit" name="cancelar"
+                                           value="Cancelar"/>
+                                {% else %}
+                                    <button id="btnCancel" data-dismiss="modal"
+                                            class="btn btn-secondary">Cancelar
+                                    </button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
-                </body>
-
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block page-javascript %}
+    <script src="{% static 'assets/fullcalendar-5.3.2/lib/main.js' %}"></script>
+    <script src="{% static 'assets/fullcalendar-5.3.2/lib/es.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let calendarEl = document.getElementById('calendar');
+            let calendar;
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                timeZone: 'local',
+                initialView: 'dayGridMonth',
+                language: 'Spanish',
+                selectable: true,
+                editable: true,
+                headerToolbar: {
+                    right: 'dayGridMonth, timeGridWeek, timeGridDay',
+                    left: 'prev,next',
+                    center: 'title'
+                },
+                slotLabelFormat: [
+                    {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        omitZeroMinute: false,
+                        meridiem: 'short'
+                    }
+                ],
+
+                events: [
+                    {% for i in citasList %}
+                        {
+                            title: "{{ i.paciente.nombre}}",
+                            start: '{{ i.fecha|date:"Y-m-d" }}T{{ i.hora|time:"H:i"}}',
+                            id: '{{ i.id }}',
+                        },
+                    {% endfor %}
+                ],
+
+                eventClick: function (info) {
+                    location.href = `/dentalE/editarcita/${info.event.id}`;
+                },
+
+                dateClick: function (info) {
+                    limpiarFormulario();
+                    $('#id_fecha').val(info.dateStr);
+                    $('#btnAdd').prop("disabled", false);
+                    $('#btnEdit').prop("disabled", true);
+                    $('#btnDelete').prop("disabled", true);
+                    $('#exampleModal').modal('toggle');
+                }
+
+            });
+            calendar.setOption('locale', 'es')
+            calendar.render();
+
+            function limpiarFormulario() {
+                $('#id_paciente').val("");
+                $('#txtProf').val("");
+                $('#txtFecha').val("");
+                $('#txtHora').val("");
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            if (location.href.includes('editarcita')) {
+                $('#btnAdd').prop("disabled", true);
+                $('#btnEdit').prop("disabled", false);
+                $('#btnDelete').prop("disabled", false);
+                $('#exampleModal').modal();
+            }
+        });
+    </script>
 {% endblock %}

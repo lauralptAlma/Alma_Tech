@@ -3,10 +3,12 @@ from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.models import User
+from django.forms.widgets import EmailInput
 from .models import Paciente, Cita, Consulta, Nucleo, Integrante, \
-    AntecedentesClinicos, CPO, \
+    Contacto, AntecedentesClinicos, CPO, \
     CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, \
-    NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES
+    NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, \
+    PATIENT_GENDER
 
 
 class IngresoForm(ModelForm):
@@ -20,7 +22,8 @@ class PacienteForm(ModelForm):
         model = Paciente
         fields = (
             'documento', 'nombre', 'primer_apellido', 'segundo_apellido',
-            'direccion', 'fecha_nacimiento', 'email',
+            'genero', 'direccion', 'ciudad',
+            'fecha_nacimiento', 'email',
             'celular',
             'nucleo_activo')
 
@@ -31,11 +34,14 @@ class PacienteForm(ModelForm):
                 attrs={'class': 'form-control'}),
             'segundo_apellido': forms.TextInput(
                 attrs={'class': 'form-control'}),
+            'genero': forms.RadioSelect(choices=PATIENT_GENDER),
             'fecha_nacimiento': DatePickerInput(options={
                 "format": "DD/MM/YYYY",  # moment date-time format
                 "locale": 'es'
             }),
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+            'ciudad': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'celular': forms.TextInput(attrs={'class': 'form-control'}),
             'nucleo_activo': forms.CheckboxInput(
@@ -48,6 +54,20 @@ class CitaForm(ModelForm):
     class Meta:
         model = Cita
         fields = ('paciente', 'doctor', 'fecha', 'hora')
+
+        widgets = {
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'}),
+            'doctor': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar Profesional...'}),
+            'fecha': forms.TextInput(attrs={'class': 'form-control'}),
+            'hora': forms.TextInput(attrs={'class': 'form-control',
+                                           'type': 'time', 'min': '07:00',
+                                           'max': '19:00', 'step': '600'}),
+
+        }
 
 
 class ConsultaForm(ModelForm):
@@ -146,6 +166,18 @@ class AntecedenteForm(ModelForm):
             'desc_osteoarticulares': forms.TextInput(
                 attrs={'class': 'form-control'}),
             'observations': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+
+class ContactoForm(forms.ModelForm):
+    class Meta:
+        model = Contacto
+        fields = ('nombre', 'email', 'asunto', 'mensaje')
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': EmailInput(attrs={'class': 'form-control'}),
+            'asunto': forms.TextInput(attrs={'class': 'form-control'}),
+            'mensaje': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
 

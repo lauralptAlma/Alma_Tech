@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        "CLIENT": {"name": 'testingDB',
+        "CLIENT": {"name": 'pruebaCalendar',
                    "host": 'mongodb+srv://admin:almaAdmin@clusteralmatech.izim4.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true',
                    "username": 'admin',
                    "password": 'almaAdmin',
@@ -195,3 +195,13 @@ GRAPH_MODELS = {
     'all_applications': True,
     'group_models': True,
 }
+
+# Email settings
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'divsdabhjpsrwbft'
+EMAIL_HOST_USER = 'almatech20@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587

@@ -9,12 +9,16 @@ from .views import (
     verhistoriageneral,
     patient_render_background_pdf,
 
+    # contacto
+    contacto,
+
     # secretaria
     resumendia,
     listaprofesionales,
     agregarpaciente,
     listapacientes,
-    agregarcita,
+    CalendarPage,
+    edit_cita,
 
     # paciente
     pacienteinicio,
@@ -40,12 +44,17 @@ urlpatterns = [
         patient_render_background_pdf,
         name="paciente-pdf-view"),
 
+    # contacto
+    url(r'^contacto/$', contacto,
+        name="contacto"),
+
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
     url(r'^profesionales/$', listaprofesionales, name='profesionales'),
     url(r'^agregarpaciente/$', agregarpaciente, name="agregarpaciente"),
     url(r'^listapacientes/$', listapacientes, name="listapacientes"),
-    url(r'^agregarcita/$', agregarcita, name="agregarcita"),
+    url(r'^agregarcita/$', CalendarPage, name="agregarcita"),
+    url(r'^editarcita/(?P<cita_id>\d+)/$', edit_cita, name="editarcita"),
 
     # paciente
     url(r'^pacienteincio/$', pacienteinicio, name='pacienteincio'),

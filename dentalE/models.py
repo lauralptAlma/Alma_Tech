@@ -3,11 +3,22 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
 
-
 # USUARIO OPTIONS
 USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'))
 USER_ESPECIALIDAD = (('ORTOPEDIA', 'ORTOPEDIA'), ('ORTODONCIA', 'ORTODONCIA'),
                      ('GENERAL', 'GENERAL'))
+# PACIENTE OPTIONS
+PATIENT_CITY = (('ARTIGAS', 'Artigas'), ('CANELONES', 'Canelones'),
+                ('CERRO LARGO', 'Cerro Largo'), ('COLONIA', 'Colonia'),
+                ('DURAZNO', 'Durazno'), ('FLORES', 'Flores'),
+                ('FLORIDA', 'Florida'), ('LAVALLEJA', 'Lavalleja'),
+                ('MALDONADO', 'Maldonado'), ('MONTEVIDEO', 'Montevideo'),
+                ('PAYSANDÚ', 'Paysandú'), ('RÍO NEGRO', 'Río Negro'),
+                ('RIVERA', 'Rivera'), ('ROCHA', 'Rocha'), ('SALTO', 'Salto'),
+                ('SAN JOSÉ', 'San José'), ('SORIANO', 'Soriano'),
+                ('TACUAREMBÓ', 'Tacuarembó'),
+                ('TRENTA Y TRES', 'Treinta y Tres'))
+PATIENT_GENDER = (('FEMENINO', 'F'), ('MASCULINO', 'M'), ('OTRO', 'Otro'))
 # NUCLEO OPTIONS
 NUCLEO_OPCIONES = (
     ('CONYUGE', 'CONYUGE'), ('MADRE', 'MADRE'), ('PADRE', 'PADRE'),
@@ -57,8 +68,12 @@ class Paciente(models.Model):
                                        null=False, blank=False)
     segundo_apellido = models.CharField('Segundo Apellido', max_length=100,
                                         null=True, blank=True)
+    genero = models.CharField('Género*', max_length=10, choices=PATIENT_GENDER,
+                              default='')
     direccion = models.CharField('Dirección* ', max_length=155, null=False,
                                  blank=False)
+    ciudad = models.CharField(max_length=15, choices=PATIENT_CITY, blank=True,
+                              null=True)
     fecha_nacimiento = models.DateField('Fecha de nacimiento* ',
                                         help_text="ej. 01/08/2012",
                                         null=False, blank=False)
@@ -250,6 +265,7 @@ class Consulta(models.Model):
     indicaciones = models.TextField(max_length=250, default='', blank=False,
                                     null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
+
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
@@ -307,3 +323,21 @@ class Cita(models.Model):
 
     def __str__(self):
         return str(self.paciente)
+
+
+class Contacto(models.Model):
+    nombre = models.CharField(max_length=50, blank=False, null=False,
+                              default='')
+    email = models.EmailField(max_length=50, blank=False, null=False,
+                              default='')
+    asunto = models.CharField(max_length=50, blank=False, null=False,
+                              default='')
+    mensaje = models.TextField(max_length=550, blank=False, null=False,
+                               default='')
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Contacto"
+
+    def __str__(self):
+        return self.name + "-" + self.email
