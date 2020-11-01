@@ -1,0 +1,255 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Antecedentes Clínicos{% endblock %}
+{% block page-title %}Historia Clínica {{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+{% block page-content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+             {% include 'almaFront/bases/clinic-history-tabs.html' %}
+                <div class="card shadow mb-4">
+                    <!--div class="card-header py-3">
+                        <h6 class="text-primary font-weight-bold m-0">
+                            {% if antecedentes %}
+                                Fecha: {{ antecedentes.creado }}
+                            {% else %}
+                                No existen registros de Antecedentes para paciente actual
+                            {% endif %}
+                        </h6>
+                    </div-->
+                    {% if antecedentes %}
+                        <div class="card-header py-3">
+                        <h6 class="font-weight-bold m-0">
+                            Fecha: {{ antecedentes.creado }}
+                        </h6>
+                        </div>
+                        <ul class="list-group list-group-flush border-left-info">
+                            <li class="list-group-item">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Fumador: </span>
+                                            <span> {{ antecedentes.fumador }} </span>
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Alcohol: </span>
+                                            <span> {{ antecedentes.alcohol }} </span>
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Coproparasitario: </span>
+                                            <span> {{ antecedentes.coproparasitario }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row align-items-start no-gutters">
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Ap. Digestivo: </span>
+                                            <span> {{ antecedentes.aparato_digestivo }} </span>
+                                            {% if antecedentes.aparato_digestivo == 'SI' %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ antecedentes.desc_aparato_digestivo }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Dermatológicos: </span>
+                                            <span> {{ antecedentes.dermatologicos }} </span>
+                                            {% if antecedentes.dermatologicos == 'SI' %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ antecedentes.desc_dermatologicos }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Alergias: </span>
+                                            <span> {{ antecedentes.alergias }} </span>
+                                            {% if antecedentes.alergias == 'SI' %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ antecedentes.desc_alergias }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Autoinmunes: </span>
+                                            <span> {{ antecedentes.autoinmunes }} </span>
+                                            {% if antecedentes.autoinmunes == 'SI' %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ antecedentes.desc_autoinmunes }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Oncológicas: </span>
+                                            <span> {{ antecedentes.oncologicas }} </span>
+                                            {% if antecedentes.oncologicas == 'SI' %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ antecedentes.desc_oncologicas }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Hematológicas: </span>
+                                            <span> {{ antecedentes.hematologicas }} </span>
+                                            {% if antecedentes.hematologicas == 'SI' %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ antecedentes.desc_hematologicas }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Intervenciones: </span>
+                                            <span> {{ antecedentes.intervenciones }} </span>
+                                            {% if antecedentes.intervenciones == 'SI' %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ antecedentes.desc_intervenciones }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Medicación Habitual: </span>
+                                            <span> {{ antecedentes.toma_medicacion }} </span>
+                                            {% if antecedentes.toma_medicacion == 'SI' %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ antecedentes.desc_medicacion }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="list-group list-group-flush border-left-warning">
+                            <li class="list-group-item">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Endocrinometabólico: </span>
+                                            {% for e in antecedentes.endocrinometabolico %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
+                                                    {% if e == 'OTROS' %}
+                                                        : {{ antecedentes.desc_endocrinometabolico }}
+                                                    {% endif %}
+                                            </span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Cardiovascular: </span>
+                                            {% for e in antecedentes.cardiovascular %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
+                                                    {% if e == 'OTROS' %}
+                                                        : {{ antecedentes.desc_cardiovascular }}
+                                                    {% endif %}
+                                            </span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Nefrourológicos: </span>
+                                            {% for e in antecedentes.nefrourologicos %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
+                                                    {% if e == 'OTROS' %}
+                                                        : {{ antecedentes.desc_nefrourologicos }}
+                                                    {% endif %}
+                                            </span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Osteoarticulares: </span>
+                                            {% for e in antecedentes.osteoarticulares %}
+                                                <br>
+                                                <span class="ml-4"><i
+                                                        class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
+                                                    {% if e == 'OTROS' %}
+                                                        : {{ antecedentes.desc_osteoarticulares }}
+                                                    {% endif %}
+                                            </span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="list-group list-group-flush border-left-primary">
+                            <li class="list-group-item">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div>
+                                            <span class="text-info font-weight-bold mb-1">Observaciones: </span>
+                                            <br>
+                                            <span class="ml-4">
+                                            {{ antecedentes.observations }}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <ul class="list-group list-group-flush border-left-danger">
+                            <li class="list-group-item">
+                                <div class="row align-items-center no-gutters">
+                                <span class="text-danger font-weight-bold mb-1">
+                                    No existen registros de antecedentes para este paciente en el sistema.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+{% endblock %}

@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
-
 from django.contrib.auth.models import User
 
 
@@ -64,7 +63,7 @@ class Paciente(models.Model):
                                         help_text="ej. 01/08/2012",
                                         null=False, blank=False)
     # Contacto
-    celular_regex = RegexValidator(regex=r'^\+?1?\d{9,9}$',
+    celular_regex = RegexValidator(regex=r'^09\d{7,7}$',
                                    message="El número debe ser del "
                                            "formato: '+XXXXXXXXX'. "
                                            "9 digitos admitidos.")

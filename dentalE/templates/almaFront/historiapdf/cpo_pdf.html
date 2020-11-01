@@ -1,0 +1,125 @@
+<!-- CPOs -->
+<div class="sub-title">
+    <span>CPO: </span>
+</div>
+<table class="cpo-table" repeat="1">
+    <tbody>
+    <tr>
+        <td class="date">
+            Fecha: {{ c.creado|date:"SHORT_DATE_FORMAT" }}
+        </td>
+        <td>
+            CeoD:{% if c.ceod %}
+            {{ c.ceod }}
+        {% else %}
+            -
+        {% endif %}
+            <br>
+            CeoS:{% if c.ceos %}
+            {{ c.ceos }}
+        {% else %}
+            -
+        {% endif %}
+        </td>
+        <td>
+            CpoD:{% if c.cpod %}
+            {{ c.cpod }}
+        {% else %}
+            -
+        {% endif %}
+            <br>
+            CpoS:
+            {% if c.cpos %}
+                {{ c.cpos }}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+{% if c.caries or c.obturaciones or c.ausentes or c.perdidos %}
+    <table class="table cpo-table" repeat="2">
+        <thead>
+        <tr>
+            <th>Pieza</th>
+            <th>Cara</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if c.caries %}
+            {% for c in c.caries %}
+                <tr>
+                    <td>
+                        {{ c.0 }}
+                    </td>
+                    <td>
+                        {{ c.1 }}
+                    </td>
+                    <td>Carie
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        {% if c.obturaciones %}
+            {% for o in c.obturaciones %}
+                <tr>
+                    <td>
+                        {{ o.0 }}
+                    </td>
+                    <td>
+                        {{ o.1 }}
+                    </td>
+                    <td>Obturación
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        {% if c.perdidos %}
+            {% for p in c.perdidos %}
+                <tr>
+                    <td>
+                        {{ p }}
+                    </td>
+                    <td>
+                        -
+                    </td>
+                    <td>Perdido
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        {% if c.ausentes %}
+            {% for a in c.ausentes %}
+                <tr>
+                    <td>
+                        {{ a }}
+                    </td>
+                    <td>
+                        -
+                    </td>
+                    <td>Ausente
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% else %}
+    <table>
+        <tr></tr>
+        <tr>
+            <td class="date" style="text-align: center"> ------- Dentadura sana -------</td>
+            <td></td>
+        </tr>
+    </table>
+    <p class="separator">&nbsp;</p>
+    <br>
+{% endif %}
+<hr color="#757575">
+<p class="separator">&nbsp;</p>

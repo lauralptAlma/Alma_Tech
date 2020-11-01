@@ -12,11 +12,11 @@ function createOdontogram() {
     for (var i = 9 - 1; i >= 1; i--) {
         //Dientes Definitivos Cuandrante Derecho (Superior/Inferior)
         let claseDiente = "diente";
-        if (i == 8 || i == 1) {
+        if (i == 8) {
             claseDiente = "primer-diente";
         }
         htmlRight += '<div data-name="value" id="dienteindex' + i + '" class=' + claseDiente + '>' +
-            '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
+            '<span style="margin-left: -0.2vw; margin-bottom:1vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + i + '</span>' +
             '<div id="tindex' + i + '" class="cuadro click">' +
             '</div>' +
             '<div id="lindex' + i + '" class="cuadro izquierdo click">' +
@@ -30,7 +30,7 @@ function createOdontogram() {
             '</div>';
         //Dientes Definitivos Cuandrante Izquierdo (Superior/Inferior)
         htmlLeft += '<div id="dienteindex' + a + '" class=' + claseDiente + '>' +
-            '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + a + '</span>' +
+            '<span style="margin-left: -0.2vw; margin-bottom:1vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill badge-info">index' + a + '</span>' +
             '<div id="tindex' + a + '" class="cuadro click">' +
             '</div>' +
             '<div id="lindex' + a + '" class="cuadro izquierdo click">' +
@@ -43,18 +43,22 @@ function createOdontogram() {
             '</div>' +
             '</div>';
         if (i <= 5) {
+            let claseDienteLeche = "diente-leche";
+            if (i == 5) {
+                claseDienteLeche = "primer-diente-leche";
+            }
             //Dientes Temporales Cuandrante Derecho (Superior/Inferior)
-            htmlLecheRight += '<div id="dienteLindex' + i + '" style="left: -25%;" class="diente-leche">' +
+            htmlLecheRight += '<div id="dienteLindex' + i + '" style="left: -25%;" class=' + claseDienteLeche + '>' +
                 '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill label-alma">index' + i + '</span>' +
-                '<div id="tlecheindex' + i + '" class="cuadro-leche top-leche click">' +
+                '<div id="tindex' + i + '" class="cuadro-leche top-leche click">' +
                 '</div>' +
-                '<div id="llecheindex' + i + '" class="cuadro-leche izquierdo-leche click">' +
+                '<div id="lindex' + i + '" class="cuadro-leche izquierdo-leche click">' +
                 '</div>' +
-                '<div id="blecheindex' + i + '" class="cuadro-leche debajo-leche click">' +
+                '<div id="bindex' + i + '" class="cuadro-leche debajo-leche click">' +
                 '</div>' +
-                '<div id="rlecheindex' + i + '" class="cuadro-leche derecha-leche click click">' +
+                '<div id="rindex' + i + '" class="cuadro-leche derecha-leche click click">' +
                 '</div>' +
-                '<div id="clecheindex' + i + '" class="centro-leche click">' +
+                '<div id="cindex' + i + '" class="centro-leche click">' +
                 '</div>' +
                 '</div>';
         }
@@ -66,15 +70,15 @@ function createOdontogram() {
             //Dientes Temporales Cuandrante Izquierdo (Superior/Inferior)
             htmlLecheLeft += '<div id="dienteLindex' + a + '" class=' + claseDienteLeche + '>' +
                 '<span style="margin-left: 2.930vw; margin-bottom:0.326vw; display: inline-block !important; border-radius: 0.651vw !important;" class="badge badge-pill label-alma">index' + a + '</span>' +
-                '<div id="tlecheindex' + a + '" class="cuadro-leche top-leche click">' +
+                '<div id="tindex' + a + '" class="cuadro-leche top-leche click">' +
                 '</div>' +
-                '<div id="llecheindex' + a + '" class="cuadro-leche izquierdo-leche click">' +
+                '<div id="lindex' + a + '" class="cuadro-leche izquierdo-leche click">' +
                 '</div>' +
-                '<div id="blecheindex' + a + '" class="cuadro-leche debajo-leche click">' +
+                '<div id="bindex' + a + '" class="cuadro-leche debajo-leche click">' +
                 '</div>' +
-                '<div id="rlecheindex' + a + '" class="cuadro-leche derecha-leche click click">' +
+                '<div id="rindex' + a + '" class="cuadro-leche derecha-leche click click">' +
                 '</div>' +
-                '<div id="clecheindex' + a + '" class="centro-leche click">' +
+                '<div id="cindex' + a + '" class="centro-leche click">' +
                 '</div>' +
                 '</div>';
         }

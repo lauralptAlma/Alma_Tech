@@ -5,6 +5,9 @@ from .views import (
     agregartratamiento,
     agregarCPO,
     verCPO,
+    verantecedentes,
+    verhistoriageneral,
+    patient_render_background_pdf,
 
     # secretaria
     resumendia,
@@ -18,7 +21,6 @@ from .views import (
     pacientedetalles,
     pacientecambiopass,
     agregarantecedentes,
-    pruebaBaseFront,
     edit_patient,
 
 )
@@ -30,6 +32,13 @@ urlpatterns = [
         name="agregartratamiento"),
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
     url(r'^cpopaciente/(?P<paciente_id>\d+)/$', verCPO, name="cpopaciente"),
+    url(r'^antecedentespaciente/(?P<paciente_id>\d+)/$', verantecedentes,
+        name="antecedentespaciente"),
+    url(r'^tratamientospaciente/(?P<paciente_id>\d+)/$', verhistoriageneral,
+        name="tratamientospaciente"),
+    url(r'^generarhistoriapdf/(?P<paciente_id>\d+)/$',
+        patient_render_background_pdf,
+        name="paciente-pdf-view"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
@@ -48,5 +57,4 @@ urlpatterns = [
         name='agregarantecedentes'),
     url(r'^editarpaciente/(?P<paciente_id>\d+)/$', edit_patient,
         name='editarpaciente'),
-    url(r'^pruebafront/$', pruebaBaseFront),
 ]
