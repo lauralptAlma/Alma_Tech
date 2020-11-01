@@ -1,6 +1,6 @@
 from django.contrib import admin
-from django import forms
-from .models import UserProfile, Consulta, Cita, Paciente, AntecedentesClinicos, Nucleo, Integrante, CPO
+from .models import UserProfile, Consulta, Cita, Paciente,\
+    AntecedentesClinicos, Nucleo, Integrante, CPO
 
 # Register your models here.
 admin.site.register(UserProfile)
@@ -9,6 +9,7 @@ admin.site.register(Cita)
 admin.site.register(Paciente)
 admin.site.register(AntecedentesClinicos)
 admin.site.register(CPO)
+
 
 @admin.register(Nucleo)
 class PublisherAdmin(admin.ModelAdmin):

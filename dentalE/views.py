@@ -1,7 +1,7 @@
-import json
-
+import ast
+from operator import attrgetter
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import TemplateView
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 from django.core.mail import send_mail
@@ -11,7 +11,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.views import View, generic
 from django.db.models import Q
-from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, \
@@ -22,10 +21,9 @@ from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO
 from datetime import date
-
-
-def pruebaBaseFront(request):
-    return render(request, "almaFront/cpo.html")
+# Imports needed for pdf generation
+from itertools import chain
+from dentalE.historiaPdf import pdf, clean_cpo
 
 
 # doctor
@@ -136,7 +134,7 @@ def agregartratamiento(request):
         form = ConsultaForm(request.POST)
         if form.is_valid():
             form.instance.doctor = request.user
-            consulta = form.save()
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -154,7 +152,7 @@ def agregarCPO(request):
         formCPO = ConsultaCPOForm(request.POST)
         if formCPO.is_valid():
             formCPO.instance.doctor = request.user
-            consulta_cpo = formCPO.save()
+            formCPO.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -181,10 +179,10 @@ def listaprofesionales(request):
 
 @login_required(login_url="/")
 def listapacientes(request):
-    busqueda = request.GET.get("buscar")
     pacientes = Paciente.objects.all().order_by('primer_apellido')
+    busqueda = request.GET.get("buscar")
     if busqueda:
-        pacientes = Paciente.objects.filter(
+        pacientes = pacientes.filter(
             Q(nombre__icontains=busqueda) |
             Q(primer_apellido__icontains=busqueda) |
             Q(documento__icontains=busqueda)
@@ -193,7 +191,7 @@ def listapacientes(request):
                   {'patients': pacientes})
 
 
-class buscarView(TemplateView):
+class BuscarView(TemplateView):
     def post(self, request, *args, **kwargs):
         return render(request, {'alma/pacientes/buscarpaciente.html'})
 
@@ -204,7 +202,7 @@ def agregarpaciente(request):
     if request.method == 'POST':
         form = PacienteForm(request.POST)
         if form.is_valid():
-            patient = form.save()
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -212,6 +210,34 @@ def agregarpaciente(request):
             )
             return HttpResponseRedirect("/dentalE/agregarpaciente/")
     return render(request, "almaFront/agregar_paciente.html", {'form': form})
+
+
+@login_required(login_url="/")
+def edit_patient(request, paciente_id):
+    paciente = get_object_or_404(Paciente, paciente_id=paciente_id)
+    template = 'almaFront/agregar_paciente.html'
+    if request.method == "POST":
+        form = PacienteForm(request.POST, instance=paciente)
+        try:
+            if form.is_valid():
+                form.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    'Paciente editado exitosamente!'
+                )
+        except Exception as e:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                'Error al editar paciente, error: {}'.format(e)
+            )
+    else:
+        form = PacienteForm(instance=paciente)
+    context = {'form': form,
+               'paciente': paciente
+               }
+    return render(request, template, context)
 
 
 # paciente
@@ -257,32 +283,69 @@ def pacientedetalles(request, paciente_id):
 
 
 @login_required(login_url="/")
-def verCPO(request, paciente_id):
+def verhistoriageneral(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
-    ultimo_cpo_paciente = CPO.objects.filter(paciente_id=paciente_id).last()
-    return render(request, "almaFront/ver_cpo.html",
-                  {'patient': paciente, 'cpo': ultimo_cpo_paciente})
+    consultas_list = Consulta.objects.filter(paciente_id=paciente_id).order_by(
+        '-id')
+    paginator = Paginator(consultas_list, 10)  # Show 10 treatments per page.
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    return render(request,
+                  "almaFront/pacientes/patient_treatments_history.html",
+                  {'patient': paciente, 'treatments': page_obj})
 
 
 @login_required(login_url="/")
-def contacto(request):
-    form = ContactoForm()
-    if request.method == 'POST':
-        form = ContactoForm(request.POST)
-        if form.is_valid():
-            contacto = form.save()
-            subject = request.POST['asunto'] + "  Usuario:  " + request.POST['nombre']
-            message = request.POST['mensaje'] + " Email:  " + request.POST['email']
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = ['andrea.correa@estudiantes.utec.edu.uy']
-            send_mail(subject, message, email_from, recipient_list)
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                'Mensaje enviado exitosamente!'
-            )
-        return redirect("/dentalE/resumendia/")
-    return render(request, "almaFront/bases/contacto.html", {'form': form})
+def verCPO(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    cpos_list = CPO.objects.filter(paciente_id=paciente_id).order_by('-cpo_id')
+    paginator = Paginator(cpos_list, 1)  # Show 1 cpo per page.
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    return render(request, "almaFront/pacientes/patient_cpo.html",
+                  {'patient': paciente, 'page_obj': page_obj})
+
+
+# Get patitent clinical background
+def getantecedentes(paciente_id):
+    antecedentes_list = AntecedentesClinicos.objects.filter(
+        paciente_id=paciente_id).last()
+    if antecedentes_list:
+        antecedentes_list.creado = formats.date_format(
+            antecedentes_list.creado, "SHORT_DATE_FORMAT")
+        antecedentes_list.endocrinometabolico = ast.literal_eval(
+            antecedentes_list.endocrinometabolico)
+        antecedentes_list.cardiovascular = ast.literal_eval(
+            antecedentes_list.cardiovascular)
+        for c in antecedentes_list.cardiovascular:
+            if c == 'H.T.A.':
+                c_index = antecedentes_list.cardiovascular.index(c)
+                antecedentes_list.cardiovascular[
+                    c_index] = 'Hipertensión arterial'
+            if c == 'I.A.M':
+                c_index = antecedentes_list.cardiovascular.index(c)
+                antecedentes_list.cardiovascular[
+                    c_index] = 'Infarto agudo de miocardio'
+        antecedentes_list.nefrourologicos = ast.literal_eval(
+            antecedentes_list.nefrourologicos)
+        antecedentes_list.osteoarticulares = ast.literal_eval(
+            antecedentes_list.osteoarticulares)
+    return antecedentes_list
+
+
+@login_required(login_url="/")
+def verantecedentes(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    antecedentes_list = getantecedentes(paciente_id)
+    return render(request, "almaFront/pacientes/patient_background.html",
+                  {'patient': paciente, 'antecedentes': antecedentes_list})
+
+
+@login_required(login_url="/")
+def historiapaciente(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    return render(request, "almaFront/ver_historia.html",
+                  {'patient': paciente})
 
 
 @login_required(login_url="/")
@@ -389,10 +452,6 @@ def ingreso(request):
     return render(request, 'almaFront/index.html')
 
 
-# def user_view(request):
-# current_user = request.user
-# return current_user.get_full_name()
-
 # antecedentes paciente
 @login_required(login_url="/")
 def agregarantecedentes(request):
@@ -400,7 +459,7 @@ def agregarantecedentes(request):
     if request.method == 'POST':
         form = AntecedenteForm(request.POST)
         if form.is_valid():
-            patient = form.save()
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -414,3 +473,38 @@ def agregarantecedentes(request):
 def logout_view(request):
     logout(request)
     return redirect('ingreso')
+
+
+# Historia clínica paciente pdf
+
+@login_required(login_url="/")
+def patient_render_background_pdf(request, *args, **kwargs):
+    try:
+        userprofile = UserProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        return render(request, 'almaFront/bases/404.html')
+    if userprofile.user_tipo == 'SECRETARIA':
+        return render(request, 'almaFront/bases/404.html')
+    elif userprofile.user_tipo == 'DOCTOR':
+        user = request.user
+        paciente_id = kwargs.get('paciente_id')
+        patient = get_object_or_404(Paciente, paciente_id=paciente_id)
+        treatments = Consulta.objects.filter(paciente_id=paciente_id).order_by(
+            '-id')
+        background = getantecedentes(paciente_id)
+        cpos = clean_cpo.get_cpo(paciente_id)
+        all_ordered = sorted(
+            chain(treatments, cpos),
+            key=attrgetter('creado'), reverse=True)
+
+        # Template that we are going to use to render the pdf
+        template_path = 'almaFront/historiapdf/historia_pdf.html'
+        context = {'patient': patient, 'treatments': treatments, 'user': user,
+                   'background': background, 'cpo': cpos,
+                   'all': all_ordered}
+        patient_name = patient.nombre + patient.primer_apellido
+        filename = patient_name + "-HistoriaClínicaDental"
+        response = pdf.generate_pdf(template_path, context, filename)
+        return response
+    else:
+        return HttpResponseRedirect('account_logout')

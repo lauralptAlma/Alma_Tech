@@ -1,11 +1,13 @@
 from django.conf.urls import url
-from django.contrib import admin
 from .views import (
 
     # doctor
     agregartratamiento,
     agregarCPO,
     verCPO,
+    verantecedentes,
+    verhistoriageneral,
+    patient_render_background_pdf,
 
     # contacto
     contacto,
@@ -25,7 +27,7 @@ from .views import (
     pacientedetalles,
     pacientecambiopass,
     agregarantecedentes,
-    pruebaBaseFront,
+    edit_patient,
 
 )
 
@@ -36,7 +38,14 @@ urlpatterns = [
         name="agregartratamiento"),
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
     url(r'^cpopaciente/(?P<paciente_id>\d+)/$', verCPO, name="cpopaciente"),
-
+    url(r'^antecedentespaciente/(?P<paciente_id>\d+)/$', verantecedentes,
+        name="antecedentespaciente"),
+    url(r'^tratamientospaciente/(?P<paciente_id>\d+)/$', verhistoriageneral,
+        name="tratamientospaciente"),
+    url(r'^generarhistoriapdf/(?P<paciente_id>\d+)/$',
+        patient_render_background_pdf,
+        name="paciente-pdf-view"),
+    
     # contacto
     url(r'^contacto/$', contacto,
         name="contacto"),
@@ -58,6 +67,6 @@ urlpatterns = [
         name='pacientecambiopass'),
     url(r'^agregarantecedentes/$', agregarantecedentes,
         name='agregarantecedentes'),
-
-    url(r'^pruebafront/$', pruebaBaseFront),
+    url(r'^editarpaciente/(?P<paciente_id>\d+)/$', edit_patient,
+        name='editarpaciente'),
 ]

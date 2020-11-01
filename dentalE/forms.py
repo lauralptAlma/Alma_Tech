@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django import forms
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from bootstrap_datepicker_plus import DatePickerInput, TimePickerInput
@@ -8,9 +8,10 @@ from django.shortcuts import render
 from django.urls import reverse
 import datetime
 from django.forms.widgets import SelectDateWidget, EmailInput
-from django.forms import ModelForm, Form
-from .models import Paciente, Cita, Consulta, Nucleo, Integrante, Contacto, AntecedentesClinicos, CPO, \
-    CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, PATIENT_GENDER
+from .models import Paciente, Cita, Consulta, Nucleo, Integrante, \
+    Contacto, AntecedentesClinicos, CPO, \
+    CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, \
+    NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, PATIENT_GENDER
 
 
 class IngresoForm(ModelForm):
@@ -23,7 +24,9 @@ class PacienteForm(ModelForm):
     class Meta:
         model = Paciente
         fields = (
-            'documento', 'nombre', 'primer_apellido', 'segundo_apellido', 'genero', 'direccion', 'ciudad','fecha_nacimiento', 'email',
+            'documento', 'nombre', 'primer_apellido', 'segundo_apellido',
+            'genero', 'direccion', 'ciudad',
+            'fecha_nacimiento', 'email',
             'celular',
             'nucleo_activo')
 
@@ -41,7 +44,8 @@ class PacienteForm(ModelForm):
             'ciudad': forms.Select(attrs={'class': 'form-control mdb-select md-form'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'celular': forms.TextInput(attrs={'class': 'form-control'}),
-            'nucleo_activo': forms.CheckboxInput(attrs={'type': 'checkbox', 'class': 'custom-checkbox'}),
+            'nucleo_activo': forms.CheckboxInput(
+                attrs={'type': 'checkbox', 'class': 'custom-checkbox'}),
             'relacion_nucleo': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -68,6 +72,14 @@ class ConsultaForm(ModelForm):
         model = Consulta
         readonly_fields = 'creado'
         fields = ('paciente', 'diagnostico', 'tratamiento', 'indicaciones')
+        widgets = {
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'}),
+            'diagnostico': forms.Textarea(attrs={'class': 'form-control'}),
+            'tratamiento': forms.Textarea(attrs={'class': 'form-control'}),
+            'indicaciones': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
 
 class ConsultaCPOForm(ModelForm):
@@ -80,31 +92,40 @@ class ConsultaCPOForm(ModelForm):
             'ceos': forms.NumberInput(attrs={'class': 'form-control'}),
             'cpod': forms.NumberInput(attrs={'class': 'form-control'}),
             'cpos': forms.NumberInput(attrs={'class': 'form-control'}),
-            'contenido_cpo': forms.NumberInput(attrs={'class': 'form-control', 'type': 'hidden'}),
+            'contenido_cpo': forms.NumberInput(
+                attrs={'class': 'form-control', 'type': 'hidden'}),
             'paciente': forms.Select(
-                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'})
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'})
         }
 
 
 class AntecedenteForm(ModelForm):
     class Meta:
         model = AntecedentesClinicos
-        fields = ('paciente', 'fumador', 'alcohol', 'coproparasitario', 'aparato_digestivo', 'desc_aparato_digestivo',
+        fields = ('paciente', 'fumador', 'alcohol', 'coproparasitario',
+                  'aparato_digestivo', 'desc_aparato_digestivo',
                   'dermatologicos', 'desc_dermatologicos',
-                  'alergias', 'desc_alergias', 'autoinmunes', 'desc_autoinmunes', 'oncologicas', 'desc_oncologicas',
-                  'hematologicas', 'desc_hematologicas', 'intervenciones', 'desc_intervenciones', 'toma_medicacion',
-                  'desc_medicacion', 'endocrinometabolico', 'desc_endocrinometabolico', 'cardiovascular',
-                  'desc_cardiovascular', 'nefrourologicos', 'desc_nefrourologicos', 'osteoarticulares',
+                  'alergias', 'desc_alergias', 'autoinmunes',
+                  'desc_autoinmunes', 'oncologicas', 'desc_oncologicas',
+                  'hematologicas', 'desc_hematologicas', 'intervenciones',
+                  'desc_intervenciones', 'toma_medicacion',
+                  'desc_medicacion', 'endocrinometabolico',
+                  'desc_endocrinometabolico', 'cardiovascular',
+                  'desc_cardiovascular', 'nefrourologicos',
+                  'desc_nefrourologicos', 'osteoarticulares',
                   'desc_osteoarticulares', 'observations')
 
         widgets = {
             'paciente': forms.Select(
-                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'}),
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'}),
             'fumador': forms.RadioSelect(choices=SN_OPCIONES),
             'alcohol': forms.RadioSelect(choices=SN_OPCIONES),
             'coproparasitario': forms.RadioSelect(choices=SN_OPCIONES),
             'aparato_digestivo': forms.RadioSelect(choices=SN_OPCIONES),
-            'desc_aparato_digestivo': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_aparato_digestivo': forms.TextInput(
+                attrs={'class': 'form-control'}),
             'dermatologicos': forms.RadioSelect(choices=SN_OPCIONES),
             'alergias': forms.RadioSelect(choices=SN_OPCIONES),
             'autoinmunes': forms.RadioSelect(choices=SN_OPCIONES),
@@ -112,21 +133,35 @@ class AntecedenteForm(ModelForm):
             'hematologicas': forms.RadioSelect(choices=SN_OPCIONES),
             'intervenciones': forms.RadioSelect(choices=SN_OPCIONES),
             'toma_medicacion': forms.RadioSelect(choices=SN_OPCIONES),
-            'endocrinometabolico': forms.CheckboxSelectMultiple(choices=ENDOCRINOLOGICOS_OPCIONES),
-            'cardiovascular': forms.CheckboxSelectMultiple(choices=CARDIOVASCULAR_OPCIONES),
-            'nefrourologicos': forms.CheckboxSelectMultiple(choices=NEFROUROLOGICOS_OPCIONES),
-            'osteoarticulares': forms.CheckboxSelectMultiple(choices=OSTEOARTICULARES_OPCIONES),
-            'desc_dermatologicos': forms.TextInput(attrs={'class': 'form-control'}),
+            'endocrinometabolico': forms.CheckboxSelectMultiple(
+                choices=ENDOCRINOLOGICOS_OPCIONES),
+            'cardiovascular': forms.CheckboxSelectMultiple(
+                choices=CARDIOVASCULAR_OPCIONES),
+            'nefrourologicos': forms.CheckboxSelectMultiple(
+                choices=NEFROUROLOGICOS_OPCIONES),
+            'osteoarticulares': forms.CheckboxSelectMultiple(
+                choices=OSTEOARTICULARES_OPCIONES),
+            'desc_dermatologicos': forms.TextInput(
+                attrs={'class': 'form-control'}),
             'desc_alergias': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_autoinmunes': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_oncologicas': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_hematologicas': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_intervenciones': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_medicacion': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_endocrinometabolico': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_cardiovascular': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_nefrourologicos': forms.TextInput(attrs={'class': 'form-control'}),
-            'desc_osteoarticulares': forms.TextInput(attrs={'class': 'form-control'}),
+            'desc_autoinmunes': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'desc_oncologicas': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'desc_hematologicas': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'desc_intervenciones': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'desc_medicacion': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'desc_endocrinometabolico': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'desc_cardiovascular': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'desc_nefrourologicos': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'desc_osteoarticulares': forms.TextInput(
+                attrs={'class': 'form-control'}),
             'observations': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
@@ -176,9 +211,9 @@ class BaseIntegrantesFormset(BaseInlineFormSet):
 
     def clean(self):
         """
-        Si un formulario principal no tiene datos, pero sus formularios anidados los tienen, deberíamos
-         devolver un error, porque no podemos guardar integrantes sin nucleo
-
+        Si un formulario principal no tiene datos, pero sus formularios
+        anidados los tienen, deberíamos devolver un error, porque no podemos
+        guardar integrantes sin nucleo
         """
         super().clean()
 
@@ -232,7 +267,8 @@ class BaseIntegrantesFormset(BaseInlineFormSet):
         # At this point we know that the "form" is empty.
         # In all the inline forms that aren't being deleted, are there any that
         # contain data? Return True if so.
-        return any(not is_empty_form(nested_form) for nested_form in non_deleted_forms)
+        return any(not is_empty_form(nested_form) for nested_form in
+                   non_deleted_forms)
 
 
 #

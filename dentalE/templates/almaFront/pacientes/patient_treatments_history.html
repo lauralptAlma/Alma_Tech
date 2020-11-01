@@ -1,0 +1,55 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Odontología General{% endblock %}
+{% block page-title %}Historia Clínica {{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+{% block page-content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                {% include 'almaFront/bases/clinic-history-tabs.html' %}
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                             aria-describedby="dataTable_info">
+                            <table class="table my-0" id="dataTable">
+                                <thead class="card-header py-3">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Diagnóstico</th>
+                                    <th>Tratamiento</th>
+                                    <th>Indicaciones</th>
+                                    <th>Profesional</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if treatments %}
+                                    {% for t in treatments %}
+                                        <tr class="tr-body">
+                                            <td>{{ t.creado|date:"SHORT_DATE_FORMAT" }}</td>
+                                            <td>{{ t.diagnostico }}</td>
+                                            <td>{{ t.tratamiento }}</td>
+                                            <td>{{ t.indicaciones }}</td>
+                                            <td>{{ t.doctor.get_full_name }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr class="no-data">
+                                        <td colspan="20">No existen consultas registradas para este paciente en
+                                            el sistema.
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if treatments %}
+                            {% include 'almaFront/bases/pagination.html' with page_obj=treatments %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+{% endblock %}

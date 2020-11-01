@@ -1,0 +1,36 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Historia Clínica{% endblock %}
+{% block page-title %}Historia Clínica {{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+{% block page-content %}
+    <div class="container-fluid">
+        <ul class="nav nav-tabs" id="historiaTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="antecedentes-tab" data-toggle="tab" href="#historiaantecedentes"
+                   role="tab"
+                   aria-controls="antecedentes"
+                   aria-selected="true">Antecendentes</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="general-tab" data-toggle="tab" href="#historiageneral" role="tab"
+                   aria-controls="general"
+                   aria-selected="false">Odontología General</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="cpo-tab" data-toggle="tab" href="#historiacpo" role="tab"
+                   aria-controls="cpo"
+                   aria-selected="false">CPO</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="ortodoncia-tab" data-toggle="tab" href="#historiaortodoncia" role="tab"
+                   aria-controls="ortodoncia"
+                   aria-selected="false">Ortodoncia</a>
+            </li>
+        </ul>
+{% endblock %}
+{% block page-javascript %}
+    <script type="text/javascript" src="{% static 'assets/js/odontograma.js' %}">
+    </script>
+    <script type="text/javascript" src="{% static 'assets/js/load-odontogram.js' %}">
+    </script>
+{% endblock %}
