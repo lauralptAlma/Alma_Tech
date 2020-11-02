@@ -1,0 +1,29 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Charts{% endblock %}
+{% block page-title %}Prueba Charts{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-sm-10">
+
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+    <script>
+        $(document).ready(function () {
+            const endpoint = '/dentalE/api/data/'
+            $.ajax({
+                method: "GET",
+                url: endpoint,
+                success: function (data) {
+                    console.log(data)
+                },
+                error: function (error_data) {
+                    console.log(error_data)
+                },
+            })
+        })
+    </script>
+{% endblock %}

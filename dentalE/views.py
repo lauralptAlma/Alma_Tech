@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.views import View
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
@@ -219,6 +219,8 @@ def edit_patient(request, paciente_id):
                     messages.SUCCESS,
                     'Paciente editado exitosamente!'
                 )
+            return HttpResponseRedirect(
+                "/dentalE/pacientedetalles/" + paciente_id)
         except Exception as e:
             messages.add_message(
                 request,
@@ -538,3 +540,28 @@ def contacto(request):
                 'por favor intente nuevamente.'
             )
     return render(request, "almaFront/bases/contacto.html", {'form': form})
+
+
+@login_required(login_url="/")
+def analisis(request):
+    return render(request, "almaFront/negocio.html")
+
+@login_required(login_url="/")
+def DataView(request):
+    return render(request, "almaFront/charts.html")
+
+
+@login_required(login_url="/")
+def get_data(request, *args, **kwargs):
+    try:
+        userprofile = UserProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        return HttpResponse('Unauthorized', status=401)
+    if userprofile.user_tipo == 'SECRETARIA':
+        return HttpResponse('Unauthorized', status=401)
+    elif userprofile.user_tipo == 'DOCTOR':
+        data = {
+            "sales": 100,
+            "customers": 10,
+        }
+        return JsonResponse(data)  # http response
