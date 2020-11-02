@@ -31,6 +31,7 @@ from .views import (
     analisis,
     get_data,
     DataView,
+    ChartData,
 
 )
 
@@ -79,4 +80,5 @@ urlpatterns = [
         name='api-data'),
     url(r'^data/$', DataView,
         name='api-data'),
+    url(r'^api/chart/data/$', ChartData.as_view()),
 ]

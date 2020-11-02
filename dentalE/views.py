@@ -25,6 +25,9 @@ from datetime import date
 # Imports needed for pdf generation
 from itertools import chain
 from dentalE.historiaPdf import pdf, clean_cpo
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 
 
 # doctor
@@ -565,3 +568,14 @@ def get_data(request, *args, **kwargs):
             "customers": 10,
         }
         return JsonResponse(data)  # http response
+
+class ChartData(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+        data = {
+            "sales": 100,
+            "customers": 10,
+        }
+        return Response(data)

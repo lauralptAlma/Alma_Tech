@@ -67,3 +67,7 @@ whitenoise==5.2.0
 xhtml2pdf==0.2.5
 yarg==0.1.9
 zipp==3.2.0
+
+setuptools~=47.1.0
+pip~=20.1.1
+djangorestframework~=3.12.1
