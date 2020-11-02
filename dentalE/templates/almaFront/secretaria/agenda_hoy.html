@@ -38,7 +38,7 @@
                                        href="/dentalE/pacientedetalles/{{ app.paciente.paciente_id }}">{{ app.paciente.nombre }} {{ app.paciente.primer_apellido }}</a>
                                 </td>
                                 <td>{{ app.doctor.get_full_name }}</td>
-                                <td>{{ app.fecha }}</td>
+                                <td>{{ app.fecha|date:"SHORT_DATE_FORMAT" }}</td>
                                 <td>{{ app.hora }}</td>
                             </tr>
                         {% endfor %}

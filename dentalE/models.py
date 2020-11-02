@@ -46,7 +46,14 @@ SN_OPCIONES = (('SI', 'Sí'), ('NO', 'No'))
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_tipo = models.CharField(max_length=15, choices=USER_TIPO, default='')
-    user_celular = models.IntegerField(null=True)
+    # Contacto
+    celular_regex = RegexValidator(regex=r'^09\d{7,7}$',
+                                   message="El número debe ser del "
+                                           "formato: '+XXXXXXXXX'. "
+                                           "9 digitos admitidos.")
+    user_celular = models.CharField("Número de teléfono celular* ",
+                                    validators=[celular_regex], max_length=9,
+                                    null=True)  # validators should be a list
     user_alta = models.DateTimeField(auto_now_add=True)
     user_especialidad = models.CharField(max_length=15,
                                          choices=USER_ESPECIALIDAD, blank=True,
@@ -54,6 +61,9 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return self.user
+
+    def __str__(self):
+        return str(self.user.get_full_name())
 
 
 class Paciente(models.Model):
@@ -151,7 +161,7 @@ class Paciente(models.Model):
         return dig == self.get_validation_digit(ci)
 
     def __str__(self):
-        return str(self.nombre)
+        return str(self.nombre + " " + self.primer_apellido)
 
 
 class AntecedentesClinicos(models.Model):

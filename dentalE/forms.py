@@ -5,7 +5,7 @@ from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.models import User
 from django.forms.widgets import EmailInput
 from .models import Paciente, Cita, Consulta, Nucleo, Integrante, \
-    Contacto, AntecedentesClinicos, CPO, \
+    Contacto, AntecedentesClinicos, UserProfile, CPO, \
     CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, \
     NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, \
     PATIENT_GENDER
@@ -66,8 +66,13 @@ class CitaForm(ModelForm):
             'hora': forms.TextInput(attrs={'class': 'form-control',
                                            'type': 'time', 'min': '07:00',
                                            'max': '19:00', 'step': '600'}),
-
         }
+
+    def __init__(self, *args, **kwargs):
+        super(CitaForm, self).__init__(*args, **kwargs)
+        doctors = UserProfile.objects.filter(user_tipo='DOCTOR')
+        self.fields['doctor'].queryset = User.objects.all().filter(
+            id__in=doctors.values_list('user_id', flat=True))
 
 
 class ConsultaForm(ModelForm):
