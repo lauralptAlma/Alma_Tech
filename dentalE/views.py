@@ -1,4 +1,5 @@
 import ast
+import pandas as pd
 from operator import attrgetter
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
@@ -20,14 +21,13 @@ from django.views.generic.detail import SingleObjectMixin
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
     ConsultaCPOForm, ContactoForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
-    AntecedentesClinicos, CPO
+    AntecedentesClinicos, CPO, PATIENT_CITY
 from datetime import date
 # Imports needed for pdf generation
 from itertools import chain
 from dentalE.historiaPdf import pdf, clean_cpo
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
 
 
 # doctor
@@ -549,6 +549,7 @@ def contacto(request):
 def analisis(request):
     return render(request, "almaFront/negocio.html")
 
+
 @login_required(login_url="/")
 def DataView(request):
     return render(request, "almaFront/charts.html")
@@ -569,13 +570,22 @@ def get_data(request, *args, **kwargs):
         }
         return JsonResponse(data)  # http response
 
+
 class ChartData(APIView):
     authentication_classes = []
     permission_classes = []
 
     def get(self, request, format=None):
+        pacientes = Paciente.objects.all().values()
+        pacientes_data_set = pd.DataFrame(pacientes)
+        pacientes_por_depto = pacientes_data_set['ciudad'].value_counts()
+        pacientes_por_depto = pacientes_por_depto.reset_index()
+        pacientes_por_depto.columns = ['Departamento',
+                                       'Cantidad']  # change column names
+        deparamentos = pacientes_por_depto['Departamento'].tolist()
+        cantidades = pacientes_por_depto['Cantidad'].tolist()
         data = {
-            "sales": 100,
-            "customers": 10,
+            "labels": deparamentos,
+            "values": cantidades,
         }
         return Response(data)

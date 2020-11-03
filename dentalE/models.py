@@ -17,7 +17,7 @@ PATIENT_CITY = (('ARTIGAS', 'Artigas'), ('CANELONES', 'Canelones'),
                 ('RIVERA', 'Rivera'), ('ROCHA', 'Rocha'), ('SALTO', 'Salto'),
                 ('SAN JOSÉ', 'San José'), ('SORIANO', 'Soriano'),
                 ('TACUAREMBÓ', 'Tacuarembó'),
-                ('TRENTA Y TRES', 'Treinta y Tres'))
+                ('TREINTA Y TRES', 'Treinta y Tres'))
 PATIENT_GENDER = (('FEMENINO', 'F'), ('MASCULINO', 'M'), ('OTRO', 'Otro'))
 # NUCLEO OPTIONS
 NUCLEO_OPCIONES = (
