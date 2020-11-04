@@ -588,4 +588,17 @@ class ChartData(APIView):
             "labels": deparamentos,
             "values": cantidades,
         }
+
+        pacientes_por_genero = pacientes_data_set['genero'].value_counts()
+        pacientes_por_genero = pacientes_por_genero.reset_index()
+        pacientes_por_genero.columns = ['Genero',
+                                        'Cantidad']
+        genero = pacientes_por_genero['Genero'].tolist()
+        cantidad = pacientes_por_genero['Cantidad'].tolist()
+        datos = {
+            "labelsGen": genero,
+            "valuesGen": cantidad,
+        }
+
+        data = {"data": data ,"datos": datos}
         return Response(data)
