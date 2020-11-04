@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
+from djongo import models as djongomodel
 
 # USUARIO OPTIONS
 USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'))
@@ -285,18 +286,23 @@ class Consulta(models.Model):
         ordering = ('creado',)
 
 
-class Foto(models.Model):
-    """ Subida de imagenes """
-    doctor = models.ForeignKey(User, related_name='foto_trat_doctor',
-                               on_delete=models.CASCADE)
+class Ortodoncia(models.Model):
+    doctor = models.ForeignKey(User, related_name='doctor_ortodoncia', on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    fecha = models.DateField("Fecha", auto_now_add=True)
-    titulo = models.CharField("Titulo", max_length=125, default='')
-    contenido = models.TextField("Contenido", default='')
-    image = models.ImageField("Imagen", upload_to='upload/imagenesConsulta')
+    tipo = models.TextField('Tipo', choices=CONSULTA_OPCIONES, default='ORTODONCIA')
+    diagnostico = models.TextField('Diagnóstico', max_length=250, default='', blank=False, null=False)
+    tratamiento = models.TextField(max_length=250, default='', blank=False, null=False)
+    indicaciones = models.TextField(max_length=250, default='', blank=False, null=False)
+    creado = models.DateField(auto_now_add=True, blank=True, null=True)
+    modificado = models.DateField(auto_now=True, blank=True, null=True)
+    image = djongomodel.ImageField(storage=GridFSStorage(collection='image'))
 
     class Meta:
-        db_table = "dentalE_imagenes"
+        verbose_name = " Consulta de Ortodoncia | Ortopedia"
+        verbose_name_plural = "Consultas de Ortodoncia | Ortopedia"
+
+    def __str__(self):
+        return str(self.paciente)
 
 
 class CPO(models.Model):

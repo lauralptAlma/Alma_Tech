@@ -205,3 +205,8 @@ EMAIL_HOST_PASSWORD = 'divsdabhjpsrwbft'
 EMAIL_HOST_USER = 'almatech20@gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+
+# Gridfs specific settings
+UPLOADED_FILES_USE_URL = False
+DEFAULT_GRIDFS_COLLECTION = 'storage'
+DEFAULT_FILE_STORAGE = 'gridfs_storage.storage.GridFSStorage'

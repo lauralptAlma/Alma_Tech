@@ -201,6 +201,46 @@
             </div>
         </div>
     {% endif %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 font-weight-bold">Últimos registros fotográficos</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                 aria-describedby="dataTable_info">
+                <table class="table my-0" id="dataTable">
+                    <thead class="card-header py-3">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Imagen</th>
+                        <th>Profesional</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if ortodoncia %}
+                        <tr class="tr-body">
+                            <td>{{ ortodoncia.creado }}</td>
+                            <td><img src="data:image/jpeg;base64,{{ image }}"></td>
+                            <td>{{ ortodoncia.doctor.get_full_name }}</td>
+
+                        </tr>
+
+                    {% else %}
+                        <tr class="no-data">
+                            <td colspan="20">No existen imágenes para este paciente en
+                                el sistema.
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                    <tfoot>
+
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
 {% endblock %}
 {% block page-javascript %}
 {% endblock %}

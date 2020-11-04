@@ -1,30 +1,32 @@
 import ast
+from datetime import date
+# Imports needed for pdf generation
+from itertools import chain
 from operator import attrgetter
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.core.mail import send_mail
+
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.http import HttpResponseRedirect
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
-from django.views import View
-from django.db.models import Q
-from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.utils import formats
+from django.views import View
 from django.views.generic import CreateView, ListView, DetailView, \
     FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
+
+from dentalE.historiaPdf import pdf, clean_cpo
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
     ConsultaCPOForm, ContactoForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO
-from datetime import date
-# Imports needed for pdf generation
-from itertools import chain
-from dentalE.historiaPdf import pdf, clean_cpo
 
 
 # doctor
@@ -273,6 +275,27 @@ def pacientedetalles(request, paciente_id):
                   {'patient': paciente, 'antecedentes': antecedentes_paciente,
                    'consultas': consultas_paciente,
                    'sin_patologias': sin_patologias})
+
+
+'''
+  ortodoncia_paciente = Ortodoncia.objects.filter(paciente_id=paciente_id).last()
+    if ortodoncia_paciente:
+        imagen = Image.open(ortodoncia_paciente.image)
+        image_data = base64.b64encode(imagen).decode('utf-8')
+
+
+        '''
+encoded = b64encode(imagen.())
+mime = "image/jpeg"
+uri = "data:%s;base64,%s" % (mime, encoded)
+'''
+if consultas_paciente:
+consultas_paciente = consultas_paciente[:3]
+
+return render(request, "almaFront/pacientes/paciente.html",
+          {'patient': paciente, 'antecedentes': antecedentes_paciente, 'consultas': consultas_paciente,
+           'ortodoncia': ortodoncia_paciente, 'image': image_data})
+           '''
 
 
 @login_required(login_url="/")
