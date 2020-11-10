@@ -9,12 +9,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.views import View
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from PIL import Image
 from django.utils import formats
 from django.views.generic import CreateView, ListView, DetailView, \
     FormView, TemplateView
@@ -24,14 +23,13 @@ from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
     ConsultaCPOForm, ContactoForm, OrtodonciaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, Ortodoncia
-from PIL import Image
 from datetime import date
 # Imports needed for pdf generation
 from itertools import chain
-from dentalE.historiaPdf import pdf, clean_cpo
-
 
 # doctor
+
+
 @login_required(login_url="/")
 def resumendia(request):
     try:
@@ -141,6 +139,7 @@ def agregartratamiento(request):
     return render(request, "almaFront/consultas/agregar_tratamiento.html",
                   {'form': form})
 
+
 @login_required(login_url="/")
 def agregarortodoncia(request):
     form = OrtodonciaForm()
@@ -148,14 +147,16 @@ def agregarortodoncia(request):
         form = OrtodonciaForm(request.POST, request.FILES)
         if form.is_valid():
             form.instance.doctor = request.user
-            ortodoncia = form.save()
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 'Consulta guardada exitosamente!'
             )
             return HttpResponseRedirect("/dentalE/agregarortodoncia/")
-    return render(request, "almaFront/consultas/agregar_ortodoncia.html", {'form': form})
+    return render(request, "almaFront/consultas/agregar_ortodoncia.html",
+                  {'form': form})
+
 
 @login_required(login_url="/")
 def agregarCPO(request):
@@ -193,7 +194,6 @@ def listaprofesionales(request):
 def listapacientes(request):
     pacientes = Paciente.objects.all().order_by('primer_apellido')
     busqueda = request.GET.get("buscar")
-    print(antecedentes)
     if busqueda:
         pacientes = pacientes.filter(
             Q(nombre__icontains=busqueda) |

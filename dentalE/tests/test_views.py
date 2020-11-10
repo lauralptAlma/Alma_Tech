@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from dentalE.models import Paciente, UserProfile
+from dentalE.models import UserProfile
 from django.contrib.auth.models import User
 
 
@@ -11,7 +11,7 @@ class TestViews(TestCase):
         test_user = User.objects.create(username=self.username)
         test_user.set_password(self.password)
         test_user.save()
-        client = Client()
+        self.client = Client()
 
     def test_resumendia_GET_error(self):
         self.client.login(username=self.username, password=self.password)

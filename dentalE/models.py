@@ -49,7 +49,11 @@ SN_OPCIONES = (('SI', 'Sí'), ('NO', 'No'))
 CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 
 CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
+
+
 # MODELOS
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_tipo = models.CharField(max_length=15, choices=USER_TIPO, default='')
@@ -114,10 +118,11 @@ class Paciente(models.Model):
         except ValueError:
             raise ValidationError('Por favor ingrese solamente números')
         if not validate_ci(ci):
-            raise forms.ValidationError({'documento': 'El documento no tiene un formato válido'})
+            raise forms.ValidationError(
+                {'documento': 'El documento no tiene un formato válido'})
 
     def __str__(self):
-        return str(self.nombre + " " + self.primer_apellido)
+        return str("{} {}".format(self.nombre, self.primer_apellido))
 
 
 class AntecedentesClinicos(models.Model):
@@ -242,12 +247,17 @@ class Consulta(models.Model):
 
 
 class Ortodoncia(models.Model):
-    doctor = models.ForeignKey(User, related_name='doctor_ortodoncia', on_delete=models.CASCADE)
+    doctor = models.ForeignKey(User, related_name='doctor_ortodoncia',
+                               on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    tipo = models.TextField('Tipo', choices=CONSULTA_OPCIONES, default='ORTODONCIA')
-    diagnostico = models.TextField('Diagnóstico', max_length=250, default='', blank=False, null=False)
-    tratamiento = models.TextField(max_length=250, default='', blank=False, null=False)
-    indicaciones = models.TextField(max_length=250, default='', blank=False, null=False)
+    tipo = models.TextField('Tipo', choices=CONSULTA_OPCIONES,
+                            default='ORTODONCIA')
+    diagnostico = models.TextField('Diagnóstico', max_length=250, default='',
+                                   blank=False, null=False)
+    tratamiento = models.TextField(max_length=250, default='', blank=False,
+                                   null=False)
+    indicaciones = models.TextField(max_length=250, default='', blank=False,
+                                    null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
     image = djongomodel.ImageField(storage=GridFSStorage(collection='image'))
@@ -311,4 +321,4 @@ class Contacto(models.Model):
         verbose_name_plural = "Contacto"
 
     def __str__(self):
-        return self.name + "-" + self.email
+        return str("{}-{}".format(self.name, self.email))

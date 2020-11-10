@@ -89,10 +89,12 @@ class ConsultaForm(ModelForm):
             'indicaciones': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
+
 class OrtodonciaForm(forms.ModelForm):
     class Meta:
         model = Ortodoncia
-        fields = ('tipo','paciente', 'diagnostico', 'tratamiento', 'indicaciones', 'image')
+        fields = ('tipo', 'paciente', 'diagnostico', 'tratamiento',
+                  'indicaciones', 'image')
         widgets = {
             'tipo': forms.Select(
                 attrs={'class': 'form-control mdb-select md-form'}),
@@ -101,10 +103,9 @@ class OrtodonciaForm(forms.ModelForm):
             'indicaciones': forms.Textarea(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
             'paciente': forms.Select(
-                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'})
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'})
         }
-
-
 
 
 class ConsultaCPOForm(ModelForm):
