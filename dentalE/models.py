@@ -3,8 +3,10 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
 from djongo import models as djongomodel
-
+from djongo.storage import GridFSStorage
 # USUARIO OPTIONS
+
+
 USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'))
 USER_ESPECIALIDAD = (('ORTOPEDIA', 'ORTOPEDIA'), ('ORTODONCIA', 'ORTODONCIA'),
                      ('GENERAL', 'GENERAL'))
@@ -42,7 +44,7 @@ OSTEOARTICULARES_OPCIONES = (
     ('FRACTURAS', 'Fracturas'), ('OTROS', 'Otros'))
 SN_OPCIONES = (('SI', 'Sí'), ('NO', 'No'))
 
-
+CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 # MODELOS
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

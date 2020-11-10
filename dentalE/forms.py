@@ -8,7 +8,7 @@ from .models import Paciente, Cita, Consulta, Nucleo, Integrante, \
     Contacto, AntecedentesClinicos, UserProfile, CPO, \
     CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, \
     NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, \
-    PATIENT_GENDER
+    PATIENT_GENDER, Ortodoncia
 
 
 class IngresoForm(ModelForm):
@@ -88,6 +88,23 @@ class ConsultaForm(ModelForm):
             'tratamiento': forms.Textarea(attrs={'class': 'form-control'}),
             'indicaciones': forms.Textarea(attrs={'class': 'form-control'}),
         }
+
+class OrtodonciaForm(forms.ModelForm):
+    class Meta:
+        model = Ortodoncia
+        fields = ('tipo','paciente', 'diagnostico', 'tratamiento', 'indicaciones', 'image')
+        widgets = {
+            'tipo': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form'}),
+            'diagnostico': forms.Textarea(attrs={'class': 'form-control'}),
+            'tratamiento': forms.Textarea(attrs={'class': 'form-control'}),
+            'indicaciones': forms.Textarea(attrs={'class': 'form-control'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form', 'searchable': 'Buscar paciente...'})
+        }
+
+
 
 
 class ConsultaCPOForm(ModelForm):

@@ -1,8 +1,10 @@
 from django.conf.urls import url
+
 from .views import (
 
     # doctor
     agregartratamiento,
+    agregarortodoncia,
     agregarCPO,
     verCPO,
     verantecedentes,
@@ -34,6 +36,7 @@ urlpatterns = [
     # doctor
     url(r'^agregartratamiento/$', agregartratamiento,
         name="agregartratamiento"),
+    url(r'^agregarortodoncia/$', agregarortodoncia, name="agregarortodoncia"),
     url(r'^agregarcpo/$', agregarCPO, name='agregarcpo'),
     url(r'^cpopaciente/(?P<paciente_id>\d+)/$', verCPO, name="cpopaciente"),
     url(r'^antecedentespaciente/(?P<paciente_id>\d+)/$', verantecedentes,
