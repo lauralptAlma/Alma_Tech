@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
@@ -19,10 +19,12 @@ from django.utils import formats
 from django.views.generic import CreateView, ListView, DetailView, \
     FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
+from dentalE.historiaPdf import pdf, clean_cpo
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
     ConsultaCPOForm, ContactoForm, OrtodonciaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, Ortodoncia
+from PIL import Image
 from datetime import date
 # Imports needed for pdf generation
 from itertools import chain
@@ -35,7 +37,7 @@ def resumendia(request):
     try:
         userprofile = UserProfile.objects.get(user=request.user)
     except ObjectDoesNotExist:
-        return render(request, 'almaFront/bases/404.html')
+        return render(request, 'almaFront/bases/404.html', status=401)
     if userprofile.user_tipo == 'SECRETARIA':
         agenda_hoy = Cita.objects.filter(fecha=date.today()).order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
@@ -191,6 +193,7 @@ def listaprofesionales(request):
 def listapacientes(request):
     pacientes = Paciente.objects.all().order_by('primer_apellido')
     busqueda = request.GET.get("buscar")
+    print(antecedentes)
     if busqueda:
         pacientes = pacientes.filter(
             Q(nombre__icontains=busqueda) |
@@ -286,17 +289,17 @@ def pacientedetalles(request, paciente_id):
             sin_patologias = True
     if consultas_paciente:
         consultas_paciente = consultas_paciente[:3]
-    ortodoncia_paciente = Ortodoncia.objects.filter(paciente_id=paciente_id).last()
-
+    ortodoncia_paciente = Ortodoncia.objects.filter(
+        paciente_id=paciente_id).last()
     if ortodoncia_paciente:
         imagen = ortodoncia_paciente.image.read()
         image_data = base64.b64encode(imagen).decode('utf-8')
-
-
+        ortodoncia_paciente.image = image_data
     return render(request, "almaFront/pacientes/paciente.html",
                   {'patient': paciente, 'antecedentes': antecedentes_paciente,
                    'consultas': consultas_paciente,
-                   'sin_patologias': sin_patologias, 'ortodoncia': ortodoncia_paciente, 'image': image_data})
+                   'sin_patologias': sin_patologias,
+                   'ortodoncia': ortodoncia_paciente})
 
 
 @login_required(login_url="/")
@@ -323,7 +326,7 @@ def verCPO(request, paciente_id):
                   {'patient': paciente, 'page_obj': page_obj})
 
 
-# Get patitent clinical background
+# Get patient clinical background
 def getantecedentes(paciente_id):
     antecedentes_list = AntecedentesClinicos.objects.filter(
         paciente_id=paciente_id).last()
@@ -356,6 +359,48 @@ def verantecedentes(request, paciente_id):
     antecedentes_list = getantecedentes(paciente_id)
     return render(request, "almaFront/pacientes/patient_background.html",
                   {'patient': paciente, 'antecedentes': antecedentes_list})
+
+
+# Get patient orthodontics background
+
+
+def getconsultasortodoncia(paciente_id):
+    ortodoncia_paciente = Ortodoncia.objects.filter(
+        paciente_id=paciente_id).order_by('-id')
+    if ortodoncia_paciente:
+        for o in ortodoncia_paciente:
+            if o.image:
+                imagen = o.image.read()
+                image_data = base64.b64encode(imagen).decode('utf-8')
+                o.image = image_data
+    return ortodoncia_paciente
+
+
+@login_required(login_url="/")
+def verhistoriaortodoncia(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    ortodoncia_paciente = getconsultasortodoncia(paciente_id)
+    paginator = Paginator(ortodoncia_paciente, 1)  # Show 1 cpo per page.
+    page_number = request.GET.get('page', 1)
+    ortodoncia_obj = paginator.get_page(page_number)
+    return render(request, "almaFront/pacientes/patient_orthodontics.html",
+                  {'patient': paciente, 'ortodoncia_obj': ortodoncia_obj})
+
+
+@login_required(login_url="/")
+def compararortodoncia(request, paciente_id):
+    paciente = Paciente.objects.get(paciente_id=paciente_id)
+    ortodoncia_paciente = getconsultasortodoncia(paciente_id)
+    ortodoncia_imagenes = []
+    if ortodoncia_paciente:
+        for o in ortodoncia_paciente:
+            if o.image:
+                ortodoncia_imagenes.append(o)
+    ortodoncia_comparativa = [ortodoncia_imagenes[0], ortodoncia_imagenes[-1]]
+    print(ortodoncia_comparativa)
+    return render(request,
+                  "almaFront/pacientes/patient_orthodontics_beforeafter.html",
+                  {'patient': paciente, 'ortodoncia': ortodoncia_comparativa})
 
 
 @login_required(login_url="/")
@@ -510,6 +555,7 @@ def patient_render_background_pdf(request, *args, **kwargs):
             '-id')
         background = getantecedentes(paciente_id)
         cpos = clean_cpo.get_cpo(paciente_id)
+        ortodoncia = getconsultasortodoncia(paciente_id)
         all_ordered = sorted(
             chain(treatments, cpos),
             key=attrgetter('creado'), reverse=True)
@@ -518,6 +564,7 @@ def patient_render_background_pdf(request, *args, **kwargs):
         template_path = 'almaFront/historiapdf/historia_pdf.html'
         context = {'patient': patient, 'treatments': treatments, 'user': user,
                    'background': background, 'cpo': cpos,
+                   'ortodoncia': ortodoncia,
                    'all': all_ordered}
         patient_name = patient.nombre + patient.primer_apellido
         filename = patient_name + "-HistoriaClínicaDental"

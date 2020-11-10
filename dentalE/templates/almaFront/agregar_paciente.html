@@ -7,6 +7,7 @@
     <div class="container-fluid">
         <form method="post" action="">
             {% csrf_token %}
+            {{ form.non_field_errors }}
             <div class="row">
                 <div class="col-md-8 col-xl-8 mb-4">
                     <div class="card shadow border-left-info py-2">
@@ -15,11 +16,19 @@
                                 <div class="form-row mb-2">
                                     <div>
                                         <!-- Documento -->
-                                        <label> Documento *</label>
+                                        <label for="{{ form.documento.id_for_label }}">
+                                            Documento *</label>
                                         {{ form.documento }}
-                                        <small id="defaultRegisterFormCIHelpBlock" class="form-text text-muted mb-2">
-                                            Sin puntos ni guión
-                                        </small>
+                                        {% if form.documento.errors %}
+                                            <div class="warning">
+                                                {{ form.documento.errors }}
+                                            </div>
+                                        {% else %}
+                                            <small id="defaultRegisterFormCIHelpBlock"
+                                                   class="form-text text-muted mb-2">
+                                                Sin puntos ni guión
+                                            </small>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -83,12 +92,19 @@
                                     <!-- Telefono  -->
                                     <label> Teléfono Celular *</label>
                                     {{ form.celular }}
+                                    {% if form.celular.errors %}
+                                        <div class="warning">
+                                            {{ form.celular.errors }}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
 
 
                             <div class="row justify-content-end mr-3">
-                                <button type="submit" class="btn btn-info">Guardar</button>
+                                <button type="submit" class="btn btn-info">
+                                    Guardar
+                                </button>
                             </div>
 
                         </div>
