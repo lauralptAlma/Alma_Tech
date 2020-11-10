@@ -1,22 +1,35 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
 {% block tab-title %}Charts{% endblock %}
-{% block page-title %}Prueba Charts{% endblock %}
+{% block page-title %}Análisis de Negocio{% endblock %}
 
 {% block page-content %}
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="col-sm-6 col-lg-4">
-                <canvas id="chartPatientDpto" width="300" height="300"></canvas>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="chartPatientDpto" width="300" height="300"></canvas>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-6 col-lg-4">
-                <canvas id="chartPatientGen" width="300" height="300"></canvas>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="chartPatientGen" width="300" height="300"></canvas>
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-6 col-lg-4">
-                <canvas id="chartPatientCons" width="300" height="300"></canvas>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="chartPatientCons" width="300" height="300"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block page-javascript %}
@@ -54,8 +67,8 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Pacientes por Departamento',
                             data: defaultData,
+                            label: 'Cantidad',
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
                                 'rgba(54, 162, 235, 0.2)',
@@ -82,7 +95,12 @@
                                     beginAtZero: true
                                 }
                             }]
+                        },
+                        title: {
+                            display: true,
+                            text: 'Pacientes por departamento'
                         }
+
                     }
                 });
                 const chartPatientGen = new Chart(ctx2, {
@@ -105,6 +123,12 @@
                             borderWidth: 1
                         }]
                     },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Pacientes por Género'
+                        }
+                    }
 
                 });
                 const chartPatientCons = new Chart(ctx3, {
