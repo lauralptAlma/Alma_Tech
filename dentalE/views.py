@@ -25,7 +25,10 @@ from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, Ortodoncia
 from PIL import Image
-import base64
+from datetime import date
+# Imports needed for pdf generation
+from itertools import chain
+from dentalE.historiaPdf import pdf, clean_cpo
 
 
 # doctor

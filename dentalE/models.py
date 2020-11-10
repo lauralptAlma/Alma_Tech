@@ -242,21 +242,15 @@ class Consulta(models.Model):
 
 
 class Ortodoncia(models.Model):
-    doctor = models.ForeignKey(User, related_name='doctor_ortodoncia',
-                               on_delete=models.CASCADE)
+    doctor = models.ForeignKey(User, related_name='doctor_ortodoncia', on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    tipo = models.TextField('Tipo', choices=CONSULTA_OPCIONES,
-                            default='ORTODONCIA')
-    diagnostico = models.TextField('Diagnóstico', max_length=250, default='',
-                                   blank=False, null=False)
-    tratamiento = models.TextField(max_length=250, default='', blank=False,
-                                   null=False)
-    indicaciones = models.TextField(max_length=250, default='', blank=False,
-                                    null=False)
+    tipo = models.TextField('Tipo', choices=CONSULTA_OPCIONES, default='ORTODONCIA')
+    diagnostico = models.TextField('Diagnóstico', max_length=250, default='', blank=False, null=False)
+    tratamiento = models.TextField(max_length=250, default='', blank=False, null=False)
+    indicaciones = models.TextField(max_length=250, default='', blank=False, null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
-    image = djongomodel.ImageField(storage=GridFSStorage(collection='image'),
-                                   blank=True, null=True)
+    image = djongomodel.ImageField(storage=GridFSStorage(collection='image'))
 
     class Meta:
         verbose_name = " Consulta de Ortodoncia | Ortopedia"
