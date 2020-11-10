@@ -1,0 +1,49 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Charts{% endblock %}
+{% block page-title %}Consultas por Paciente{% endblock %}
+
+{% block page-content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-6 col-lg-4">
+                <canvas id="chartPatientCons" width="300" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page-javascript %}
+    <script>
+        $(document).ready(function () {
+
+            let defaultData, labels = []
+            defaultData = {{data.values }}
+
+
+            function setChart() {
+                const ctx = document.getElementById('chartPatientCons').getContext('2d')
+                const chartPatientCons = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [new Date ("2015-3-15").toLocaleString(), new Date ("2015-3-15").toLocaleString()],
+                        datasets: [{
+                            label: 'Consultas por Paciente',
+                            data: defaultData,
+
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                distribution: 'linear'
+                            }]
+                        }
+
+                    },
+                });
+            }
+        })
+    </script>
+{% endblock %}

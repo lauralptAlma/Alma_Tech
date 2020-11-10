@@ -22,7 +22,7 @@ from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
     ConsultaCPOForm, ContactoForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, PATIENT_CITY
-from datetime import date
+from datetime import date, datetime
 # Imports needed for pdf generation
 from itertools import chain
 from dentalE.historiaPdf import pdf, clean_cpo
@@ -600,5 +600,30 @@ class ChartData(APIView):
             "valuesGen": cantidad,
         }
 
-        data = {"data": data ,"datos": datos}
+        data = {"data": data, "datos": datos}
         return Response(data)
+
+
+'''class ChartPatient(APIView):
+    authentication_classes = []
+    permission_classes = []
+'''
+
+
+def ChartPatient(request, paciente_id):
+    paciente = Paciente.objects.filter(paciente_id=paciente_id)
+    consulta = Consulta.objects.filter(paciente_id=paciente_id).values()
+    pacientes_data_set = pd.DataFrame(consulta)
+    pacientes_por_consulta = pacientes_data_set['creado'].value_counts()
+    pacientes_por_consulta = pacientes_por_consulta.reset_index()
+    pacientes_por_consulta.columns = ['Fecha', 'Cantidad']
+    fechas = pd.to_datetime(pacientes_por_consulta['Fecha'], format='%Y-%m-%d')
+    consultas = fechas.tolist()
+    cantidad = pacientes_por_consulta['Cantidad'].tolist()
+    data = {
+        "labels": consultas,
+        "values": cantidad,
+    }
+    print(data)
+    return render(request, "almaFront/pacientes/patient_statistics.html",
+                  {'data': data})

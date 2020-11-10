@@ -6,11 +6,14 @@
 {% block page-content %}
     <div class="row">
         <div class="col-sm-12">
-            <div class="col-sm-6 col-lg-6">
-                <canvas id="myChart" width="300" height="300"></canvas>
+            <div class="col-sm-6 col-lg-4">
+                <canvas id="chartPatientDpto" width="300" height="300"></canvas>
             </div>
-            <div class="col-sm-6 col-lg-6">
-                <canvas id="myChart2" width="300" height="300"></canvas>
+            <div class="col-sm-6 col-lg-4">
+                <canvas id="chartPatientGen" width="300" height="300"></canvas>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <canvas id="chartPatientCons" width="300" height="300"></canvas>
             </div>
         </div>
     </div>
@@ -20,10 +23,9 @@
     <script>
         $(document).ready(function () {
             const endpoint = '/dentalE/api/chart/data/'
-            let defaultData = []
-            let labels = []
-            let defaultDataGen = []
-            let labelsGen = []
+            let defaultData, labels = []
+            let defaultDataGen, labelsGen = []
+
             $.ajax({
                 method: "GET",
                 url: endpoint,
@@ -44,9 +46,10 @@
             })
 
             function setChart() {
-                const ctx = document.getElementById('myChart').getContext('2d')
-                const ctx2 = document.getElementById('myChart2').getContext('2d');
-                const myChart = new Chart(ctx, {
+                const ctx = document.getElementById('chartPatientDpto').getContext('2d')
+                const ctx2 = document.getElementById('chartPatientGen').getContext('2d');
+                const ctx3 = document.getElementById('chartPatientCons').getContext('2d');
+                const chartPatientDpto = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: labels,
@@ -82,7 +85,29 @@
                         }
                     }
                 });
-                const myChart2 = new Chart(ctx2, {
+                const chartPatientGen = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labelsGen,
+                        datasets: [{
+                            label: 'Pacientes por Sexo',
+                            data: defaultDataGen,
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+
+                });
+                const chartPatientCons = new Chart(ctx3, {
                     type: 'doughnut',
                     data: {
                         labels: labelsGen,

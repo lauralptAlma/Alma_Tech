@@ -32,6 +32,7 @@ from .views import (
     get_data,
     DataView,
     ChartData,
+    ChartPatient,
 
 )
 
@@ -81,4 +82,7 @@ urlpatterns = [
     url(r'^data/$', DataView,
         name='api-data'),
     url(r'^api/chart/data/$', ChartData.as_view()),
+    url(r'^api/chart/generarestadistica/(?P<paciente_id>\d+)/$',
+        ChartPatient, name="generarestadistica"),
+
 ]
