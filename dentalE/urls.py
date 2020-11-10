@@ -7,6 +7,8 @@ from .views import (
     verCPO,
     verantecedentes,
     verhistoriageneral,
+    verhistoriaortodoncia,
+    compararortodoncia,
     patient_render_background_pdf,
 
     # contacto
@@ -40,6 +42,12 @@ urlpatterns = [
         name="antecedentespaciente"),
     url(r'^tratamientospaciente/(?P<paciente_id>\d+)/$', verhistoriageneral,
         name="tratamientospaciente"),
+    url(r'^tratamientosortodoncia/(?P<paciente_id>\d+)/$',
+        verhistoriaortodoncia,
+        name="ortodonciapaciente"),
+    url(r'^compararortodoncia/(?P<paciente_id>\d+)/$',
+        compararortodoncia,
+        name="compararortodonciapaciente"),
     url(r'^generarhistoriapdf/(?P<paciente_id>\d+)/$',
         patient_render_background_pdf,
         name="paciente-pdf-view"),

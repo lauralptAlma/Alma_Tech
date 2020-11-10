@@ -133,7 +133,9 @@
                 <br>
                 <span> <b>Dirección: </b> Colegio Hogwarts de Magia y Hechicería, 1432</span>
                 <br>
-                <span> <b>Contacto: </b> (+123) 456 7891</span>
+                <span> <b>Teléfono: </b> (+123) 456 7891</span>
+                <br>
+                <span> <b>E-mail: </b> almatech20@gmail.com</span>
             </td>
             <td style="text-align: right">
                 <img src="static/assets/img/logos/logoDentalPdf.jpg"
@@ -173,6 +175,7 @@
                 </li>
             </ul>
         {% endif %}
+        <hr color="#757575">
         <!-- Odontología General -->
         <div class="sub-title">
             <span>Odontología General: </span>
@@ -189,6 +192,7 @@
                 </li>
             </ul>
         {% endif %}
+        <hr color="#757575">
         <!-- CPOs -->
         <div class="sub-title">
             <span>CPO: </span>
@@ -333,12 +337,13 @@
                 </li>
             </ul>
         {% endif %}
+        <hr color="#757575">
         <!-- Ortodoncia/Ortopedia -->
         <div class="sub-title">
             <span>Ortodoncia/Ortopedia: </span>
         </div>
-        {% if treatments %}
-            {% include 'almaFront/historiapdf/general_pdf.html' %}
+        {% if ortodoncia %}
+            {% include 'almaFront/historiapdf/ortodoncia_pdf.html' %}
         {% else %}
             <ul class="list-group">
                 <li class="list-group-item">

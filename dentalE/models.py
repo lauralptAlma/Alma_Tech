@@ -2,7 +2,10 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import forms
 from djongo import models as djongomodel
+from djongo.storage import GridFSStorage
+from dentalE.validators.ci_validator import validate_ci
 
 # USUARIO OPTIONS
 USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'))
@@ -41,6 +44,7 @@ OSTEOARTICULARES_OPCIONES = (
     ('NO', 'No'), ('LUXACIONES FRECUENTES', 'Luxaciones Frecuentes'),
     ('FRACTURAS', 'Fracturas'), ('OTROS', 'Otros'))
 SN_OPCIONES = (('SI', 'Sí'), ('NO', 'No'))
+CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 
 
 # MODELOS
@@ -90,9 +94,8 @@ class Paciente(models.Model):
                                         null=False, blank=False)
     # Contacto
     celular_regex = RegexValidator(regex=r'^09\d{7,7}$',
-                                   message="El número debe ser del "
-                                           "formato: '+XXXXXXXXX'. "
-                                           "9 digitos admitidos.")
+                                   message="El número debe seguir "
+                                           "el formato: 09XXXXXXX.")
     celular = models.CharField("Número de teléfono celular* ",
                                validators=[celular_regex], max_length=9,
                                unique=True,
@@ -108,58 +111,8 @@ class Paciente(models.Model):
             ci = int(self.documento)
         except ValueError:
             raise ValidationError('Por favor ingrese solamente números')
-        if not self.validate_ci(ci):
-            raise ValidationError('El documento no tiene un formato válido')
-
-    # Validación de Cédula
-    # The MIT License (MIT)
-    #
-    # Copyright (c) 2014 Franco Correa
-    #
-    # Permission is hereby granted, free of charge, #to any person obtaining a
-    # copy of this software and associated documentation files
-    # (the "Software"), to deal in the Software without restriction,
-    # including without limitation the rights to use, copy, modify, merge,
-    # publish, #distribute, sublicense, and/or sell copies of the Software,
-    # and to permit persons to whom the Software is furnished to do so,
-    # subject to the following #conditions:
-    #
-    # The above copyright notice and this #permission notice shall be included
-    # in all copies or substantial portions of the Software.
-    #
-    # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-    # OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-    # IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-    # CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-    # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-    # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-    @staticmethod
-    def get_validation_digit(ci):
-        a = 0
-        i = 0
-        str_ci = (str(ci))
-        if len(str_ci) <= 7:
-            for i in range(len(str_ci), 8):
-                str_ci = '0' + str_ci
-                i = i + 1
-        for i in range(0, 7):
-            a += (int("2987634"[i]) * int(str_ci[i])) % 10
-            i = i + 1
-        if a % 10 == 0:
-            return 0
-        else:
-            return 10 - a % 10
-
-    @staticmethod
-    def clean_ci(ci):
-        return int(str(ci).replace("-", "").replace('.', ''))
-
-    def validate_ci(self, ci):
-        ci = self.clean_ci(ci)
-        dig = int(str(ci)[int(len(str(ci))) - 1])
-        return dig == self.get_validation_digit(ci)
+        if not validate_ci(ci):
+            raise forms.ValidationError({'documento': 'El documento no tiene un formato válido'})
 
     def __str__(self):
         return str(self.nombre + " " + self.primer_apellido)
@@ -287,15 +240,21 @@ class Consulta(models.Model):
 
 
 class Ortodoncia(models.Model):
-    doctor = models.ForeignKey(User, related_name='doctor_ortodoncia', on_delete=models.CASCADE)
+    doctor = models.ForeignKey(User, related_name='doctor_ortodoncia',
+                               on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    tipo = models.TextField('Tipo', choices=CONSULTA_OPCIONES, default='ORTODONCIA')
-    diagnostico = models.TextField('Diagnóstico', max_length=250, default='', blank=False, null=False)
-    tratamiento = models.TextField(max_length=250, default='', blank=False, null=False)
-    indicaciones = models.TextField(max_length=250, default='', blank=False, null=False)
+    tipo = models.TextField('Tipo', choices=CONSULTA_OPCIONES,
+                            default='ORTODONCIA')
+    diagnostico = models.TextField('Diagnóstico', max_length=250, default='',
+                                   blank=False, null=False)
+    tratamiento = models.TextField(max_length=250, default='', blank=False,
+                                   null=False)
+    indicaciones = models.TextField(max_length=250, default='', blank=False,
+                                    null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
-    image = djongomodel.ImageField(storage=GridFSStorage(collection='image'))
+    image = djongomodel.ImageField(storage=GridFSStorage(collection='image'),
+                                   blank=True, null=True)
 
     class Meta:
         verbose_name = " Consulta de Ortodoncia | Ortopedia"

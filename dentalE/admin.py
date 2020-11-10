@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import UserProfile, Consulta, Cita, Paciente,\
-    AntecedentesClinicos, Nucleo, Integrante, CPO
+    AntecedentesClinicos, Nucleo, Integrante, CPO, Ortodoncia
 
 # Register your models here.
 admin.site.register(UserProfile)
@@ -9,6 +9,7 @@ admin.site.register(Cita)
 admin.site.register(Paciente)
 admin.site.register(AntecedentesClinicos)
 admin.site.register(CPO)
+admin.site.register(Ortodoncia)
 
 
 @admin.register(Nucleo)
