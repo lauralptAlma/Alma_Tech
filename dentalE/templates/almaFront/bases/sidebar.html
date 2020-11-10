@@ -41,7 +41,12 @@
                 <li class="nav-item"><a class="nav-link" href="/dentalE/agregartratamiento/">
                     <i class="fas fa-laptop-medical" {% if 'agregartratamiento' in request.path %}
                        style="color: white" {% endif %}></i>
-                    <span class={% if 'agregartratamiento' in request.path %} actual-page {% endif %}>Agregar Consulta</span></a>
+                    <span class={% if 'agregartratamiento' in request.path %} actual-page {% endif %}>Agregar Consulta Odontología Gral.</span></a>
+                </li>
+                 <li class="nav-item"><a class="nav-link" href="/dentalE/agregarortodoncia/">
+                    <i class="fas fa-laptop-medical" {% if 'agregarortodoncia' in request.path %}
+                       style="color: white" {% endif %}></i>
+                    <span class={% if 'agregarortodoncia' in request.path %} actual-page {% endif %}>Agregar Consulta Ortodoncia | Ortopedia</span></a>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="/dentalE/agregarcpo/">
                     <i class="fas fa-teeth-open" {% if 'agregarcpo' in request.path %}

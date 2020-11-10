@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        "CLIENT": {"name": 'pruebaCalendar',
+        "CLIENT": {"name": 'ortodonciaDB',
                    "host": 'mongodb+srv://admin:almaAdmin@clusteralmatech.izim4.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true',
                    "username": 'admin',
                    "password": 'almaAdmin',
@@ -205,3 +205,8 @@ EMAIL_HOST_PASSWORD = 'divsdabhjpsrwbft'
 EMAIL_HOST_USER = 'almatech20@gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+
+# Gridfs specific settings
+UPLOADED_FILES_USE_URL = False
+DEFAULT_GRIDFS_COLLECTION = 'storage'
+DEFAULT_FILE_STORAGE = 'gridfs_storage.storage.GridFSStorage'

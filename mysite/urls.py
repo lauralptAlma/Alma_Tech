@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^dentalE/', include('dentalE.urls')),
     url(r'^logout', logout_view, name='logout'),
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^media/', include('gridfs_storage.urls')),
+
 ]
