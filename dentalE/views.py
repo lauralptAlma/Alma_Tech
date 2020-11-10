@@ -1,29 +1,27 @@
 import ast
-from datetime import date
-# Imports needed for pdf generation
-from itertools import chain
+import base64
 from operator import attrgetter
-
-from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
 from django.core.paginator import Paginator
-from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
-from django.utils import formats
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
+from django.db.models import Q
+from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
+from PIL import Image
+from django.utils import formats
 from django.views.generic import CreateView, ListView, DetailView, \
     FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from dentalE.historiaPdf import pdf, clean_cpo
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
-    ConsultaCPOForm, ContactoForm
+    ConsultaCPOForm, ContactoForm, OrtodonciaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, Ortodoncia
 from PIL import Image
@@ -40,12 +38,12 @@ def resumendia(request):
     if userprofile.user_tipo == 'SECRETARIA':
         agenda_hoy = Cita.objects.filter(fecha=date.today()).order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
-                      {'agenda_hoy': agenda_hoy})
+                      {'agenda_hoy': agenda_hoy, 'successful_submit': True})
     elif userprofile.user_tipo == 'DOCTOR':
         agenda_hoy = Cita.objects.filter(fecha=date.today(),
                                          doctor=request.user).order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
-                      {'agenda_hoy': agenda_hoy})
+                      {'agenda_hoy': agenda_hoy, 'successful_submit': True})
     else:
         return HttpResponseRedirect('account_logout')
 
@@ -140,6 +138,21 @@ def agregartratamiento(request):
     return render(request, "almaFront/consultas/agregar_tratamiento.html",
                   {'form': form})
 
+@login_required(login_url="/")
+def agregarortodoncia(request):
+    form = OrtodonciaForm()
+    if request.method == 'POST':
+        form = OrtodonciaForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.instance.doctor = request.user
+            ortodoncia = form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Consulta guardada exitosamente!'
+            )
+            return HttpResponseRedirect("/dentalE/agregarortodoncia/")
+    return render(request, "almaFront/consultas/agregar_ortodoncia.html", {'form': form})
 
 @login_required(login_url="/")
 def agregarCPO(request):

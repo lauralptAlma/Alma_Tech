@@ -8,6 +8,8 @@ from djongo.storage import GridFSStorage
 from dentalE.validators.ci_validator import validate_ci
 
 # USUARIO OPTIONS
+
+
 USER_TIPO = (('DOCTOR', 'DOCTOR'), ('SECRETARIA', 'SECRETARIA'))
 USER_ESPECIALIDAD = (('ORTOPEDIA', 'ORTOPEDIA'), ('ORTODONCIA', 'ORTODONCIA'),
                      ('GENERAL', 'GENERAL'))
@@ -46,7 +48,7 @@ OSTEOARTICULARES_OPCIONES = (
 SN_OPCIONES = (('SI', 'Sí'), ('NO', 'No'))
 CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 
-
+CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 # MODELOS
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
