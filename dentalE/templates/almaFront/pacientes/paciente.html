@@ -158,7 +158,7 @@
         {% endif %}
     </div>
     {% if user.userprofile.user_tipo == 'DOCTOR' %}
-        <div class="card shadow">
+        <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <p class="text-primary m-0 font-weight-bold">Últimas
                     Consultas</p>
@@ -207,8 +207,8 @@
     {% endif %}
     <div class="card shadow">
         <div class="card-header py-3">
-            <p class="text-primary m-0 font-weight-bold">Últimos registros
-                fotográficos</p>
+            <p class="text-primary m-0 font-weight-bold">Últimos Registros
+                Fotográficos</p>
         </div>
         <div class="card-body">
             <div class="table-responsive table mt-2" id="dataTable" role="grid"
@@ -218,15 +218,34 @@
                     <tr>
                         <th>Fecha</th>
                         <th>Imagen</th>
+                        <th>Información</th>
                         <th>Profesional</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% if ortodoncia %}
                         <tr class="tr-body">
-                            <td>{{ ortodoncia.creado }}</td>
-                            <td><img
-                                    src="data:image/jpeg;base64,{{ ortodoncia.image }}">
+                            <td>{{ ortodoncia.creado|date:"SHORT_DATE_FORMAT" }}</td>
+                            <td>
+                                {% if ortodoncia.image %}
+                                    <img
+                                            src="data:image/jpeg;base64,{{ ortodoncia.image }}"
+                                            class="media-object img-fluid img-max"
+                                            alt="Imagen última consulta">
+                                {% else %}
+                                    No existe registro
+                                {% endif %}
+                            </td>
+                            <td>
+                                <p>
+                                    <strong>Diagnóstico: </strong> {{ ortodoncia.diagnostico }}
+                                </p>
+                                <p>
+                                    <strong>Tratamiento: </strong> {{ ortodoncia.tratamiento }}
+                                </p>
+                                <p>
+                                    <strong>Indicaciones: </strong> {{ ortodoncia.indicaciones }}
+                                </p>
                             </td>
                             <td>{{ ortodoncia.doctor.get_full_name }}</td>
 
