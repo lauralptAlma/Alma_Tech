@@ -20,11 +20,16 @@
                                     <strong>Documento: </strong> {{ patient.documento }}
                                 </p>
                                 <p>
-                                    <strong>Dirección: </strong> {{ patient.direccion }}
+                                    <strong>Dirección: </strong> {{ patient.direccion }}, {{ patient.ciudad | lower | capfirst }}
                                 </p>
                                 <p>
                                     <strong>Celular: </strong> {{ patient.celular }}
                                 </p>
+                                {% if patient.email %}
+                                    <p>
+                                        <strong>Email: </strong> {{ patient.email }}
+                                    </p>
+                                {% endif %}
                                 <p><strong>Fecha de
                                     Nacimiento: </strong> {{ patient.fecha_nacimiento }}
                                 </p>
@@ -104,24 +109,23 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="col"><i class="fas fa-teeth-open"
+                                                    style="margin-right: 15px;"></i><a
+                                        href="/dentalE/agregarcpo/">Agregar
+                                    CPO</a>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col"><i class="fas fa-tooth"
                                                     style="margin-right: 15px;"></i><a
-                                        href="/dentalE/agregartratamiento/">Nueva
-                                    consulta
-                                    general</a></div>
+                                        href="/dentalE/agregartratamiento/">Agregar
+                                    Consulta Odontología Gral.</a></div>
                             </div>
                             <div class="row">
                                 <div class="col"><i class="fas fa-teeth"
                                                     style="margin-right: 15px;"></i><a
-                                        href="#">Nueva
-                                    consulta
-                                    ortodoncia</a></div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><i class="fas fa-teeth-open"
-                                                    style="margin-right: 15px;"></i><a
-                                        href="/dentalE/agregarcpo/">Nueva
-                                    consulta con CPO</a></div>
+                                        href="#">Agregar Consulta Ortodoncia |
+                                    Ortopedia</a></div>
                             </div>
                         </div>
                     </div>
@@ -203,7 +207,8 @@
     {% endif %}
     <div class="card shadow">
         <div class="card-header py-3">
-            <p class="text-primary m-0 font-weight-bold">Últimos registros fotográficos</p>
+            <p class="text-primary m-0 font-weight-bold">Últimos registros
+                fotográficos</p>
         </div>
         <div class="card-body">
             <div class="table-responsive table mt-2" id="dataTable" role="grid"
@@ -220,14 +225,17 @@
                     {% if ortodoncia %}
                         <tr class="tr-body">
                             <td>{{ ortodoncia.creado }}</td>
-                            <td><img src="data:image/jpeg;base64,{{ ortodoncia.image }}"></td>
+                            <td><img
+                                    src="data:image/jpeg;base64,{{ ortodoncia.image }}">
+                            </td>
                             <td>{{ ortodoncia.doctor.get_full_name }}</td>
 
                         </tr>
 
                     {% else %}
                         <tr class="no-data">
-                            <td colspan="20">No existen imágenes para este paciente en
+                            <td colspan="20">No existen imágenes para este
+                                paciente en
                                 el sistema.
                             </td>
                         </tr>

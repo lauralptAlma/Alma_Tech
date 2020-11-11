@@ -10,13 +10,12 @@ from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.views import View
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.utils import formats
 from django.views.generic import CreateView, ListView, DetailView, \
-    FormView, TemplateView
+    FormView
 from django.views.generic.detail import SingleObjectMixin
 from dentalE.historiaPdf import pdf, clean_cpo
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
@@ -27,22 +26,36 @@ from datetime import date
 # Imports needed for pdf generation
 from itertools import chain
 
+
 # doctor
 
 
 @login_required(login_url="/")
 def resumendia(request):
+    busqueda = request.GET.get("buscar")
     try:
         userprofile = UserProfile.objects.get(user=request.user)
     except ObjectDoesNotExist:
-        return render(request, 'almaFront/bases/404.html', status=401)
+        return render(request, 'almaFront/bases/404.html', status=404)
     if userprofile.user_tipo == 'SECRETARIA':
         agenda_hoy = Cita.objects.filter(fecha=date.today()).order_by('hora')
+        if busqueda:
+            agenda_hoy = agenda_hoy.filter(
+                Q(paciente__nombre__contains=busqueda) |
+                Q(paciente__primer_apellido__contains=busqueda) |
+                Q(paciente__documento__contains=busqueda)
+            ).distinct().order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
                       {'agenda_hoy': agenda_hoy, 'successful_submit': True})
     elif userprofile.user_tipo == 'DOCTOR':
         agenda_hoy = Cita.objects.filter(fecha=date.today(),
                                          doctor=request.user).order_by('hora')
+        if busqueda:
+            agenda_hoy = agenda_hoy.filter(
+                Q(paciente__nombre__contains=busqueda) |
+                Q(paciente__primer_apellido__contains=busqueda) |
+                Q(paciente__documento__contains=busqueda)
+            ).distinct().order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
                       {'agenda_hoy': agenda_hoy, 'successful_submit': True})
     else:
@@ -204,11 +217,6 @@ def listapacientes(request):
                   {'patients': pacientes})
 
 
-class BuscarView(TemplateView):
-    def post(self, request, *args, **kwargs):
-        return render(request, {'alma/pacientes/buscarpaciente.html'})
-
-
 @login_required(login_url="/")
 def agregarpaciente(request):
     form = PacienteForm()
@@ -247,16 +255,11 @@ def edit_patient(request, paciente_id):
             )
     else:
         form = PacienteForm(instance=paciente)
+        form.fields['documento'].widget.attrs['readonly'] = True
     context = {'form': form,
                'paciente': paciente
                }
     return render(request, template, context)
-
-
-# paciente
-@login_required(login_url="/")
-def pacienteinicio(request):
-    return render(request, "paciente/home/home.html", {})
 
 
 @login_required(login_url="/")
@@ -403,97 +406,7 @@ def compararortodoncia(request, paciente_id):
                   {'patient': paciente, 'ortodoncia': ortodoncia_comparativa})
 
 
-@login_required(login_url="/")
-def historiapaciente(request, paciente_id):
-    paciente = Paciente.objects.get(paciente_id=paciente_id)
-    return render(request, "almaFront/ver_historia.html",
-                  {'patient': paciente})
-
-
-@login_required(login_url="/")
-def pacientecambiopass(request):
-    return render(request, "paciente/common/cambiar_constrasena.html", {})
-
-
-# nucleo e integrantes
-
-class NucleoListView(ListView):
-    model = Nucleo
-    template_name = 'nucleo/nucleo_lista.html'
-
-
-class NucleoDetailView(DetailView):
-    model = Nucleo
-    template_name = 'nucleo/nucleo_detalles.html'
-
-
-class NucleoCreateView(CreateView):
-    """
-    Solo crea un nucleo nuevo,agrega integrantes se hace desde
-    NucleoIntegrantesUpdateView().
-    """
-    model = Nucleo
-    template_name = 'nucleo/nucleo_crear.html'
-    fields = ['matricula', 'titular']
-
-    def form_valid(self, form):
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            'EL nucleo ha sido agregado con exito'
-        )
-
-        return super().form_valid(form)
-
-
-class NucleoIntegrantesUpdateView(SingleObjectMixin, FormView):
-    """
-    Para agregar integrantes a un nucleo o editarlos
-    """
-
-    model = Nucleo
-    template_name = 'nucleo/nucleo_integrantes_update.html'
-
-    def get(self, request, *args, **kwargs):
-        # El nucleo que estamos editando:
-        self.object = self.get_object(queryset=Nucleo.objects.all())
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        # El nuecleo que estamos editando:
-        self.object = self.get_object(queryset=Nucleo.objects.all())
-        return super().post(request, *args, **kwargs)
-
-    def get_form(self, form_class=None):
-        """
-        Use our big formset of formsets, and pass in the Publisher object.
-        """
-
-    def form_valid(self, form):
-        """
-        If the form is valid, redirect to the supplied URL.
-        """
-        form.save()
-
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            'Informacion actualizada'
-        )
-
-        return HttpResponseRedirect(self.get_success_url())
-
-    def get_success_url(self):
-        return reverse('nucleo:nucleo_detalles', kwargs={'pk': self.object.pk})
-
-
 # frontpage
-@login_required(login_url="/")
-class HomeView(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, "almaFront/index.html")
-
-
 def ingreso(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -609,3 +522,87 @@ def contacto(request):
                 'por favor intente nuevamente.'
             )
     return render(request, "almaFront/bases/contacto.html", {'form': form})
+
+
+# Vistas para funcionalidades no completadas
+# paciente
+@login_required(login_url="/")
+def pacienteinicio(request):
+    return render(request, "paciente/home/home.html", {})
+
+
+@login_required(login_url="/")
+def pacientecambiopass(request):
+    return render(request, "paciente/common/cambiar_constrasena.html", {})
+
+
+# nucleo e integrantes
+
+class NucleoListView(ListView):
+    model = Nucleo
+    template_name = 'nucleo/nucleo_lista.html'
+
+
+class NucleoDetailView(DetailView):
+    model = Nucleo
+    template_name = 'nucleo/nucleo_detalles.html'
+
+
+class NucleoCreateView(CreateView):
+    """
+    Solo crea un nucleo nuevo,agrega integrantes se hace desde
+    NucleoIntegrantesUpdateView().
+    """
+    model = Nucleo
+    template_name = 'nucleo/nucleo_crear.html'
+    fields = ['matricula', 'titular']
+
+    def form_valid(self, form):
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'EL nucleo ha sido agregado con exito'
+        )
+
+        return super().form_valid(form)
+
+
+class NucleoIntegrantesUpdateView(SingleObjectMixin, FormView):
+    """
+    Para agregar integrantes a un nucleo o editarlos
+    """
+
+    model = Nucleo
+    template_name = 'nucleo/nucleo_integrantes_update.html'
+
+    def get(self, request, *args, **kwargs):
+        # El nucleo que estamos editando:
+        self.object = self.get_object(queryset=Nucleo.objects.all())
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # El nuecleo que estamos editando:
+        self.object = self.get_object(queryset=Nucleo.objects.all())
+        return super().post(request, *args, **kwargs)
+
+    def get_form(self, form_class=None):
+        """
+        Use our big formset of formsets, and pass in the Publisher object.
+        """
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        form.save()
+
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'Informacion actualizada'
+        )
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('nucleo:nucleo_detalles', kwargs={'pk': self.object.pk})

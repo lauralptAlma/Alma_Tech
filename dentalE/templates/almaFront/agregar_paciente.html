@@ -1,6 +1,6 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
-{% block tab-title %}Paciente Nuevo{% endblock %}
+{% block tab-title %}Agregar Paciente{% endblock %}
 {% block page-title %}Agregar Paciente{% endblock %}
 
 {% block page-content %}
@@ -26,7 +26,7 @@
                                         {% else %}
                                             <small id="defaultRegisterFormCIHelpBlock"
                                                    class="form-text text-muted mb-2">
-                                                Sin puntos ni guión
+                                                {{ form.documento.help_text }}
                                             </small>
                                         {% endif %}
                                     </div>
@@ -59,9 +59,9 @@
                                     {{ form.fecha_nacimiento }}
                                 </div>
                                 <div class="col-md-6">
-                                    <!-- Genero -->
+                                    <!-- Sexo -->
                                     <div>
-                                        <label> Género * </label>
+                                        <label> Sexo * </label>
                                     </div>
                                     <div>
                                         {{ form.genero }}
@@ -76,8 +76,8 @@
                                     {{ form.direccion }}
                                 </div>
                                 <div class="col-md-4">
-                                    <!-- Ciudad -->
-                                    <label> Ciudad *</label>
+                                    <!-- Departamento -->
+                                    <label> Departamento *</label>
                                     {{ form.ciudad }}
                                 </div>
                             </div>
@@ -96,6 +96,11 @@
                                         <div class="warning">
                                             {{ form.celular.errors }}
                                         </div>
+                                    {% else %}
+                                        <small id="defaultRegisterFormCIHelpBlock"
+                                               class="form-text text-muted mb-2">
+                                            {{ form.celular.help_text }}
+                                        </small>
                                     {% endif %}
                                 </div>
                             </div>

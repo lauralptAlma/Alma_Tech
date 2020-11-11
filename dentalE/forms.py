@@ -204,6 +204,7 @@ class ContactoForm(forms.ModelForm):
         }
 
 
+# Forms para funcionalidad Núcleo Familiar
 PacienteIntegranteFormset = inlineformset_factory(
     Nucleo,
     Integrante,
