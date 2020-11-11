@@ -618,7 +618,8 @@ def ChartPatient(request, paciente_id):
     pacientes_por_consulta = pacientes_por_consulta.reset_index()
     pacientes_por_consulta.columns = ['Fecha', 'Cantidad']
     fechas = pd.to_datetime(pacientes_por_consulta['Fecha'], format='%Y-%m-%d')
-    consultas = fechas.tolist()
+    print(fechas)
+    consultas = fechas.astype(str).tolist()
     cantidad = pacientes_por_consulta['Cantidad'].tolist()
     data = {
         "labels": consultas,

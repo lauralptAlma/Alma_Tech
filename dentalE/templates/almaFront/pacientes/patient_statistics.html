@@ -6,9 +6,7 @@
 {% block page-content %}
     <div class="row">
         <div class="col-sm-12">
-            <div class="col-sm-6 col-lg-4">
-                <canvas id="chartPatientCons" width="300" height="300"></canvas>
-            </div>
+            <canvas id="chartPatientCons" width="800" height="100"></canvas>
         </div>
     </div>
 {% endblock %}
@@ -16,32 +14,58 @@
 {% block page-javascript %}
     <script>
         $(document).ready(function () {
-
-            let defaultData, labels = []
-            defaultData = {{data.values }}
-
+            let defaultData = []
+            let dates = []
+            let data = []
+            defaultData = {{ data.values }}
+            dates = {{ data.labels }}
+                if (dates) {
+                    for (let i=0; i<dates.length; i++) {
+                        data.push({x:dates[i], y:defaultData[i]});
+                    }
+                    console.log(data);
+                    setChart();
+                }
 
             function setChart() {
                 const ctx = document.getElementById('chartPatientCons').getContext('2d')
                 const chartPatientCons = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: [new Date ("2015-3-15").toLocaleString(), new Date ("2015-3-15").toLocaleString()],
                         datasets: [{
-                            label: 'Consultas por Paciente',
-                            data: defaultData,
-
+                            data: data,
+                            pointStyle: 'circle',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            showLine: false
                         }]
                     },
                     options: {
+                        legend: {
+                            display: false
+                        },
                         scales: {
+                            yAxes: [{
+                                ticks: {
+                                    display: false,
+                                },
+                                gridLines: {
+                                    display: false
+                                }
+                            }],
                             xAxes: [{
                                 type: 'time',
-                                distribution: 'linear'
+                                time: {
+                                    unit: 'day',
+                                    tooltipFormat: 'MMM DD'
+                                },
+                                gridLines: {
+                                    display: false
+                                }
                             }]
                         }
-
-                    },
+                    }
                 });
             }
         })
