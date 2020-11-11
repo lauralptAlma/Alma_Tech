@@ -547,7 +547,7 @@ def contacto(request):
 
 @login_required(login_url="/")
 def analisis(request):
-    return render(request, "almaFront/negocio.html")
+    return render(request, "almaFront/charts.html")
 
 
 @login_required(login_url="/")
