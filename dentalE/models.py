@@ -47,8 +47,6 @@ OSTEOARTICULARES_OPCIONES = (
 SN_OPCIONES = (('SI', 'Sí'), ('NO', 'No'))
 CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 
-CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
-
 
 # MODELOS
 

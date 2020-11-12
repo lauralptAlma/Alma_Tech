@@ -469,16 +469,11 @@ def patient_render_background_pdf(request, *args, **kwargs):
         background = getantecedentes(paciente_id)
         cpos = clean_cpo.get_cpo(paciente_id)
         ortodoncia = getconsultasortodoncia(paciente_id)
-        all_ordered = sorted(
-            chain(treatments, cpos),
-            key=attrgetter('creado'), reverse=True)
-
         # Template that we are going to use to render the pdf
         template_path = 'almaFront/historiapdf/historia_pdf.html'
         context = {'patient': patient, 'treatments': treatments, 'user': user,
                    'background': background, 'cpo': cpos,
-                   'ortodoncia': ortodoncia,
-                   'all': all_ordered}
+                   'ortodoncia': ortodoncia}
         patient_name = patient.nombre + patient.primer_apellido
         filename = patient_name + "-HistoriaClínicaDental"
         response = pdf.generate_pdf(template_path, context, filename)
