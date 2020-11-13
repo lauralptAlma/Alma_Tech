@@ -262,6 +262,11 @@ def edit_patient(request, paciente_id):
     return render(request, template, context)
 
 
+def encode_image(img):
+    img_content = img.read()
+    return base64.b64encode(img_content).decode('utf-8')
+
+
 @login_required(login_url="/")
 def pacientedetalles(request, paciente_id):
     sin_patologias = False
@@ -295,8 +300,9 @@ def pacientedetalles(request, paciente_id):
     ortodoncia_paciente = Ortodoncia.objects.filter(
         paciente_id=paciente_id).last()
     if ortodoncia_paciente:
-        imagen = ortodoncia_paciente.image.read()
-        image_data = base64.b64encode(imagen).decode('utf-8')
+        #imagen = ortodoncia_paciente.image.read()
+        #image_data = base64.b64encode(imagen).decode('utf-8')
+        image_data = encode_image(ortodoncia_paciente.image)
         ortodoncia_paciente.image = image_data
     return render(request, "almaFront/pacientes/paciente.html",
                   {'patient': paciente, 'antecedentes': antecedentes_paciente,
@@ -373,8 +379,9 @@ def getconsultasortodoncia(paciente_id):
     if ortodoncia_paciente:
         for o in ortodoncia_paciente:
             if o.image:
-                imagen = o.image.read()
-                image_data = base64.b64encode(imagen).decode('utf-8')
+                #imagen = o.image.read()
+                #image_data = base64.b64encode(imagen).decode('utf-8')
+                image_data = encode_image(o.image)
                 o.image = image_data
     return ortodoncia_paciente
 
