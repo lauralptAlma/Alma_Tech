@@ -26,7 +26,6 @@ class PacienteForm(ModelForm):
             'fecha_nacimiento', 'email',
             'celular',
             'nucleo_activo')
-
         widgets = {
             'documento': forms.TextInput(attrs={'class': 'form-control'}),
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
@@ -80,6 +79,9 @@ class ConsultaForm(ModelForm):
         model = Consulta
         readonly_fields = 'creado'
         fields = ('paciente', 'diagnostico', 'tratamiento', 'indicaciones')
+        labels = {
+            'paciente': 'Paciente* '
+        }
         widgets = {
             'paciente': forms.Select(
                 attrs={'class': 'form-control mdb-select md-form',
@@ -95,6 +97,10 @@ class OrtodonciaForm(forms.ModelForm):
         model = Ortodoncia
         fields = ('tipo', 'paciente', 'diagnostico', 'tratamiento',
                   'indicaciones', 'image')
+        labels = {
+            'paciente': 'Paciente* ',
+            'tipo': 'Tipo de consulta* '
+        }
         widgets = {
             'tipo': forms.Select(
                 attrs={'class': 'form-control mdb-select md-form'}),
@@ -113,6 +119,9 @@ class ConsultaCPOForm(ModelForm):
         model = CPO
         readonly_fields = 'creado'
         fields = ('paciente', 'contenido_cpo', 'ceod', 'ceos', 'cpod', 'cpos')
+        labels = {
+            'paciente': 'Paciente* :'
+        }
         widgets = {
             'ceod': forms.NumberInput(attrs={'class': 'form-control'}),
             'ceos': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -141,7 +150,9 @@ class AntecedenteForm(ModelForm):
                   'desc_cardiovascular', 'nefrourologicos',
                   'desc_nefrourologicos', 'osteoarticulares',
                   'desc_osteoarticulares', 'observations')
-
+        labels = {
+            'paciente': 'Paciente* '
+        }
         widgets = {
             'paciente': forms.Select(
                 attrs={'class': 'form-control mdb-select md-form',

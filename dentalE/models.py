@@ -198,14 +198,16 @@ class AntecedentesClinicos(models.Model):
 
 
 class Consulta(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente,
+                                 on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='consulta_doctor',
                                on_delete=models.CASCADE)
-    diagnostico = models.TextField('Diagnóstico', max_length=250, default='',
+    diagnostico = models.TextField('Diagnóstico* ', max_length=250, default='',
                                    blank=False, null=False)
-    tratamiento = models.TextField(max_length=250, default='', blank=False,
-                                   null=False)
-    indicaciones = models.TextField(max_length=250, default='', blank=False,
+    tratamiento = models.TextField('Tratamiento* ', max_length=250, default='',
+                                   blank=False, null=False)
+    indicaciones = models.TextField('Indicaciones* ', max_length=250,
+                                    default='', blank=False,
                                     null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
 
@@ -222,17 +224,20 @@ class Ortodoncia(models.Model):
     doctor = models.ForeignKey(User, related_name='doctor_ortodoncia',
                                on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    tipo = models.TextField('Tipo', choices=CONSULTA_OPCIONES,
+    tipo = models.TextField('Tipo* ', choices=CONSULTA_OPCIONES,
                             default='ORTODONCIA')
-    diagnostico = models.TextField('Diagnóstico', max_length=250, default='',
+    diagnostico = models.TextField('Diagnóstico* ', max_length=250, default='',
                                    blank=False, null=False)
-    tratamiento = models.TextField(max_length=250, default='', blank=False,
+    tratamiento = models.TextField('Tratamiento* ', max_length=250, default='',
+                                   blank=False,
                                    null=False)
-    indicaciones = models.TextField(max_length=250, default='', blank=False,
+    indicaciones = models.TextField('Indicaciones* ', max_length=250,
+                                    default='', blank=False,
                                     null=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
-    image = djongomodel.ImageField(storage=GridFSStorage(collection='image'))
+    image = djongomodel.ImageField(storage=GridFSStorage(collection='image'),
+                                   blank=True, null=True)
 
     class Meta:
         verbose_name = " Consulta de Ortodoncia | Ortopedia"
@@ -266,8 +271,8 @@ class Cita(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='app_doctor',
                                on_delete=models.CASCADE)
-    fecha = models.DateField(blank=True, null=True)
-    hora = models.TimeField(null=True, blank=True)
+    fecha = models.DateField(blank=False, null=False)
+    hora = models.TimeField(null=False, blank=False)
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
