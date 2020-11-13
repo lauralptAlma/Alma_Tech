@@ -600,6 +600,28 @@ class ChartData(APIView):
             "valuesGen": cantidad,
         }
 
+        antecedentes_paciente = AntecedentesClinicos.objects.all().values()
+        antecedentes_data = pd.DataFrame(antecedentes_paciente)
+        total_antecedentes = antecedentes_data[
+            ['alcohol','fumador','aparato_digestivo','dermatologicos','alergias','autoinmunes','oncologicas',
+             'hematologicas']]
+        total_antecedentes = total_antecedentes.reset_index()
+
+        soloSI = total_antecedentes.groupby(['fumador']).size().reset_index(name='cantidad')
+        reversed_df = soloSI.transpose()
+        reversed_df2 = reversed_df.drop([0], axis=1)
+        #reversed_df = soloSI.drop(['NO'], axis='rows')
+        #reversed_df = soloSI.drop(['NO'], axis=1)
+
+
+
+        #g = fff.columns = ['ALCOHOL', 'Cantidad']
+        #g = g.groupby(by="Cantidad")
+        #reversed_df = total_antecedentes.transpose()
+
+        print(reversed_df2)
+        #print(total_antecedentes)
+
         data = {"data": data, "datos": datos}
         return Response(data)
 
