@@ -603,33 +603,55 @@ class ChartData(APIView):
         antecedentes_paciente = AntecedentesClinicos.objects.all().values()
         antecedentes_data = pd.DataFrame(antecedentes_paciente)
         total_antecedentes = antecedentes_data[
-            ['alcohol','fumador','aparato_digestivo','dermatologicos','alergias','autoinmunes','oncologicas',
+            ['alcohol', 'fumador', 'aparato_digestivo', 'dermatologicos', 'alergias', 'autoinmunes', 'oncologicas',
              'hematologicas']]
+
         total_antecedentes = total_antecedentes.reset_index()
 
         soloSI = total_antecedentes.groupby(['fumador']).size().reset_index(name='cantidad')
-        reversed_df = soloSI.transpose()
-        reversed_df2 = reversed_df.drop([0], axis=1)
-        #reversed_df = soloSI.drop(['NO'], axis='rows')
-        #reversed_df = soloSI.drop(['NO'], axis=1)
+        soloSIA = total_antecedentes.groupby(['alcohol']).size().reset_index(name='cantidad')
+        soloSIAg = total_antecedentes.groupby(['aparato_digestivo']).size().reset_index(name='cantidad')
+        soloSID = total_antecedentes.groupby(['dermatologicos']).size().reset_index(name='cantidad')
+        soloSIAl = total_antecedentes.groupby(['alergias']).size().reset_index(name='cantidad')
+        soloSIAi = total_antecedentes.groupby(['autoinmunes']).size().reset_index(name='cantidad')
+        soloSIO = total_antecedentes.groupby(['oncologicas']).size().reset_index(name='cantidad')
+        soloSIH = total_antecedentes.groupby(['hematologicas']).size().reset_index(name='cantidad')
 
+        fumador = soloSI.loc[soloSI['fumador'] == 'SI']
+        alcohol = soloSIA.loc[soloSIA['alcohol'] == 'SI']
+        digestivo = soloSIAg.loc[soloSIAg['aparato_digestivo'] == 'SI']
+        dermatologico = soloSID.loc[soloSID['dermatologicos'] == 'SI']
+        alergias = soloSIAl.loc[soloSIAl['alergias'] == 'SI']
+        autoinmunes = soloSIAi.loc[soloSIAi['autoinmunes'] == 'SI']
+        oncologicas = soloSIO.loc[soloSIO['oncologicas'] == 'SI']
+        hematologicas = soloSIH.loc[soloSIH['hematologicas'] == 'SI']
 
+        print(fumador)
 
-        #g = fff.columns = ['ALCOHOL', 'Cantidad']
-        #g = g.groupby(by="Cantidad")
-        #reversed_df = total_antecedentes.transpose()
+        prueba_f = fumador.transpose().T
+        prueba_a = alcohol.transpose().T
+        prueba_d = digestivo.transpose().T
+        prueba_de = dermatologico.transpose().T
+        prueba_al = alergias.transpose().T
+        prueba_ai = autoinmunes.transpose().T
+        prueba_o = oncologicas.transpose().T
+        prueba_h = hematologicas.transpose().T
 
-        print(reversed_df2)
-        #print(total_antecedentes)
-
-        data = {"data": data, "datos": datos}
+        data_final = pd.concat([prueba_a, prueba_f, prueba_d, prueba_de, prueba_al, prueba_ai, prueba_o, prueba_h],
+                               axis=0)
+        p = pd.melt(data_final, id_vars='cantidad')
+        p = p.loc[p['value'] == 'SI']
+        antecedente = p['variable'].tolist()
+        cantidad = p['cantidad'].tolist()
+        datosA = {
+            "labelsAnt": antecedente,
+            "valuesAnt": cantidad,
+        }
+        print(datosA)
+        data = {"data": data, "datos": datos, "datosA": datosA}
         return Response(data)
 
 
-'''class ChartPatient(APIView):
-    authentication_classes = []
-    permission_classes = []
-'''
 
 
 def ChartPatient(request, paciente_id):
