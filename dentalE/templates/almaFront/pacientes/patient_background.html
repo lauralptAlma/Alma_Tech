@@ -1,18 +1,31 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
 {% block tab-title %}Antecedentes Clínicos{% endblock %}
-{% block page-title %}Historia Clínica {{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+{% block page-breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a
+                    href="/dentalE/pacientedetalles/{{ patient.paciente_id }}">
+                {{ patient.nombre }} {{ patient.primer_apellido }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Antecedentes
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+{% block page-title %}Historia Clínica {{ patient.nombre }}
+    {{ patient.primer_apellido }}{% endblock %}
 {% block page-content %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-             {% include 'almaFront/bases/clinic-history-tabs.html' %}
+                {% include 'almaFront/bases/clinic-history-tabs.html' %}
                 <div class="card shadow mb-4">
                     {% if antecedentes %}
                         <div class="card-header py-3">
-                        <h6 class="font-weight-bold m-0">
-                            Fecha: {{ antecedentes.creado }}
-                        </h6>
+                            <h6 class="font-weight-bold m-0">
+                                Fecha: {{ antecedentes.creado }}
+                            </h6>
                         </div>
                         <ul class="list-group list-group-flush border-left-info">
                             <li class="list-group-item">
@@ -157,7 +170,8 @@
                                                 <span class="ml-4"><i
                                                         class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
                                                     {% if e == 'OTROS' %}
-                                                        : {{ antecedentes.desc_endocrinometabolico }}
+                                                        :
+                                                        {{ antecedentes.desc_endocrinometabolico }}
                                                     {% endif %}
                                             </span>
                                             {% endfor %}
@@ -171,7 +185,8 @@
                                                 <span class="ml-4"><i
                                                         class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
                                                     {% if e == 'OTROS' %}
-                                                        : {{ antecedentes.desc_cardiovascular }}
+                                                        :
+                                                        {{ antecedentes.desc_cardiovascular }}
                                                     {% endif %}
                                             </span>
                                             {% endfor %}
@@ -189,7 +204,8 @@
                                                 <span class="ml-4"><i
                                                         class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
                                                     {% if e == 'OTROS' %}
-                                                        : {{ antecedentes.desc_nefrourologicos }}
+                                                        :
+                                                        {{ antecedentes.desc_nefrourologicos }}
                                                     {% endif %}
                                             </span>
                                             {% endfor %}
@@ -203,7 +219,8 @@
                                                 <span class="ml-4"><i
                                                         class="fas fa-angle-right"></i> {{ e | lower | capfirst }}
                                                     {% if e == 'OTROS' %}
-                                                        : {{ antecedentes.desc_osteoarticulares }}
+                                                        :
+                                                        {{ antecedentes.desc_osteoarticulares }}
                                                     {% endif %}
                                             </span>
                                             {% endfor %}

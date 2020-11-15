@@ -247,6 +247,8 @@ def edit_patient(request, paciente_id):
                     messages.SUCCESS,
                     'Paciente editado exitosamente!'
                 )
+                return HttpResponseRedirect(
+                    "/dentalE/pacientedetalles/{}".format(paciente_id))
         except Exception as e:
             messages.add_message(
                 request,
@@ -256,6 +258,7 @@ def edit_patient(request, paciente_id):
     else:
         form = PacienteForm(instance=paciente)
         form.fields['documento'].widget.attrs['readonly'] = True
+    form.fields['documento'].widget.attrs['readonly'] = True
     context = {'form': form,
                'paciente': paciente
                }
@@ -298,7 +301,7 @@ def pacientedetalles(request, paciente_id):
     if consultas_paciente:
         consultas_paciente = consultas_paciente[:3]
     ortodoncia_paciente = Ortodoncia.objects.filter(
-        paciente_id=paciente_id).last()
+        paciente_id=paciente_id).order_by('-creado').first()
     if ortodoncia_paciente:
         #imagen = ortodoncia_paciente.image.read()
         #image_data = base64.b64encode(imagen).decode('utf-8')
@@ -375,7 +378,7 @@ def verantecedentes(request, paciente_id):
 
 def getconsultasortodoncia(paciente_id):
     ortodoncia_paciente = Ortodoncia.objects.filter(
-        paciente_id=paciente_id).order_by('-id')
+        paciente_id=paciente_id).order_by('-creado')
     if ortodoncia_paciente:
         for o in ortodoncia_paciente:
             if o.image:
