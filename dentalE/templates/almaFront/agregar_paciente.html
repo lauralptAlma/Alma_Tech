@@ -1,7 +1,12 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
 {% block tab-title %}Agregar Paciente{% endblock %}
-{% block page-title %}Agregar Paciente{% endblock %}
+
+{% block page-title %}
+    {% if 'editarpaciente' in request.path %} Editar
+    {% else %} Agregar {% endif %} Paciente
+{% endblock %}
+
 
 {% block page-content %}
     <div class="container-fluid">
@@ -57,6 +62,10 @@
                                     <!-- Fecha Nacimiento -->
                                     <label> Fecha de Nacimiento * </label>
                                     {{ form.fecha_nacimiento }}
+                                    <small id="defaultRegisterFormCIHelpBlock"
+                                           class="form-text text-muted mb-2">
+                                        {{ form.fecha_nacimiento.help_text }}
+                                    </small>
                                 </div>
                                 <div class="col-md-6">
                                     <!-- Sexo -->

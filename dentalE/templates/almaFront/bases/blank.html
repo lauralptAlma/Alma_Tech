@@ -98,6 +98,9 @@
 
             <div class="container-fluid">
                 {% include 'almaFront/bases/alertas.html' %}
+                {% block page-breadcrumbs %}
+                {% endblock %}
+                <br>
                 <h3 class="text-dark mb-1">{% block page-title %}Título
                     Base{% endblock %}</h3>
                 <br>
@@ -114,7 +117,8 @@
                     </span>
                 </div>
                 <div column-count:2;>
-                    <li> <a class="text-center nav-link"  href="/dentalE/contacto/"> Contacto </a></li>
+                    <li><a class="text-center nav-link"
+                           href="/dentalE/contacto/"> Contacto </a></li>
                 </div>
             </div>
         </footer>

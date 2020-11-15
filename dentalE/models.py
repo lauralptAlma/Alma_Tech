@@ -53,7 +53,8 @@ CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    user_tipo = models.CharField(max_length=15, choices=USER_TIPO, default='')
+    user_tipo = models.CharField("Perfil de usuario* ", max_length=15,
+                                 choices=USER_TIPO, default='')
     # Contacto
     celular_regex = RegexValidator(regex=r'^09\d{7,7}$',
                                    message="El número debe ser del "
@@ -93,7 +94,7 @@ class Paciente(models.Model):
     ciudad = models.CharField(max_length=15, choices=PATIENT_CITY, blank=False,
                               null=False)
     fecha_nacimiento = models.DateField('Fecha de nacimiento* ',
-                                        help_text="ej. 01/08/2012",
+                                        help_text="Formato DD/MM/AAAA",
                                         null=False, blank=False)
     # Contacto
     celular_regex = RegexValidator(regex=r'^09\d{7,7}$',
@@ -255,10 +256,14 @@ class CPO(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     cpo_id = models.AutoField(primary_key=True)
     contenido_cpo = models.TextField()
-    ceod = models.IntegerField(blank=True, null=True)
-    ceos = models.IntegerField(blank=True, null=True)
-    cpod = models.IntegerField(blank=True, null=True)
-    cpos = models.IntegerField(blank=True, null=True)
+    ceod = models.DecimalField(max_digits=2, decimal_places=1, blank=True,
+                               null=True)
+    ceos = models.DecimalField(max_digits=2, decimal_places=1, blank=True,
+                               null=True)
+    cpod = models.DecimalField(max_digits=2, decimal_places=1, blank=True,
+                               null=True)
+    cpos = models.DecimalField(max_digits=2, decimal_places=1, blank=True,
+                               null=True)
 
     class Meta:
         db_table = "dentalE_CPOs"
@@ -278,6 +283,7 @@ class Cita(models.Model):
 
     class Meta:
         ordering = ('fecha',)
+        # unique_together = ('doctor', 'fecha', 'hora',)
 
     def __str__(self):
         return str(self.paciente)
