@@ -138,6 +138,7 @@ li {
     padding-left: 1rem;
     padding-right: 1rem;
 }
+
 .diente {
     position: static;
     width: 0vw;
@@ -468,4 +469,13 @@ li {
     .wrapper {
         padding: 0 15px;
     }
+}
+
+.img-max {
+    max-width: 450px;
+    width: 100%;
+}
+
+.breadcrumb li {
+    margin-right: 0px;
 }

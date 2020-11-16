@@ -1,6 +1,18 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
 {% block tab-title %}CPO{% endblock %}
+{% block page-breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a
+                    href="/dentalE/pacientedetalles/{{ patient.paciente_id }}">
+                {{ patient.nombre }} {{ patient.primer_apellido }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">CPO
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
 {% block page-title %}Historia Clínica {{ patient.nombre }}
     {{ patient.primer_apellido }}{% endblock %}
 {% block page-content %}

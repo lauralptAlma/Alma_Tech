@@ -1,21 +1,21 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
-{% block tab-title %}Agenda{% endblock %}
-{% block page-title %}Agenda de hoy{% endblock %}
+{% block tab-title %}Citas{% endblock %}
+{% block page-title %}Citas del día{% endblock %}
 
 {% block page-content %}
     <div class="card shadow">
         <div class="card-body">
             <div class="row justify-content-end">
                 <div>
-                    <form method="GET" id="search-form" autocomplete="off">
+                    <form method="GET" id="search-form" autocomplete="on">
                         <div class="search-div input-group">
-                            <input type="text" class="form-control" id="search"
-                                   name="search"
-                                   placeholder="Buscar paciente..."
-                                   value="{{ search }}">
+                            <input type="text"
+                                   class="bg-light form-control border-0 small"
+                                   name="buscar"
+                                   placeholder="Buscar paciente...">
                             <div class="input-group-append">
-                                <button class="btn input-group-text lime lighten-2"
+                                <button class="btn btn-primary py-0"
                                         type="submit" id="search-btn">
                                     <i class="fas fa-search text-grey"
                                        aria-hidden="true"></i></button>

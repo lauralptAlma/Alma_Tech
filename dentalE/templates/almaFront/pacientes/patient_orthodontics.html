@@ -1,0 +1,97 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Ortodoncia | Ortopedia{% endblock %}
+{% block page-breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a
+                    href="/dentalE/pacientedetalles/{{ patient.paciente_id }}">
+                {{ patient.nombre }} {{ patient.primer_apellido }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Ortodoncia | Ortopedia
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+{% block page-title %}Historia Clínica {{ patient.nombre }}
+    {{ patient.primer_apellido }}{% endblock %}
+{% block page-content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                {% include 'almaFront/bases/clinic-history-tabs.html' %}
+                <div class="card shadow mb-3">
+                    {% if ortodoncia_obj %}
+                        <div class="card-header py-3">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <p class="m-0 font-weight-bold">
+                                    {% for ortodoncia in ortodoncia_obj %}
+                                        Fecha:
+                                        {{ ortodoncia.creado|date:"SHORT_DATE_FORMAT" }}
+                                        |
+                                        Tipo de Consulta:
+                                        {{ ortodoncia.tipo | lower | capfirst }}
+                                    {% endfor %}
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        {% if ortodoncia_obj %}
+                            <div id="historia-ortodoncia" class="media">
+                                {% for ortodoncia in ortodoncia_obj %}
+                                    {% if ortodoncia.image %}
+                                        <div class="media-left align-self-center mr-4 mb-4">
+                                            <img src="data:image/jpeg;base64,{{ ortodoncia.image }}"
+                                                 class="media-object img-fluid img-max"
+                                                 alt="Imagen última consulta">
+                                        </div>
+                                    {% endif %}
+                                    <div class="media-body">
+                                        <p>
+                                            <strong>Profesional: </strong> {{ ortodoncia.doctor.get_full_name }}
+                                        </p>
+                                        <p>
+                                            <strong>Diagnóstico: </strong> {{ ortodoncia.diagnostico }}
+                                        </p>
+                                        <p>
+                                            <strong>Tratamiento: </strong> {{ ortodoncia.tratamiento }}
+                                        </p>
+                                        <p>
+                                            <strong>Indicaciones: </strong> {{ ortodoncia.indicaciones }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                            {% if ortodoncia_obj %}
+                                {% include "almaFront/bases/pagination.html" with page_obj=ortodoncia_obj %}
+                            {% endif %}
+                        {% else %}
+                            <tr class="no-data">
+                                <td colspan="20">No existen consultas de
+                                    Ortodoncia u Ortopedia
+                                    registradas para
+                                    este
+                                    paciente en
+                                    el sistema.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+    <script>
+        const $background = $('#historia-ortodoncia');
+        $(window).resize(function () {
+            if (window.innerWidth >= 1000) $background.addClass('media');
+            else $background.removeClass('media');
+        });
+    </script>
+{% endblock %}

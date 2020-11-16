@@ -1,7 +1,21 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
 {% block tab-title %}Odontología General{% endblock %}
-{% block page-title %}Historia Clínica {{ patient.nombre }} {{ patient.primer_apellido }}{% endblock %}
+{% block page-breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a
+                    href="/dentalE/pacientedetalles/{{ patient.paciente_id }}">
+                {{ patient.nombre }} {{ patient.primer_apellido }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Odontología General
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+{% block page-title %}Historia Clínica {{ patient.nombre }}
+    {{ patient.primer_apellido }}{% endblock %}
 {% block page-content %}
     <div class="container-fluid">
         <div class="row">
@@ -9,7 +23,8 @@
                 {% include 'almaFront/bases/clinic-history-tabs.html' %}
                 <div class="card shadow mb-4">
                     <div class="card-body">
-                        <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                        <div class="table-responsive table mt-2" id="dataTable"
+                             role="grid"
                              aria-describedby="dataTable_info">
                             <table class="table my-0" id="dataTable">
                                 <thead class="card-header py-3">
@@ -34,7 +49,8 @@
                                     {% endfor %}
                                 {% else %}
                                     <tr class="no-data">
-                                        <td colspan="20">No existen consultas registradas para este paciente en
+                                        <td colspan="20">No existen consultas
+                                            registradas para este paciente en
                                             el sistema.
                                         </td>
                                     </tr>

@@ -1,6 +1,7 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
-{% block page-title %}Agregar Cita{% endblock %}
+{% block tab-title %}Agenda{% endblock %}
+{% block page-title %}Agenda{% endblock %}
 
 {% block page-content %}
     <div class="form-row">
@@ -12,7 +13,8 @@
             </form>
             <form method="post" action="">
                 {% csrf_token %}
-                <div class="modal fade" id="exampleModal" tabindex="-1"
+                <div class="modal fade" id="exampleModal"
+                     data-backdrop="static" tabindex="-1"
                      aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog">
@@ -20,38 +22,36 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">
                                     Datos de la Cita</h5>
-                                <button type="button" class="close"
-                                        data-dismiss="modal"
-                                        aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                {% if 'editarcita' not in request.path %}
+                                    <button type="button" class="close"
+                                            data-dismiss="modal"
+                                            aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                {% endif %}
                             </div>
                             <div class="modal-body">
+                                {{ form.non_field_errors }}
                                 <div class="form-row">
                                     <div class="form-group col-md-8">
-                                        <label>Paciente:</label>
+                                        <label>Paciente* :</label>
                                         {{ form.paciente }}
-                                        <!--input type="text" class="form-control" name="txtPaciente" id="txtPaciente"-->
                                     </div>
                                     <div class="form-group col-md-8">
-                                        <label>Profesional:</label>
+                                        <label>Profesional* :</label>
                                         {{ form.doctor }}
-                                        <!--input type="text" class="form-control" name="txtProf" id="txtProf"-->
                                     </div>
                                     <div class="form-group col-md-8">
-                                        <label>Fecha:</label>
+                                        <label>Fecha* :</label>
                                         {{ form.fecha }}
-                                        <!--input type="text" class="form-control" name="txtFecha" id="txtFecha"-->
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Hora:</label>
+                                        <label>Hora* :</label>
                                         {{ form.hora }}
-                                        <!--input type="time" min="07:00" max="19:00" step="600"
-                                               class="form-control" name="txtHora" id="txtHora"-->
                                     </div>
                                 </div>
                             </div>
-                            <div class=" modal-footer">
+                            <div class="modal-footer">
                                 <button type="submit" id="btnAdd"
                                         class="btn btn-success">Agregar
                                 </button>
@@ -93,11 +93,18 @@
                 initialView: 'dayGridMonth',
                 language: 'Spanish',
                 selectable: true,
+                nowIndicator: true,
                 editable: true,
                 headerToolbar: {
                     right: 'dayGridMonth, timeGridWeek, timeGridDay',
                     left: 'prev,next',
                     center: 'title'
+                },
+                businessHours: {
+                    // days of week. an array of zero-based day of week integers (0=Sunday)
+                    daysOfWeek: [1, 2, 3, 4, 5], // Monday - Friday
+                    startTime: '09:00', // a start time (9am in this example)
+                    endTime: '20:00', // an end time (7pm in this example)
                 },
                 slotLabelFormat: [
                     {
@@ -111,7 +118,7 @@
                 events: [
                     {% for i in citasList %}
                         {
-                            title: "{{ i.paciente.nombre}}",
+                            title: "{{ i.paciente.nombre }} {{ i.paciente.primer_apellido }}",
                             start: '{{ i.fecha|date:"Y-m-d" }}T{{ i.hora|time:"H:i"}}',
                             id: '{{ i.id }}',
                         },
@@ -129,7 +136,7 @@
                     $('#btnEdit').prop("disabled", true);
                     $('#btnDelete').prop("disabled", true);
                     $('#exampleModal').modal('toggle');
-                }
+                },
 
             });
             calendar.setOption('locale', 'es')
