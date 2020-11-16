@@ -603,19 +603,28 @@ class ChartData(APIView):
         antecedentes_paciente = AntecedentesClinicos.objects.all().values()
         antecedentes_data = pd.DataFrame(antecedentes_paciente)
         total_antecedentes = antecedentes_data[
-            ['alcohol', 'fumador', 'aparato_digestivo', 'dermatologicos', 'alergias', 'autoinmunes', 'oncologicas',
+            ['alcohol', 'fumador', 'aparato_digestivo', 'dermatologicos',
+             'alergias', 'autoinmunes', 'oncologicas',
              'hematologicas']]
 
         total_antecedentes = total_antecedentes.reset_index()
 
-        soloSI = total_antecedentes.groupby(['fumador']).size().reset_index(name='cantidad')
-        soloSIA = total_antecedentes.groupby(['alcohol']).size().reset_index(name='cantidad')
-        soloSIAg = total_antecedentes.groupby(['aparato_digestivo']).size().reset_index(name='cantidad')
-        soloSID = total_antecedentes.groupby(['dermatologicos']).size().reset_index(name='cantidad')
-        soloSIAl = total_antecedentes.groupby(['alergias']).size().reset_index(name='cantidad')
-        soloSIAi = total_antecedentes.groupby(['autoinmunes']).size().reset_index(name='cantidad')
-        soloSIO = total_antecedentes.groupby(['oncologicas']).size().reset_index(name='cantidad')
-        soloSIH = total_antecedentes.groupby(['hematologicas']).size().reset_index(name='cantidad')
+        soloSI = total_antecedentes.groupby(['fumador']).size().reset_index(
+            name='cantidad')
+        soloSIA = total_antecedentes.groupby(['alcohol']).size().reset_index(
+            name='cantidad')
+        soloSIAg = total_antecedentes.groupby(
+            ['aparato_digestivo']).size().reset_index(name='cantidad')
+        soloSID = total_antecedentes.groupby(
+            ['dermatologicos']).size().reset_index(name='cantidad')
+        soloSIAl = total_antecedentes.groupby(['alergias']).size().reset_index(
+            name='cantidad')
+        soloSIAi = total_antecedentes.groupby(
+            ['autoinmunes']).size().reset_index(name='cantidad')
+        soloSIO = total_antecedentes.groupby(
+            ['oncologicas']).size().reset_index(name='cantidad')
+        soloSIH = total_antecedentes.groupby(
+            ['hematologicas']).size().reset_index(name='cantidad')
 
         fumador = soloSI.loc[soloSI['fumador'] == 'SI']
         alcohol = soloSIA.loc[soloSIA['alcohol'] == 'SI']
@@ -626,8 +635,6 @@ class ChartData(APIView):
         oncologicas = soloSIO.loc[soloSIO['oncologicas'] == 'SI']
         hematologicas = soloSIH.loc[soloSIH['hematologicas'] == 'SI']
 
-        print(fumador)
-
         prueba_f = fumador.transpose().T
         prueba_a = alcohol.transpose().T
         prueba_d = digestivo.transpose().T
@@ -637,8 +644,10 @@ class ChartData(APIView):
         prueba_o = oncologicas.transpose().T
         prueba_h = hematologicas.transpose().T
 
-        data_final = pd.concat([prueba_a, prueba_f, prueba_d, prueba_de, prueba_al, prueba_ai, prueba_o, prueba_h],
-                               axis=0)
+        data_final = pd.concat(
+            [prueba_a, prueba_f, prueba_d, prueba_de, prueba_al, prueba_ai,
+             prueba_o, prueba_h],
+            axis=0)
         p = pd.melt(data_final, id_vars='cantidad')
         p = p.loc[p['value'] == 'SI']
         antecedente = p['variable'].tolist()
@@ -647,28 +656,41 @@ class ChartData(APIView):
             "labelsAnt": antecedente,
             "valuesAnt": cantidad,
         }
-        print(datosA)
         data = {"data": data, "datos": datos, "datosA": datosA}
         return Response(data)
 
 
-
-
+@login_required(login_url="/")
 def ChartPatient(request, paciente_id):
-    paciente = Paciente.objects.filter(paciente_id=paciente_id)
     consulta = Consulta.objects.filter(paciente_id=paciente_id).values()
-    pacientes_data_set = pd.DataFrame(consulta)
-    pacientes_por_consulta = pacientes_data_set['creado'].value_counts()
-    pacientes_por_consulta = pacientes_por_consulta.reset_index()
-    pacientes_por_consulta.columns = ['Fecha', 'Cantidad']
-    fechas = pd.to_datetime(pacientes_por_consulta['Fecha'], format='%Y-%m-%d')
-    print(fechas)
-    consultas = fechas.astype(str).tolist()
-    cantidad = pacientes_por_consulta['Cantidad'].tolist()
-    data = {
-        "labels": consultas,
-        "values": cantidad,
-    }
-    print(data)
+    data = {}
+    data_caries = {}
+    if consulta:
+        pacientes_data_set = pd.DataFrame(consulta)
+        pacientes_por_consulta = pacientes_data_set['creado'].value_counts()
+        pacientes_por_consulta = pacientes_por_consulta.reset_index()
+        pacientes_por_consulta.columns = ['Fecha', 'Cantidad']
+        fechas = pd.to_datetime(pacientes_por_consulta['Fecha'], format='%Y-%m-%d')
+        consultas = fechas.astype(str).tolist()
+        cantidad = pacientes_por_consulta['Cantidad'].tolist()
+        data = {
+            "labels": consultas,
+            "values": cantidad,
+        }
+
+    cpo_fechas = []
+    cantidad_caries = []
+    cpos = reversed(clean_cpo.get_cpo(paciente_id))
+    if cpos:
+        i = 0
+        for c in cpos:
+            cpo_fechas.append(c.creado.strftime("%d/%m/%Y"))
+            i = i + len(c.caries)
+            cantidad_caries.append(i)
+            print(len(c.caries))
+        data_caries = {
+            "labels": cpo_fechas,
+            "values": cantidad_caries,
+        }
     return render(request, "almaFront/pacientes/patient_statistics.html",
-                  {'data': data})
+                  {'data': data, 'data_caries': data_caries})
