@@ -1,6 +1,5 @@
 import ast
 import base64
-from operator import attrgetter
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -23,8 +22,6 @@ from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, Ortodoncia
 from datetime import date
-# Imports needed for pdf generation
-from itertools import chain
 
 
 # doctor
@@ -303,8 +300,8 @@ def pacientedetalles(request, paciente_id):
     ortodoncia_paciente = Ortodoncia.objects.filter(
         paciente_id=paciente_id).order_by('-creado').first()
     if ortodoncia_paciente:
-        #imagen = ortodoncia_paciente.image.read()
-        #image_data = base64.b64encode(imagen).decode('utf-8')
+        # imagen = ortodoncia_paciente.image.read()
+        # image_data = base64.b64encode(imagen).decode('utf-8')
         image_data = encode_image(ortodoncia_paciente.image)
         ortodoncia_paciente.image = image_data
     return render(request, "almaFront/pacientes/paciente.html",
@@ -382,8 +379,8 @@ def getconsultasortodoncia(paciente_id):
     if ortodoncia_paciente:
         for o in ortodoncia_paciente:
             if o.image:
-                #imagen = o.image.read()
-                #image_data = base64.b64encode(imagen).decode('utf-8')
+                # imagen = o.image.read()
+                # image_data = base64.b64encode(imagen).decode('utf-8')
                 image_data = encode_image(o.image)
                 o.image = image_data
     return ortodoncia_paciente
