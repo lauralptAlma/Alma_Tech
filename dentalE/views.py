@@ -1,7 +1,6 @@
 import ast
 import pandas as pd
 import base64
-from operator import attrgetter
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -11,7 +10,6 @@ from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.views import View
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
@@ -23,11 +21,9 @@ from dentalE.historiaPdf import pdf, clean_cpo
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
     ConsultaCPOForm, ContactoForm, OrtodonciaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
-    AntecedentesClinicos, CPO, PATIENT_CITY
-from datetime import date, datetime
+    AntecedentesClinicos, CPO, Ortodoncia
+from datetime import date
 # Imports needed for pdf generation
-from itertools import chain
-from dentalE.historiaPdf import pdf, clean_cpo
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -308,8 +304,6 @@ def pacientedetalles(request, paciente_id):
     ortodoncia_paciente = Ortodoncia.objects.filter(
         paciente_id=paciente_id).order_by('-creado').first()
     if ortodoncia_paciente:
-        #imagen = ortodoncia_paciente.image.read()
-        #image_data = base64.b64encode(imagen).decode('utf-8')
         image_data = encode_image(ortodoncia_paciente.image)
         ortodoncia_paciente.image = image_data
     return render(request, "almaFront/pacientes/paciente.html",
@@ -387,8 +381,6 @@ def getconsultasortodoncia(paciente_id):
     if ortodoncia_paciente:
         for o in ortodoncia_paciente:
             if o.image:
-                #imagen = o.image.read()
-                #image_data = base64.b64encode(imagen).decode('utf-8')
                 image_data = encode_image(o.image)
                 o.image = image_data
     return ortodoncia_paciente
@@ -659,7 +651,8 @@ def ChartPatient(request, paciente_id):
         pacientes_por_consulta = pacientes_data_set['creado'].value_counts()
         pacientes_por_consulta = pacientes_por_consulta.reset_index()
         pacientes_por_consulta.columns = ['Fecha', 'Cantidad']
-        fechas = pd.to_datetime(pacientes_por_consulta['Fecha'], format='%Y-%m-%d')
+        fechas = pd.to_datetime(pacientes_por_consulta['Fecha'],
+                                format='%Y-%m-%d')
         consultas = fechas.astype(str).tolist()
         cantidad = pacientes_por_consulta['Cantidad'].tolist()
         data = {
@@ -683,6 +676,8 @@ def ChartPatient(request, paciente_id):
         }
     return render(request, "almaFront/pacientes/patient_statistics.html",
                   {'data': data, 'data_caries': data_caries})
+
+
 # Vistas para funcionalidades no completadas
 # paciente
 @login_required(login_url="/")
