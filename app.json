@@ -2,8 +2,8 @@
   "environments": {
     "test": {
       "scripts": {
-        "test-setup": "flake8 dentalE",
-        "test": "bandit -r dentalE"
+        "test-setup": "flake8 dentalE && bandit -r dentalE",
+        "test": "python manage.py test dentalE"
       }
     }
   }
