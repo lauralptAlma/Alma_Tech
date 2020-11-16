@@ -684,7 +684,7 @@ def ChartPatient(request, paciente_id):
     if cpos:
         i = 0
         for c in cpos:
-            cpo_fechas.append(c.creado.strftime("%d/%m/%Y"))
+            cpo_fechas.append(c.creado.strftime("%Y-%m-%d"))
             i = i + len(c.caries)
             cantidad_caries.append(i)
             print(len(c.caries))

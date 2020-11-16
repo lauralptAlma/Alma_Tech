@@ -63,6 +63,7 @@
             {% if data.labels and data.values%}
                 defaultData = {{ data.values }}
                     dates = {{ data.labels | safe }}
+                console.log('Fechas' + dates)
                 for (let i = 0; i < dates.length; i++) {
                     data.push({x: dates[i], y: defaultData[i]});
                 }
@@ -75,6 +76,7 @@
             {% if data_caries.labels and data_caries.values%}
                 cpoData = {{ data_caries.values }}
                     cpoDates = {{ data_caries.labels | safe }}
+                        console.log('Fechas CPO' + cpoDates)
                 for (let i = 0; i < cpoDates.length; i++) {
                     dataCaries.push({x: cpoDates[i], y: cpoData[i]});
                 }
@@ -144,7 +146,7 @@
                         scales: {
                             yAxes: [{
                                 ticks: {
-                                    display: false,
+                                    display: true,
                                 },
                                 gridLines: {
                                     display: false
