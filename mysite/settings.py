@@ -93,6 +93,17 @@ DATABASES = {
     }
 }
 
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'djongo',
+        "CLIENT": {"name": 'autoTestsDB',
+                   "host": 'mongodb+srv://admin:almaAdmin@clusteralmatech.izim4.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true',
+                   "username": 'admin',
+                   "password": 'almaAdmin',
+                   "authMechanism": "SCRAM-SHA-1",
+                   },
+    }
+
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
