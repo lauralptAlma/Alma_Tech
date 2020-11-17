@@ -661,6 +661,8 @@ class ChartData(APIView):
 
 @login_required(login_url="/")
 def ChartPatient(request, paciente_id):
+    paciente = get_object_or_404(
+        Paciente.objects.filter(paciente_id=paciente_id))
     consulta = Consulta.objects.filter(paciente_id=paciente_id).values()
     data = {}
     data_caries = {}
@@ -693,7 +695,8 @@ def ChartPatient(request, paciente_id):
             "values": cantidad_caries,
         }
     return render(request, "almaFront/pacientes/patient_statistics.html",
-                  {'data': data, 'data_caries': data_caries})
+                  {'data': data, 'data_caries': data_caries,
+                   'patient': paciente})
 
 
 # Vistas para funcionalidades no completadas
