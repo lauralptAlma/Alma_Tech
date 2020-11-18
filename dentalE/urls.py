@@ -31,6 +31,13 @@ from .views import (
     agregarantecedentes,
     edit_patient,
 
+    # general
+    analisis,
+    get_data,
+    DataView,
+    ChartData,
+    ChartPatient,
+
 )
 
 urlpatterns = [
@@ -77,4 +84,16 @@ urlpatterns = [
         name='agregarantecedentes'),
     url(r'^editarpaciente/(?P<paciente_id>\d+)/$', edit_patient,
         name='editarpaciente'),
+
+    # general
+    url(r'^negocio/$', analisis,
+        name='analisis'),
+    url(r'^api/data/$', get_data,
+        name='api-data'),
+    url(r'^data/$', DataView,
+        name='api-data'),
+    url(r'^api/chart/data/$', ChartData.as_view()),
+    url(r'^api/chart/generarestadistica/(?P<paciente_id>\d+)/$',
+        ChartPatient, name="generarestadistica"),
+
 ]

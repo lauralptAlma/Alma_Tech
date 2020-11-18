@@ -1,0 +1,183 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Estadística Paciente{% endblock %}
+{% block page-breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a
+                    href="/dentalE/pacientedetalles/{{ patient.paciente_id }}">
+                {{ patient.nombre }} {{ patient.primer_apellido }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Estadísticas de Consultas
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+{% block page-title %}Estadísticas de Consultas{% endblock %}
+
+{% block page-content %}
+    <div class="row col-sm-12 mb-4">
+        <div class="card shadow col-sm-12">
+            <div class="card-header">
+                <p class="text-primary m-0 font-weight-bold">Frecuencia
+                    Consultas Odontología General</p>
+            </div>
+            <div class="card-body">
+                {% if not data %}
+                    <ul class="list-group list-group-flush border-left-danger">
+                        <li class="list-group-item">
+                            <div class="row align-items-center no-gutters">
+                                <span class="text-danger font-weight-bold mb-1">
+                                    No existen registros de odontología general para este paciente en el sistema.</span>
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}
+                <div class="col-sm-12">
+                    <canvas id="chartPatientCons" width="800"
+                            height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row col-sm-12 mb-3">
+        <div class="card shadow col-sm-12">
+            <div class="card-header">
+                <p class="text-primary m-0 font-weight-bold">Cantidad de
+                    Caries</p>
+            </div>
+            <div class="card-body">
+                {% if not data_caries %}
+                    <ul class="list-group list-group-flush border-left-danger">
+                        <li class="list-group-item">
+                            <div class="row align-items-center no-gutters">
+                                <span class="text-danger font-weight-bold mb-1">
+                                    No existen registros CPO para este paciente en el sistema.</span>
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}
+                <div class="col-sm-12">
+                    <canvas id="chartPatientCaries" width="800"
+                            height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page-javascript %}
+    <script>
+        $(document).ready(function () {
+            let defaultData = []
+            let dates = []
+            let data = []
+            {% if data.labels and data.values%}
+                defaultData = {{ data.values }}
+                    dates = {{ data.labels | safe }}
+                console.log('Fechas' + dates)
+                for (let i = 0; i < dates.length; i++) {
+                    data.push({x: dates[i], y: defaultData[i]});
+                }
+                setChartGral();
+            {% endif %}
+
+            let cpoData = []
+            let cpoDates = []
+            let dataCaries = []
+            {% if data_caries.labels and data_caries.values%}
+                cpoData = {{ data_caries.values }}
+                    cpoDates = {{ data_caries.labels | safe }}
+                        console.log('Fechas CPO' + cpoDates)
+                for (let i = 0; i < cpoDates.length; i++) {
+                    dataCaries.push({x: cpoDates[i], y: cpoData[i]});
+                }
+                setChartCaries();
+            {% endif %}
+
+            function setChartGral() {
+                const ctx = document.getElementById('chartPatientCons').getContext('2d')
+                const chartPatientCons = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            pointStyle: 'circle',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            showLine: false
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    display: false,
+                                },
+                                gridLines: {
+                                    display: false
+                                }
+                            }],
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    unit: 'day',
+                                    tooltipFormat: 'MMM DD'
+                                },
+                                gridLines: {
+                                    display: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+            function setChartCaries() {
+                const ctxCaries = document.getElementById('chartPatientCaries').getContext('2d');
+                const chartPatientCaries = new Chart(ctxCaries, {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            data: dataCaries,
+                            pointStyle: 'circle',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            showLine: true
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    display: true,
+                                },
+                                gridLines: {
+                                    display: false
+                                }
+                            }],
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    unit: 'day',
+                                    tooltipFormat: 'MMM DD'
+                                },
+                                gridLines: {
+                                    display: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+        })
+    </script>
+{% endblock %}

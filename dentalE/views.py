@@ -1,4 +1,5 @@
 import ast
+import pandas as pd
 import base64
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
@@ -8,7 +9,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 # from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
@@ -22,6 +23,9 @@ from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, Ortodoncia
 from datetime import date
+# Imports needed for pdf generation
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 # doctor
@@ -300,8 +304,6 @@ def pacientedetalles(request, paciente_id):
     ortodoncia_paciente = Ortodoncia.objects.filter(
         paciente_id=paciente_id).order_by('-creado').first()
     if ortodoncia_paciente:
-        # imagen = ortodoncia_paciente.image.read()
-        # image_data = base64.b64encode(imagen).decode('utf-8')
         image_data = encode_image(ortodoncia_paciente.image)
         ortodoncia_paciente.image = image_data
     return render(request, "almaFront/pacientes/paciente.html",
@@ -379,8 +381,6 @@ def getconsultasortodoncia(paciente_id):
     if ortodoncia_paciente:
         for o in ortodoncia_paciente:
             if o.image:
-                # imagen = o.image.read()
-                # image_data = base64.b64encode(imagen).decode('utf-8')
                 image_data = encode_image(o.image)
                 o.image = image_data
     return ortodoncia_paciente
@@ -524,6 +524,179 @@ def contacto(request):
                 'por favor intente nuevamente.'
             )
     return render(request, "almaFront/bases/contacto.html", {'form': form})
+
+
+@login_required(login_url="/")
+def analisis(request):
+    return render(request, "almaFront/charts.html")
+
+
+@login_required(login_url="/")
+def DataView(request):
+    return render(request, "almaFront/charts.html")
+
+
+@login_required(login_url="/")
+def get_data(request, *args, **kwargs):
+    try:
+        userprofile = UserProfile.objects.get(user=request.user)
+    except ObjectDoesNotExist:
+        return HttpResponse('Unauthorized', status=401)
+    if userprofile.user_tipo == 'SECRETARIA':
+        return HttpResponse('Unauthorized', status=401)
+    elif userprofile.user_tipo == 'DOCTOR':
+        data = {
+            "sales": 100,
+            "customers": 10,
+        }
+        return JsonResponse(data)  # http response
+
+
+class ChartData(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+        pacientes = Paciente.objects.all().values()
+        pacientes_data_set = pd.DataFrame(pacientes)
+        pacientes_por_depto = pacientes_data_set['ciudad'].value_counts()
+        pacientes_por_depto = pacientes_por_depto.reset_index()
+        pacientes_por_depto.columns = ['Departamento',
+                                       'Cantidad']  # change column names
+        deparamentos = pacientes_por_depto['Departamento'].tolist()
+        cantidades = pacientes_por_depto['Cantidad'].tolist()
+        data = {
+            "labels": deparamentos,
+            "values": cantidades,
+        }
+
+        pacientes_por_genero = pacientes_data_set['genero'].value_counts()
+        pacientes_por_genero = pacientes_por_genero.reset_index()
+        pacientes_por_genero.columns = ['Genero',
+                                        'Cantidad']
+        genero = pacientes_por_genero['Genero'].tolist()
+        cantidad = pacientes_por_genero['Cantidad'].tolist()
+        datos = {
+            "labelsGen": genero,
+            "valuesGen": cantidad,
+        }
+
+        antecedentes_paciente = AntecedentesClinicos.objects.all().values()
+        antecedentes_data = pd.DataFrame(antecedentes_paciente)
+        total_antecedentes = antecedentes_data[
+            ['alcohol', 'fumador', 'aparato_digestivo', 'dermatologicos',
+             'alergias', 'autoinmunes', 'oncologicas',
+             'hematologicas']]
+
+        total_antecedentes = total_antecedentes.reset_index()
+
+        soloSI = total_antecedentes.groupby(['fumador']).size().reset_index(
+            name='cantidad')
+        soloSIA = total_antecedentes.groupby(['alcohol']).size().reset_index(
+            name='cantidad')
+        soloSIAg = total_antecedentes.groupby(
+            ['aparato_digestivo']).size().reset_index(name='cantidad')
+        soloSID = total_antecedentes.groupby(
+            ['dermatologicos']).size().reset_index(name='cantidad')
+        soloSIAl = total_antecedentes.groupby(['alergias']).size().reset_index(
+            name='cantidad')
+        soloSIAi = total_antecedentes.groupby(
+            ['autoinmunes']).size().reset_index(name='cantidad')
+        soloSIO = total_antecedentes.groupby(
+            ['oncologicas']).size().reset_index(name='cantidad')
+        soloSIH = total_antecedentes.groupby(
+            ['hematologicas']).size().reset_index(name='cantidad')
+
+        fumador = soloSI.loc[soloSI['fumador'] == 'SI']
+        alcohol = soloSIA.loc[soloSIA['alcohol'] == 'SI']
+        digestivo = soloSIAg.loc[soloSIAg['aparato_digestivo'] == 'SI']
+        dermatologico = soloSID.loc[soloSID['dermatologicos'] == 'SI']
+        alergias = soloSIAl.loc[soloSIAl['alergias'] == 'SI']
+        autoinmunes = soloSIAi.loc[soloSIAi['autoinmunes'] == 'SI']
+        oncologicas = soloSIO.loc[soloSIO['oncologicas'] == 'SI']
+        hematologicas = soloSIH.loc[soloSIH['hematologicas'] == 'SI']
+
+        prueba_f = fumador.transpose().T
+        prueba_a = alcohol.transpose().T
+        prueba_d = digestivo.transpose().T
+        prueba_de = dermatologico.transpose().T
+        prueba_al = alergias.transpose().T
+        prueba_ai = autoinmunes.transpose().T
+        prueba_o = oncologicas.transpose().T
+        prueba_h = hematologicas.transpose().T
+
+        data_final = pd.concat(
+            [prueba_a, prueba_f, prueba_d, prueba_de, prueba_al, prueba_ai,
+             prueba_o, prueba_h],
+            axis=0)
+        p = pd.melt(data_final, id_vars='cantidad')
+        p = p.loc[p['value'] == 'SI']
+        antecedente = p['variable'].tolist()
+        cantidad = p['cantidad'].tolist()
+
+        def switch_antecedentes(argument):
+            switcher = {
+                "alcohol": "Alcohol",
+                "fumador": "Fumador",
+                "aparato_digestivo": "Aparato Digestivo",
+                "dermatologicos": "Dermatológicos",
+                "alergias": "Alergias",
+                "autoinmunes": "Autoinmunes",
+                "oncologicas": "Oncológicas",
+                "hematologicas": "Hematológicas"
+            }
+            return switcher.get(argument, "Antecedente inválido")
+
+        for a in antecedente:
+            indice = antecedente.index(a)
+            antecedente[indice] = switch_antecedentes(a)
+
+        datosA = {
+            "labelsAnt": antecedente,
+            "valuesAnt": cantidad,
+        }
+        data = {"data": data, "datos": datos, "datosA": datosA}
+        return Response(data)
+
+
+@login_required(login_url="/")
+def ChartPatient(request, paciente_id):
+    paciente = get_object_or_404(
+        Paciente.objects.filter(paciente_id=paciente_id))
+    consulta = Consulta.objects.filter(paciente_id=paciente_id).values()
+    data = {}
+    data_caries = {}
+    if consulta:
+        pacientes_data_set = pd.DataFrame(consulta)
+        pacientes_por_consulta = pacientes_data_set['creado'].value_counts()
+        pacientes_por_consulta = pacientes_por_consulta.reset_index()
+        pacientes_por_consulta.columns = ['Fecha', 'Cantidad']
+        fechas = pd.to_datetime(pacientes_por_consulta['Fecha'],
+                                format='%Y-%m-%d')
+        consultas = fechas.astype(str).tolist()
+        cantidad = pacientes_por_consulta['Cantidad'].tolist()
+        data = {
+            "labels": consultas,
+            "values": cantidad,
+        }
+
+    cpo_fechas = []
+    cantidad_caries = []
+    cpos = reversed(clean_cpo.get_cpo(paciente_id))
+    if cpos:
+        i = 0
+        for c in cpos:
+            cpo_fechas.append(c.creado.strftime("%Y-%m-%d"))
+            i = i + len(c.caries)
+            cantidad_caries.append(i)
+            print(len(c.caries))
+        data_caries = {
+            "labels": cpo_fechas,
+            "values": cantidad_caries,
+        }
+    return render(request, "almaFront/pacientes/patient_statistics.html",
+                  {'data': data, 'data_caries': data_caries,
+                   'patient': paciente})
 
 
 # Vistas para funcionalidades no completadas
