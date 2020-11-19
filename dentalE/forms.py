@@ -18,12 +18,12 @@ class IngresoForm(ModelForm) :
         fields = ('username', 'password',)
 
 
-class TermsForm(ModelForm):
-    class Meta:
+class TermsForm(ModelForm) :
+    class Meta :
         model = Terms
         fields = ('agreement',)
-        widgets = {'agreement': forms.CheckboxInput(
-            attrs={'type': 'checkbox', 'class': 'custom-checkbox'}), }
+        widgets = {'agreement' : forms.CheckboxInput(
+            attrs={'type': 'checkbox', 'class' : 'custom-checkbox', 'required': 'True',}), }
 
 
 class PacienteForm(ModelForm) :
