@@ -23,21 +23,22 @@
             </div>
 
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                <table class="table my-0" id="dataTable">
+                <table class="table my-0" id="table"
+                       data-toggle="table" data-pagination="true"  data-pagination-parts="[pageList]" >
                     <thead class="card-header py-3">
                     <tr>
                         <th>Documento</th>
-                        <th>Nombre</th>
+                        <th data-sortable="true" data-sort-name="{{ pat.nombre }}" data-sort-order="desc" >Nombre</th>
                         <th>Email</th>
                         <th>Celular</th>
                         <th></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
 
                     {% if patients %}
                         {% for pat in patients %}
-                            <tr class="tr-body">
+                            <tr class="tr-body" >
                                 <td>{{ pat.documento }}</td>
                                 <td><a class="a-link"
                                        href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">{{ pat.nombre }} {{ pat.primer_apellido }}</a>
@@ -46,7 +47,7 @@
                                 <td>{{ pat.celular }}</td>
                                 <td>
                                     <a href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">
-                                        <span><i class="fas fa-pencil-alt"></i></span></a>
+                                        <span ><i class="fas fa-pencil-alt"></i></span></a>
                                 </td>
                             </tr>
 
@@ -67,4 +68,5 @@
 {% endblock %}
 
 {% block page-javascript %}
+
 {% endblock %}

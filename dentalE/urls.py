@@ -31,6 +31,8 @@ from .views import (
     agregarantecedentes,
     edit_patient,
 
+    # usuarios
+
 )
 
 urlpatterns = [
@@ -55,9 +57,9 @@ urlpatterns = [
         patient_render_background_pdf,
         name="paciente-pdf-view"),
 
+
     # contacto
-    url(r'^contacto/$', contacto,
-        name="contacto"),
+    url(r'^contacto/$', contacto, name="contacto"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),

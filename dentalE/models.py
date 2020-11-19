@@ -1,10 +1,11 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
-from django.contrib.auth.models import User
 from django.forms import forms
 from djongo import models as djongomodel
 from djongo.storage import GridFSStorage
+
 from dentalE.validators.ci_validator import validate_ci
 
 # USUARIO OPTIONS
@@ -52,9 +53,7 @@ CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 
 
 # MODELOS
-
-
-class UserProfile(models.Model):
+class UserProfile(models.Model) :
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_tipo = models.CharField(max_length=15, choices=USER_TIPO, default='')
     # Contacto
@@ -70,14 +69,22 @@ class UserProfile(models.Model):
                                          choices=USER_ESPECIALIDAD, blank=True,
                                          null=True)
 
-    def __unicode__(self):
+    def __unicode__(self) :
         return self.user
 
-    def __str__(self):
+    def __str__(self) :
         return str(self.user.get_full_name())
 
 
-class Paciente(models.Model):
+class Terms(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    agreement = models.BooleanField(default=False)
+
+    def __str__(self) :
+        return str(self.user.get_full_name())
+
+
+class Paciente(models.Model) :
     # Informacion
     paciente_id = models.AutoField(primary_key=True)
     documento = models.CharField('Documento* ', max_length=8, unique=True,
@@ -112,20 +119,20 @@ class Paciente(models.Model):
     alta = models.DateTimeField(auto_now_add=True),
     nucleo_activo = models.BooleanField('Núcleo Activo', default=True)
 
-    def clean(self):
-        try:
+    def clean(self) :
+        try :
             ci = int(self.documento)
-        except ValueError:
+        except ValueError :
             raise ValidationError('Por favor ingrese solamente números')
-        if not validate_ci(ci):
+        if not validate_ci(ci) :
             raise forms.ValidationError(
-                {'documento': 'El documento no tiene un formato válido'})
+                {'documento' : 'El documento no tiene un formato válido'})
 
-    def __str__(self):
+    def __str__(self) :
         return str("{} {}".format(self.nombre, self.primer_apellido))
 
 
-class AntecedentesClinicos(models.Model):
+class AntecedentesClinicos(models.Model) :
     creado = models.DateField(auto_now_add=True)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     fumador = models.CharField('Fumador*', max_length=2, choices=SN_OPCIONES,
@@ -193,39 +200,39 @@ class AntecedentesClinicos(models.Model):
     observations = models.TextField('Observaciones', max_length=150, null=True,
                                     blank=True)
 
-    def __str__(self):
+    def __str__(self) :
         return str(self.paciente)
 
 
-class Nucleo(models.Model):
+class Nucleo(models.Model) :
     matricula = models.CharField(primary_key=True, max_length=8,
                                  help_text="solo numeros", null=False,
                                  blank=True)
     titular = models.ForeignKey(Paciente, on_delete=models.CASCADE)
 
-    class Meta:
+    class Meta :
         verbose_name = "Nucleo"
         verbose_name_plural = "Nucleos"
 
-    def __str__(self):
+    def __str__(self) :
         return str(self.matricula) or ''
 
 
-class Integrante(models.Model):
+class Integrante(models.Model) :
     nucleo = models.ForeignKey(Nucleo, on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     relacion_nucleo = models.CharField(max_length=12, choices=NUCLEO_OPCIONES,
                                        default='')
 
-    class Meta:
+    class Meta :
         verbose_name = "Integrante"
         verbose_name_plural = "Integrantes"
 
-    def __str__(self):
+    def __str__(self) :
         return self.nucleo
 
 
-class Consulta(models.Model):
+class Consulta(models.Model) :
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='consulta_doctor',
                                on_delete=models.CASCADE)
@@ -239,14 +246,14 @@ class Consulta(models.Model):
 
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) :
         return str(self.paciente)
 
-    class Meta:
+    class Meta :
         ordering = ('creado',)
 
 
-class Ortodoncia(models.Model):
+class Ortodoncia(models.Model) :
     doctor = models.ForeignKey(User, related_name='doctor_ortodoncia',
                                on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
@@ -262,15 +269,15 @@ class Ortodoncia(models.Model):
     modificado = models.DateField(auto_now=True, blank=True, null=True)
     image = djongomodel.ImageField(storage=GridFSStorage(collection='image'))
 
-    class Meta:
+    class Meta :
         verbose_name = " Consulta de Ortodoncia | Ortopedia"
         verbose_name_plural = "Consultas de Ortodoncia | Ortopedia"
 
-    def __str__(self):
+    def __str__(self) :
         return str(self.paciente)
 
 
-class CPO(models.Model):
+class CPO(models.Model) :
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
     doctor = models.ForeignKey(User, related_name='cpo_doctor',
@@ -283,14 +290,14 @@ class CPO(models.Model):
     cpod = models.IntegerField(blank=True, null=True)
     cpos = models.IntegerField(blank=True, null=True)
 
-    class Meta:
+    class Meta :
         db_table = "dentalE_CPOs"
 
-    def __str__(self):
+    def __str__(self) :
         return str(self.cpo_id)
 
 
-class Cita(models.Model):
+class Cita(models.Model) :
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='app_doctor',
                                on_delete=models.CASCADE)
@@ -299,14 +306,14 @@ class Cita(models.Model):
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
-    class Meta:
+    class Meta :
         ordering = ('fecha',)
 
-    def __str__(self):
+    def __str__(self) :
         return str(self.paciente)
 
 
-class Contacto(models.Model):
+class Contacto(models.Model) :
     nombre = models.CharField(max_length=50, blank=False, null=False,
                               default='')
     email = models.EmailField(max_length=50, blank=False, null=False,
@@ -317,8 +324,8 @@ class Contacto(models.Model):
                                default='')
     date = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
+    class Meta :
         verbose_name_plural = "Contacto"
 
-    def __str__(self):
+    def __str__(self) :
         return str("{}-{}".format(self.name, self.email))
