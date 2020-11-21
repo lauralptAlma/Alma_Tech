@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import sys
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'django.contrib.sites',
     'bootstrap_datepicker_plus',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -91,6 +93,17 @@ DATABASES = {
                    },
     }
 }
+
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'djongo',
+        "CLIENT": {"name": 'autoTestsDB',
+                   "host": 'mongodb+srv://admin:almaAdmin@clusteralmatech.izim4.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true',
+                   "username": 'admin',
+                   "password": 'almaAdmin',
+                   "authMechanism": "SCRAM-SHA-1",
+                   },
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

@@ -20,11 +20,16 @@
                                     <strong>Documento: </strong> {{ patient.documento }}
                                 </p>
                                 <p>
-                                    <strong>Dirección: </strong> {{ patient.direccion }}
+                                    <strong>Dirección: </strong> {{ patient.direccion }}, {{ patient.ciudad | lower | capfirst }}
                                 </p>
                                 <p>
                                     <strong>Celular: </strong> {{ patient.celular }}
                                 </p>
+                                {% if patient.email %}
+                                    <p>
+                                        <strong>Email: </strong> {{ patient.email }}
+                                    </p>
+                                {% endif %}
                                 <p><strong>Fecha de
                                     Nacimiento: </strong> {{ patient.fecha_nacimiento }}
                                 </p>
@@ -104,24 +109,24 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="col"><i class="fas fa-teeth-open"
+                                                    style="margin-right: 15px;"></i><a
+                                        href="/dentalE/agregarcpo/">Agregar
+                                    CPO</a>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col"><i class="fas fa-tooth"
                                                     style="margin-right: 15px;"></i><a
-                                        href="/dentalE/agregartratamiento/">Nueva
-                                    consulta
-                                    general</a></div>
+                                        href="/dentalE/agregartratamiento/">Agregar
+                                    Consulta Odontología Gral.</a></div>
                             </div>
                             <div class="row">
                                 <div class="col"><i class="fas fa-teeth"
                                                     style="margin-right: 15px;"></i><a
-                                        href="#">Nueva
-                                    consulta
-                                    ortodoncia</a></div>
-                            </div>
-                            <div class="row">
-                                <div class="col"><i class="fas fa-teeth-open"
-                                                    style="margin-right: 15px;"></i><a
-                                        href="/dentalE/agregarcpo/">Nueva
-                                    consulta con CPO</a></div>
+                                        href="/dentalE/agregarortodoncia/">Agregar
+                                    Consulta Ortodoncia |
+                                    Ortopedia</a></div>
                             </div>
                         </div>
                     </div>
@@ -147,6 +152,12 @@
                                         target="_new">Descargar
                                     historia clínica</a></div>
                             </div>
+                            <div class="row">
+                                <div class="col"><i class="far fa-bar-chart"
+                                                    style="margin-right: 15px;"></i><a
+                                        href="/dentalE/api/chart/generarestadistica/{{ patient.paciente_id }}">Ver
+                                    Estadísticas de Consultas </a></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,10 +165,10 @@
         {% endif %}
     </div>
     {% if user.userprofile.user_tipo == 'DOCTOR' %}
-        <div class="card shadow">
+        <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">Últimas
-                    Consultas</p>
+                <p class="text-primary m-0 font-weight-bold">Últimas Consultas
+                    Odontología Gral.</p>
             </div>
             <div class="card-body">
                 <div class="table-responsive table mt-2" id="dataTable"
@@ -200,47 +211,71 @@
                 </div>
             </div>
         </div>
-    {% endif %}
-    <div class="card shadow">
-        <div class="card-header py-3">
-            <p class="text-primary m-0 font-weight-bold">Últimos registros fotográficos</p>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive table mt-2" id="dataTable" role="grid"
-                 aria-describedby="dataTable_info">
-                <table class="table my-0" id="dataTable">
-                    <thead class="card-header py-3">
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Imagen</th>
-                        <th>Profesional</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% if ortodoncia %}
-                        <tr class="tr-body">
-                            <td>{{ ortodoncia.creado }}</td>
-                            <td><img src="data:image/jpeg;base64,{{ ortodoncia.image }}"></td>
-                            <td>{{ ortodoncia.doctor.get_full_name }}</td>
-
-                        </tr>
-
-                    {% else %}
-                        <tr class="no-data">
-                            <td colspan="20">No existen imágenes para este paciente en
-                                el sistema.
-                            </td>
-                        </tr>
-                    {% endif %}
-                    </tbody>
-                    <tfoot>
-
-                    </tfoot>
-                </table>
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Última Consulta
+                    Ortodoncia | Ortopedia</p>
             </div>
+            <div class="card-body">
+                <div class="table-responsive table mt-2" id="dataTable"
+                     role="grid"
+                     aria-describedby="dataTable_info">
+                    <table class="table my-0" id="dataTable">
+                        <thead class="card-header py-3">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Imagen</th>
+                            <th>Información</th>
+                            <th>Profesional</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if ortodoncia %}
+                            <tr class="tr-body">
+                                <td>{{ ortodoncia.creado|date:"SHORT_DATE_FORMAT" }}</td>
+                                <td>
+                                    {% if ortodoncia.image %}
+                                        <img
+                                                src="data:image/jpeg;base64,{{ ortodoncia.image }}"
+                                                class="media-object img-fluid img-max"
+                                                alt="Imagen última consulta">
+                                    {% else %}
+                                        No existe registro
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <p>
+                                        <strong>Diagnóstico: </strong> {{ ortodoncia.diagnostico }}
+                                    </p>
+                                    <p>
+                                        <strong>Tratamiento: </strong> {{ ortodoncia.tratamiento }}
+                                    </p>
+                                    <p>
+                                        <strong>Indicaciones: </strong> {{ ortodoncia.indicaciones }}
+                                    </p>
+                                </td>
+                                <td>{{ ortodoncia.doctor.get_full_name }}</td>
 
+                            </tr>
+
+                        {% else %}
+                            <tr class="no-data">
+                                <td colspan="20">No existen consultas
+                                    registradas para este paciente en
+                                    el sistema.
+                                </td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                        <tfoot>
+
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
 {% block page-javascript %}
 {% endblock %}

@@ -475,3 +475,7 @@ li {
     max-width: 450px;
     width: 100%;
 }
+
+.breadcrumb li {
+    margin-right: 0px;
+}

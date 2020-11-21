@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.forms.widgets import EmailInput
-
+from datetime import date
 from .models import Paciente, Cita, Consulta, Nucleo, Integrante, \
     Contacto, AntecedentesClinicos, UserProfile, CPO, \
     CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, \
@@ -29,14 +29,13 @@ class TermsForm(ModelForm) :
 class PacienteForm(ModelForm) :
     class Meta :
         model = Paciente
+        today = date.today()
         fields = (
             'documento', 'nombre', 'primer_apellido', 'segundo_apellido',
             'genero', 'direccion', 'ciudad',
             'fecha_nacimiento', 'email',
             'celular',
-            'nucleo_activo'
-        )
-
+            'nucleo_activo')
         widgets = {
             'documento' : forms.TextInput(attrs={'class' : 'form-control'}),
             'nombre' : forms.TextInput(attrs={'class' : 'form-control'}),
@@ -63,19 +62,21 @@ class PacienteForm(ModelForm) :
 class CitaForm(ModelForm) :
     class Meta :
         model = Cita
+        today = date.today()
         fields = ('paciente', 'doctor', 'fecha', 'hora')
 
         widgets = {
-            'paciente' : forms.Select(
-                attrs={'class' : 'form-control mdb-select md-form',
-                       'searchable' : 'Buscar paciente...'}),
-            'doctor' : forms.Select(
-                attrs={'class' : 'form-control mdb-select md-form',
-                       'searchable' : 'Buscar Profesional...'}),
-            'fecha' : forms.TextInput(attrs={'class' : 'form-control'}),
-            'hora' : forms.TextInput(attrs={'class' : 'form-control',
-                                            'type' : 'time', 'min' : '07:00',
-                                            'max' : '19:00', 'step' : '600'}),
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'}),
+            'doctor': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar Profesional...'}),
+            'fecha': forms.TextInput(attrs={'class': 'form-control',
+                                            'type': 'date', 'min': today}),
+            'hora': forms.TextInput(attrs={'class': 'form-control',
+                                           'type': 'time', 'min': '07:00',
+                                           'max': '19:00', 'step': '600'}),
         }
 
     def __init__(self, *args, **kwargs) :
@@ -90,6 +91,9 @@ class ConsultaForm(ModelForm) :
         model = Consulta
         readonly_fields = 'creado'
         fields = ('paciente', 'diagnostico', 'tratamiento', 'indicaciones')
+        labels = {
+            'paciente': 'Paciente* '
+        }
         widgets = {
             'paciente' : forms.Select(
                 attrs={'class' : 'form-control mdb-select md-form',
@@ -105,6 +109,10 @@ class OrtodonciaForm(forms.ModelForm) :
         model = Ortodoncia
         fields = ('tipo', 'paciente', 'diagnostico', 'tratamiento',
                   'indicaciones', 'image')
+        labels = {
+            'paciente': 'Paciente* ',
+            'tipo': 'Tipo de consulta* '
+        }
         widgets = {
             'tipo' : forms.Select(
                 attrs={'class' : 'form-control mdb-select md-form'}),
@@ -123,16 +131,23 @@ class ConsultaCPOForm(ModelForm) :
         model = CPO
         readonly_fields = 'creado'
         fields = ('paciente', 'contenido_cpo', 'ceod', 'ceos', 'cpod', 'cpos')
+        labels = {
+            'paciente': 'Paciente* :'
+        }
         widgets = {
-            'ceod' : forms.NumberInput(attrs={'class' : 'form-control'}),
-            'ceos' : forms.NumberInput(attrs={'class' : 'form-control'}),
-            'cpod' : forms.NumberInput(attrs={'class' : 'form-control'}),
-            'cpos' : forms.NumberInput(attrs={'class' : 'form-control'}),
-            'contenido_cpo' : forms.NumberInput(
-                attrs={'class' : 'form-control', 'type' : 'hidden'}),
-            'paciente' : forms.Select(
-                attrs={'class' : 'form-control mdb-select md-form',
-                       'searchable' : 'Buscar paciente...'})
+            'ceod': forms.NumberInput(
+                attrs={'class': 'form-control', 'min': 0, 'max': 6}),
+            'ceos': forms.NumberInput(attrs={'class': 'form-control', 'min': 0,
+                                             'max': 6}),
+            'cpod': forms.NumberInput(attrs={'class': 'form-control', 'min': 0,
+                                             'max': 6}),
+            'cpos': forms.NumberInput(attrs={'class': 'form-control', 'min': 0,
+                                             'max': 6}),
+            'contenido_cpo': forms.NumberInput(
+                attrs={'class': 'form-control', 'type': 'hidden'}),
+            'paciente': forms.Select(
+                attrs={'class': 'form-control mdb-select md-form',
+                       'searchable': 'Buscar paciente...'})
         }
 
 
@@ -151,7 +166,9 @@ class AntecedenteForm(ModelForm) :
                   'desc_cardiovascular', 'nefrourologicos',
                   'desc_nefrourologicos', 'osteoarticulares',
                   'desc_osteoarticulares', 'observations')
-
+        labels = {
+            'paciente': 'Paciente* '
+        }
         widgets = {
             'paciente' : forms.Select(
                 attrs={'class' : 'form-control mdb-select md-form',
@@ -214,6 +231,7 @@ class ContactoForm(forms.ModelForm) :
         }
 
 
+# Forms para funcionalidad Núcleo Familiar
 PacienteIntegranteFormset = inlineformset_factory(
     Nucleo,
     Integrante,

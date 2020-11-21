@@ -1,8 +1,12 @@
 import ast
+import pandas as pd
 import base64
 from datetime import date
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -16,6 +20,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import formats
 from django.views.generic import DetailView, FormView, ListView, CreateView
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.db.models import Q
+from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
+from django.utils import formats
+from django.views.generic import CreateView, ListView, DetailView, \
+    FormView
 from django.views.generic.detail import SingleObjectMixin
 
 from dentalE.historiaPdf import pdf, clean_cpo
@@ -23,6 +34,10 @@ from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
     ConsultaCPOForm, ContactoForm, OrtodonciaForm, TermsForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, Ortodoncia, Terms
+from datetime import date
+# Imports needed for pdf generation
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 # doctor
@@ -225,7 +240,7 @@ def listapacientes(request) :
             Q(documento__icontains=busqueda)
         ).distinct().order_by('primer_apellido')
     return render(request, "almaFront/pacientes/pacientes.html",
-                  {'patients' : pacientes})
+                  {'patients': pacientes})
 
 
 @login_required(login_url="/")
@@ -260,7 +275,7 @@ def edit_patient(request, paciente_id) :
                 )
                 return HttpResponseRedirect(
                     "/dentalE/pacientedetalles/{}".format(paciente_id))
-        except Exception as e :
+        except Exception as e:
             messages.add_message(
                 request,
                 messages.ERROR,
@@ -270,13 +285,13 @@ def edit_patient(request, paciente_id) :
         form = PacienteForm(instance=paciente)
         form.fields['documento'].widget.attrs['readonly'] = True
     form.fields['documento'].widget.attrs['readonly'] = True
-    context = {'form' : form,
-               'paciente' : paciente
+    context = {'form': form,
+               'paciente': paciente
                }
     return render(request, template, context)
 
 
-def encode_image(img) :
+def encode_image(img):
     img_content = img.read()
     return base64.b64encode(img_content).decode('utf-8')
 
@@ -313,7 +328,7 @@ def pacientedetalles(request, paciente_id) :
         consultas_paciente = consultas_paciente[:3]
     ortodoncia_paciente = Ortodoncia.objects.filter(
         paciente_id=paciente_id).order_by('-creado').first()
-    if ortodoncia_paciente :
+    if ortodoncia_paciente:
         image_data = encode_image(ortodoncia_paciente.image)
         ortodoncia_paciente.image = image_data
     return render(request, "almaFront/pacientes/paciente.html",
@@ -388,9 +403,9 @@ def verantecedentes(request, paciente_id) :
 def getconsultasortodoncia(paciente_id) :
     ortodoncia_paciente = Ortodoncia.objects.filter(
         paciente_id=paciente_id).order_by('-creado')
-    if ortodoncia_paciente :
-        for o in ortodoncia_paciente :
-            if o.image :
+    if ortodoncia_paciente:
+        for o in ortodoncia_paciente:
+            if o.image:
                 image_data = encode_image(o.image)
                 o.image = image_data
     return ortodoncia_paciente
@@ -420,12 +435,12 @@ def compararortodoncia(request, paciente_id) :
     print(ortodoncia_comparativa)
     return render(request,
                   "almaFront/pacientes/patient_orthodontics_beforeafter.html",
-                  {'patient' : paciente, 'ortodoncia' : ortodoncia_comparativa})
+                  {'patient': paciente, 'ortodoncia': ortodoncia_comparativa})
 
 
 # frontpage
-def ingreso(request) :
-    if request.method == 'POST' :
+def ingreso(request):
+    if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
@@ -488,9 +503,9 @@ def patient_render_background_pdf(request, *args, **kwargs) :
         ortodoncia = getconsultasortodoncia(paciente_id)
         # Template that we are going to use to render the pdf
         template_path = 'almaFront/historiapdf/historia_pdf.html'
-        context = {'patient' : patient, 'treatments' : treatments, 'user' : user,
-                   'background' : background, 'cpo' : cpos,
-                   'ortodoncia' : ortodoncia}
+        context = {'patient': patient, 'treatments': treatments, 'user': user,
+                   'background': background, 'cpo': cpos,
+                   'ortodoncia': ortodoncia}
         patient_name = patient.nombre + patient.primer_apellido
         filename = patient_name + "-HistoriaClínicaDental"
         response = pdf.generate_pdf(template_path, context, filename)
@@ -533,60 +548,207 @@ def contacto(request) :
                 'Hubo un error al enviar su mensaje, '
                 'por favor intente nuevamente.'
             )
-    return render(request, "almaFront/bases/contacto.html", {'form' : form})
+    return render(request, "almaFront/bases/contacto.html", {'form': form})
 
 
 @login_required(login_url="/")
-def analisis(request) :
+def analisis(request):
     return render(request, "almaFront/charts.html")
 
 
 @login_required(login_url="/")
-def DataView(request) :
+def DataView(request):
     return render(request, "almaFront/charts.html")
 
 
 @login_required(login_url="/")
-def get_data(request, *args, **kwargs) :
-    try :
+def get_data(request, *args, **kwargs):
+    try:
         userprofile = UserProfile.objects.get(user=request.user)
-    except ObjectDoesNotExist :
+    except ObjectDoesNotExist:
         return HttpResponse('Unauthorized', status=401)
-    if userprofile.user_tipo == 'SECRETARIA' :
+    if userprofile.user_tipo == 'SECRETARIA':
         return HttpResponse('Unauthorized', status=401)
-    elif userprofile.user_tipo == 'DOCTOR' :
+    elif userprofile.user_tipo == 'DOCTOR':
         data = {
-            "sales" : 100,
-            "customers" : 10,
+            "sales": 100,
+            "customers": 10,
         }
         return JsonResponse(data)  # http response
+
+
+class ChartData(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+        pacientes = Paciente.objects.all().values()
+        pacientes_data_set = pd.DataFrame(pacientes)
+        pacientes_por_depto = pacientes_data_set['ciudad'].value_counts()
+        pacientes_por_depto = pacientes_por_depto.reset_index()
+        pacientes_por_depto.columns = ['Departamento',
+                                       'Cantidad']  # change column names
+        deparamentos = pacientes_por_depto['Departamento'].tolist()
+        cantidades = pacientes_por_depto['Cantidad'].tolist()
+        data = {
+            "labels": deparamentos,
+            "values": cantidades,
+        }
+
+        pacientes_por_genero = pacientes_data_set['genero'].value_counts()
+        pacientes_por_genero = pacientes_por_genero.reset_index()
+        pacientes_por_genero.columns = ['Genero',
+                                        'Cantidad']
+        genero = pacientes_por_genero['Genero'].tolist()
+        cantidad = pacientes_por_genero['Cantidad'].tolist()
+        datos = {
+            "labelsGen": genero,
+            "valuesGen": cantidad,
+        }
+
+        antecedentes_paciente = AntecedentesClinicos.objects.all().values()
+        antecedentes_data = pd.DataFrame(antecedentes_paciente)
+        total_antecedentes = antecedentes_data[
+            ['alcohol', 'fumador', 'aparato_digestivo', 'dermatologicos',
+             'alergias', 'autoinmunes', 'oncologicas',
+             'hematologicas']]
+
+        total_antecedentes = total_antecedentes.reset_index()
+
+        soloSI = total_antecedentes.groupby(['fumador']).size().reset_index(
+            name='cantidad')
+        soloSIA = total_antecedentes.groupby(['alcohol']).size().reset_index(
+            name='cantidad')
+        soloSIAg = total_antecedentes.groupby(
+            ['aparato_digestivo']).size().reset_index(name='cantidad')
+        soloSID = total_antecedentes.groupby(
+            ['dermatologicos']).size().reset_index(name='cantidad')
+        soloSIAl = total_antecedentes.groupby(['alergias']).size().reset_index(
+            name='cantidad')
+        soloSIAi = total_antecedentes.groupby(
+            ['autoinmunes']).size().reset_index(name='cantidad')
+        soloSIO = total_antecedentes.groupby(
+            ['oncologicas']).size().reset_index(name='cantidad')
+        soloSIH = total_antecedentes.groupby(
+            ['hematologicas']).size().reset_index(name='cantidad')
+
+        fumador = soloSI.loc[soloSI['fumador'] == 'SI']
+        alcohol = soloSIA.loc[soloSIA['alcohol'] == 'SI']
+        digestivo = soloSIAg.loc[soloSIAg['aparato_digestivo'] == 'SI']
+        dermatologico = soloSID.loc[soloSID['dermatologicos'] == 'SI']
+        alergias = soloSIAl.loc[soloSIAl['alergias'] == 'SI']
+        autoinmunes = soloSIAi.loc[soloSIAi['autoinmunes'] == 'SI']
+        oncologicas = soloSIO.loc[soloSIO['oncologicas'] == 'SI']
+        hematologicas = soloSIH.loc[soloSIH['hematologicas'] == 'SI']
+
+        prueba_f = fumador.transpose().T
+        prueba_a = alcohol.transpose().T
+        prueba_d = digestivo.transpose().T
+        prueba_de = dermatologico.transpose().T
+        prueba_al = alergias.transpose().T
+        prueba_ai = autoinmunes.transpose().T
+        prueba_o = oncologicas.transpose().T
+        prueba_h = hematologicas.transpose().T
+
+        data_final = pd.concat(
+            [prueba_a, prueba_f, prueba_d, prueba_de, prueba_al, prueba_ai,
+             prueba_o, prueba_h],
+            axis=0)
+        p = pd.melt(data_final, id_vars='cantidad')
+        p = p.loc[p['value'] == 'SI']
+        antecedente = p['variable'].tolist()
+        cantidad = p['cantidad'].tolist()
+
+        def switch_antecedentes(argument):
+            switcher = {
+                "alcohol": "Alcohol",
+                "fumador": "Fumador",
+                "aparato_digestivo": "Aparato Digestivo",
+                "dermatologicos": "Dermatológicos",
+                "alergias": "Alergias",
+                "autoinmunes": "Autoinmunes",
+                "oncologicas": "Oncológicas",
+                "hematologicas": "Hematológicas"
+            }
+            return switcher.get(argument, "Antecedente inválido")
+
+        for a in antecedente:
+            indice = antecedente.index(a)
+            antecedente[indice] = switch_antecedentes(a)
+
+        datosA = {
+            "labelsAnt": antecedente,
+            "valuesAnt": cantidad,
+        }
+        data = {"data": data, "datos": datos, "datosA": datosA}
+        return Response(data)
+
+
+@login_required(login_url="/")
+def ChartPatient(request, paciente_id):
+    paciente = get_object_or_404(
+        Paciente.objects.filter(paciente_id=paciente_id))
+    consulta = Consulta.objects.filter(paciente_id=paciente_id).values()
+    data = {}
+    data_caries = {}
+    if consulta:
+        pacientes_data_set = pd.DataFrame(consulta)
+        pacientes_por_consulta = pacientes_data_set['creado'].value_counts()
+        pacientes_por_consulta = pacientes_por_consulta.reset_index()
+        pacientes_por_consulta.columns = ['Fecha', 'Cantidad']
+        fechas = pd.to_datetime(pacientes_por_consulta['Fecha'],
+                                format='%Y-%m-%d')
+        consultas = fechas.astype(str).tolist()
+        cantidad = pacientes_por_consulta['Cantidad'].tolist()
+        data = {
+            "labels": consultas,
+            "values": cantidad,
+        }
+
+    cpo_fechas = []
+    cantidad_caries = []
+    cpos = reversed(clean_cpo.get_cpo(paciente_id))
+    if cpos:
+        i = 0
+        for c in cpos:
+            cpo_fechas.append(c.creado.strftime("%Y-%m-%d"))
+            i = i + len(c.caries)
+            cantidad_caries.append(i)
+            print(len(c.caries))
+        data_caries = {
+            "labels": cpo_fechas,
+            "values": cantidad_caries,
+        }
+    return render(request, "almaFront/pacientes/patient_statistics.html",
+                  {'data': data, 'data_caries': data_caries,
+                   'patient': paciente})
 
 
 # Vistas para funcionalidades no completadas
 # paciente
 @login_required(login_url="/")
-def pacienteinicio(request) :
+def pacienteinicio(request):
     return render(request, "paciente/home/home.html", {})
 
 
 @login_required(login_url="/")
-def pacientecambiopass(request) :
+def pacientecambiopass(request):
     return render(request, "paciente/common/cambiar_constrasena.html", {})
 
 
 # nucleo e integrantes
 
-class NucleoListView(ListView) :
+class NucleoListView(ListView):
     model = Nucleo
     template_name = 'nucleo/nucleo_lista.html'
 
 
-class NucleoDetailView(DetailView) :
+class NucleoDetailView(DetailView):
     model = Nucleo
     template_name = 'nucleo/nucleo_detalles.html'
 
 
-class NucleoCreateView(CreateView) :
+class NucleoCreateView(CreateView):
     """
     Solo crea un nucleo nuevo,agrega integrantes se hace desde
     NucleoIntegrantesUpdateView().
@@ -595,7 +757,7 @@ class NucleoCreateView(CreateView) :
     template_name = 'nucleo/nucleo_crear.html'
     fields = ['matricula', 'titular']
 
-    def form_valid(self, form) :
+    def form_valid(self, form):
         messages.add_message(
             self.request,
             messages.SUCCESS,
@@ -605,7 +767,7 @@ class NucleoCreateView(CreateView) :
         return super().form_valid(form)
 
 
-class NucleoIntegrantesUpdateView(SingleObjectMixin, FormView) :
+class NucleoIntegrantesUpdateView(SingleObjectMixin, FormView):
     """
     Para agregar integrantes a un nucleo o editarlos
     """
@@ -613,22 +775,22 @@ class NucleoIntegrantesUpdateView(SingleObjectMixin, FormView) :
     model = Nucleo
     template_name = 'nucleo/nucleo_integrantes_update.html'
 
-    def get(self, request, *args, **kwargs) :
+    def get(self, request, *args, **kwargs):
         # El nucleo que estamos editando:
         self.object = self.get_object(queryset=Nucleo.objects.all())
         return super().get(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs) :
+    def post(self, request, *args, **kwargs):
         # El nuecleo que estamos editando:
         self.object = self.get_object(queryset=Nucleo.objects.all())
         return super().post(request, *args, **kwargs)
 
-    def get_form(self, form_class=None) :
+    def get_form(self, form_class=None):
         """
         Use our big formset of formsets, and pass in the Publisher object.
         """
 
-    def form_valid(self, form) :
+    def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
         """
@@ -642,5 +804,5 @@ class NucleoIntegrantesUpdateView(SingleObjectMixin, FormView) :
 
         return HttpResponseRedirect(self.get_success_url())
 
-    def get_success_url(self) :
-        return reverse('nucleo:nucleo_detalles', kwargs={'pk' : self.object.pk})
+    def get_success_url(self):
+        return reverse('nucleo:nucleo_detalles', kwargs={'pk': self.object.pk})

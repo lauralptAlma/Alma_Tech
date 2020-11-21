@@ -10,18 +10,20 @@
                 <div>
                     <form method="GET" id="search-form" autocomplete="on">
                         <div class="search-div input-group">
-                            <input type="text" class="bg-light form-control border-0 small"
+                            <input type="text"
+                                   class="bg-light form-control border-0 small"
                                    name="buscar"
                                    placeholder="Buscar paciente...">
                             <div class="input-group-append">
-                                <button class="btn btn-primary py-0" type="submit" id="search-btn">
-                                    <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
+                                <button class="btn btn-primary py-0"
+                                        type="submit" id="search-btn">
+                                    <i class="fas fa-search text-grey"
+                                       aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                 <table class="table my-0" id="table"
                        data-toggle="table" data-pagination="true"  data-pagination-parts="[pageList]" >
@@ -31,6 +33,7 @@
                         <th data-sortable="true" data-sort-name="{{ pat.nombre }}" data-sort-order="desc" >Nombre</th>
                         <th>Email</th>
                         <th>Celular</th>
+                        <th></th>
                         <th></th>
                     </tr>
                     </thead>
@@ -45,16 +48,21 @@
                                 </td>
                                 <td>{{ pat.email }}</td>
                                 <td>{{ pat.celular }}</td>
+                                <td><a class="a-link"
+                                       href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">Ver más información</a>
+                                </td>
                                 <td>
-                                    <a href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">
-                                        <span ><i class="fas fa-pencil-alt"></i></span></a>
+                                    <a href="/dentalE/editarpaciente/{{ pat.paciente_id }}">
+                                        <span><i class="fas fa-pencil-alt"></i></span></a>
                                 </td>
                             </tr>
 
                         {% endfor %}
                     {% else %}
                         <tr class="no-data">
-                            <td colspan="20">No existen pacientes en el sistema.</td>
+                            <td colspan="20">No existen pacientes en el
+                                sistema.
+                            </td>
                         </tr>
                     {% endif %}
                     </tbody>

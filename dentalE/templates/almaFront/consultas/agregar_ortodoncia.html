@@ -18,16 +18,16 @@
                                     {% csrf_token %}
                                     <table class="col-sm-10">
                                         <tr>
-                                            <th>Paciente</th>
-                                            <th>Tipo de consulta</th>
+                                            <th>{{ form.paciente.label }}:</th>
+                                            <th>{{ form.tipo.label }}:</th>
                                         </tr>
                                         <tr>
                                             <td>{{ form.paciente }}</td>
                                             <td>{{ form.tipo }} </td>
                                         </tr>
                                         <tr class="tr-body" >
-                                            <th>{{ form.diagnostico.label }}</th>
-                                            <th>{{ form.tratamiento.label }}</th>
+                                            <th>{{ form.diagnostico.label }}:</th>
+                                            <th>{{ form.tratamiento.label }}:</th>
                                         </tr>
                                         <tr>
                                             <td> {{ form.diagnostico }}</td>
@@ -35,8 +35,8 @@
                                             <td></td>
                                         </tr>
                                         <tr class="tr-body">
-                                            <th>{{ form.indicaciones.label }}</th>
-                                            <th>Fotos</th>
+                                            <th>{{ form.indicaciones.label }}:</th>
+                                            <th>Fotos: </th>
 
                                         </tr>
                                         <tr>

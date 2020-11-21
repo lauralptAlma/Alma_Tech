@@ -1,7 +1,12 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
-{% block tab-title %}Paciente Nuevo{% endblock %}
-{% block page-title %}Agregar Paciente{% endblock %}
+{% block tab-title %}Agregar Paciente{% endblock %}
+
+{% block page-title %}
+    {% if 'editarpaciente' in request.path %} Editar
+    {% else %} Agregar {% endif %} Paciente
+{% endblock %}
+
 
 {% block page-content %}
     <div class="container-fluid">
@@ -9,7 +14,7 @@
             {% csrf_token %}
             {{ form.non_field_errors }}
             <div class="row">
-                <div class="col-md-8 col-xl-8 mb-4">
+                <div class="col-md-10 col-lg-8 col-xl-8 mb-4">
                     <div class="card shadow border-left-info py-2">
                         <div class="card-body">
                             <div class="row align-items-center no-gutters mb-3">
@@ -26,7 +31,7 @@
                                         {% else %}
                                             <small id="defaultRegisterFormCIHelpBlock"
                                                    class="form-text text-muted mb-2">
-                                                Sin puntos ni guión
+                                                {{ form.documento.help_text }}
                                             </small>
                                         {% endif %}
                                     </div>
@@ -57,11 +62,15 @@
                                     <!-- Fecha Nacimiento -->
                                     <label> Fecha de Nacimiento * </label>
                                     {{ form.fecha_nacimiento }}
+                                    <small id="defaultRegisterFormCIHelpBlock"
+                                           class="form-text text-muted mb-2">
+                                        {{ form.fecha_nacimiento.help_text }}
+                                    </small>
                                 </div>
                                 <div class="col-md-6">
-                                    <!-- Genero -->
+                                    <!-- Sexo -->
                                     <div>
-                                        <label> Género * </label>
+                                        <label> Sexo * </label>
                                     </div>
                                     <div>
                                         {{ form.genero }}
@@ -76,8 +85,8 @@
                                     {{ form.direccion }}
                                 </div>
                                 <div class="col-md-4">
-                                    <!-- Ciudad -->
-                                    <label> Ciudad *</label>
+                                    <!-- Departamento -->
+                                    <label> Departamento *</label>
                                     {{ form.ciudad }}
                                 </div>
                             </div>
@@ -96,6 +105,11 @@
                                         <div class="warning">
                                             {{ form.celular.errors }}
                                         </div>
+                                    {% else %}
+                                        <small id="defaultRegisterFormCIHelpBlock"
+                                               class="form-text text-muted mb-2">
+                                            {{ form.celular.help_text }}
+                                        </small>
                                     {% endif %}
                                 </div>
                             </div>
