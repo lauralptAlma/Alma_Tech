@@ -2,11 +2,7 @@ import ast
 import pandas as pd
 import base64
 from datetime import date
-
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -15,29 +11,19 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-# from django.core.checks import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 from django.utils import formats
-from django.views.generic import DetailView, FormView, ListView, CreateView
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.db.models import Q
-from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.utils import formats
 from django.views.generic import CreateView, ListView, DetailView, \
     FormView
 from django.views.generic.detail import SingleObjectMixin
-
 from dentalE.historiaPdf import pdf, clean_cpo
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
     ConsultaCPOForm, ContactoForm, OrtodonciaForm, TermsForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
     AntecedentesClinicos, CPO, Ortodoncia, Terms
-from datetime import date
-# Imports needed for pdf generation
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 # doctor
@@ -89,24 +75,24 @@ def resumendia(request):
 
 
 @login_required(login_url="/")
-def agregarcita(request) :
+def agregarcita(request):
     form = CitaForm()
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = CitaForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
     return render(request, "secretaria/agenda_hoy/agregar_cita.html",
-                  {'form' : form})
+                  {'form': form})
 
 
 @login_required(login_url="/")
-def CalendarPage(request) :
+def CalendarPage(request):
     citas = Cita.objects.all()
     form = CitaForm()
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = CitaForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             form.save()
             messages.add_message(
                 request,
@@ -115,19 +101,19 @@ def CalendarPage(request) :
             )
             return HttpResponseRedirect("/dentalE/agregarcita")
     return render(request, "secretaria/agenda_hoy/agregar_cita.html",
-                  {'citasList' : citas, 'form' : form})
+                  {'citasList': citas, 'form': form})
 
 
 @login_required(login_url="/")
-def edit_cita(request, cita_id) :
+def edit_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id)
     citas = Cita.objects.all()
     eliminar = request.POST.get('eliminar')
     cancelar = request.POST.get('cancelar')
     template = 'secretaria/agenda_hoy/agregar_cita.html'
-    if request.method == "POST" and cancelar :
+    if request.method == "POST" and cancelar:
         return HttpResponseRedirect("/dentalE/agregarcita")
-    elif request.method == "POST" and eliminar :
+    elif request.method == "POST" and eliminar:
         cita.delete()
         messages.add_message(
             request,
@@ -135,10 +121,10 @@ def edit_cita(request, cita_id) :
             'Cita eliminada exitosamente!'
         )
         return HttpResponseRedirect("/dentalE/agregarcita")
-    elif request.method == "POST" :
+    elif request.method == "POST":
         form = CitaForm(request.POST, instance=cita)
-        try :
-            if form.is_valid() :
+        try:
+            if form.is_valid():
                 form.save()
                 messages.add_message(
                     request,
@@ -146,27 +132,27 @@ def edit_cita(request, cita_id) :
                     'Cita editada exitosamente!'
                 )
             return HttpResponseRedirect("/dentalE/agregarcita")
-        except Exception as e :
+        except Exception as e:
             messages.add_message(
                 request,
                 messages.ERROR,
                 'Error al editar cita, error: {}'.format(e)
             )
-    else :
+    else:
         form = CitaForm(instance=cita)
-    context = {'form' : form,
-               'cita' : cita,
-               'citasList' : citas
+    context = {'form': form,
+               'cita': cita,
+               'citasList': citas
                }
     return render(request, template, context)
 
 
 @login_required(login_url="/")
-def agregartratamiento(request) :
+def agregartratamiento(request):
     form = ConsultaForm()
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = ConsultaForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             form.instance.doctor = request.user
             form.save()
             messages.add_message(
@@ -176,15 +162,15 @@ def agregartratamiento(request) :
             )
             return HttpResponseRedirect("/dentalE/agregartratamiento/")
     return render(request, "almaFront/consultas/agregar_tratamiento.html",
-                  {'form' : form})
+                  {'form': form})
 
 
 @login_required(login_url="/")
-def agregarortodoncia(request) :
+def agregarortodoncia(request):
     form = OrtodonciaForm()
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = OrtodonciaForm(request.POST, request.FILES)
-        if form.is_valid() :
+        if form.is_valid():
             form.instance.doctor = request.user
             form.save()
             messages.add_message(
@@ -194,15 +180,15 @@ def agregarortodoncia(request) :
             )
             return HttpResponseRedirect("/dentalE/agregarortodoncia/")
     return render(request, "almaFront/consultas/agregar_ortodoncia.html",
-                  {'form' : form})
+                  {'form': form})
 
 
 @login_required(login_url="/")
-def agregarCPO(request) :
+def agregarCPO(request):
     formCPO = ConsultaCPOForm()
-    if request.method == 'POST' :
+    if request.method == 'POST':
         formCPO = ConsultaCPOForm(request.POST)
-        if formCPO.is_valid() :
+        if formCPO.is_valid():
             formCPO.instance.doctor = request.user
             formCPO.save()
             messages.add_message(
@@ -212,28 +198,28 @@ def agregarCPO(request) :
             )
             return HttpResponseRedirect("/dentalE/agregarcpo/")
         # En un futuro redirigirlo al historial de CPOs del paciente
-    return render(request, "almaFront/cpo.html", {'formCPO' : formCPO})
+    return render(request, "almaFront/cpo.html", {'formCPO': formCPO})
 
 
 @login_required(login_url="/")
-def listaprofesionales(request) :
+def listaprofesionales(request):
     busqueda = request.GET.get("buscar")
     profesionales = UserProfile.objects.filter(user_tipo='DOCTOR')
-    if busqueda :
+    if busqueda:
         profesionales = UserProfile.objects.filter(
             Q(user_tipo__exact='DOCTOR') &
             Q(user__first_name__contains=busqueda) |
             Q(user__last_name__contains=busqueda)
         ).distinct()
     return render(request, "almaFront/doctor/profesionales.html",
-                  {'profesionales' : profesionales})
+                  {'profesionales': profesionales})
 
 
 @login_required(login_url="/")
-def listapacientes(request) :
+def listapacientes(request):
     pacientes = Paciente.objects.all().order_by('primer_apellido')
     busqueda = request.GET.get("buscar")
-    if busqueda :
+    if busqueda:
         pacientes = pacientes.filter(
             Q(nombre__icontains=busqueda) |
             Q(primer_apellido__icontains=busqueda) |
@@ -244,11 +230,11 @@ def listapacientes(request) :
 
 
 @login_required(login_url="/")
-def agregarpaciente(request) :
+def agregarpaciente(request):
     form = PacienteForm()
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = PacienteForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             form.save()
             messages.add_message(
                 request,
@@ -256,17 +242,17 @@ def agregarpaciente(request) :
                 'Paciente agregado exitosamente!'
             )
             return HttpResponseRedirect("/dentalE/agregarpaciente/")
-    return render(request, "almaFront/agregar_paciente.html", {'form' : form})
+    return render(request, "almaFront/agregar_paciente.html", {'form': form})
 
 
 @login_required(login_url="/")
-def edit_patient(request, paciente_id) :
+def edit_patient(request, paciente_id):
     paciente = get_object_or_404(Paciente, paciente_id=paciente_id)
     template = 'almaFront/agregar_paciente.html'
-    if request.method == "POST" :
+    if request.method == "POST":
         form = PacienteForm(request.POST, instance=paciente)
-        try :
-            if form.is_valid() :
+        try:
+            if form.is_valid():
                 form.save()
                 messages.add_message(
                     request,
@@ -281,7 +267,7 @@ def edit_patient(request, paciente_id) :
                 messages.ERROR,
                 'Error al editar paciente, error: {}'.format(e)
             )
-    else :
+    else:
         form = PacienteForm(instance=paciente)
         form.fields['documento'].widget.attrs['readonly'] = True
     form.fields['documento'].widget.attrs['readonly'] = True
@@ -297,14 +283,14 @@ def encode_image(img):
 
 
 @login_required(login_url="/")
-def pacientedetalles(request, paciente_id) :
+def pacientedetalles(request, paciente_id):
     sin_patologias = False
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     antecedentes_paciente = AntecedentesClinicos.objects.filter(
         paciente_id=paciente_id).last()
     consultas_paciente = Consulta.objects.filter(
         paciente_id=paciente_id).order_by('-id')
-    if antecedentes_paciente :
+    if antecedentes_paciente:
         antecedentes = [antecedentes_paciente.fumador,
                         antecedentes_paciente.alcohol,
                         antecedentes_paciente.coproparasitario,
@@ -322,9 +308,9 @@ def pacientedetalles(request, paciente_id) :
                         antecedentes_paciente.osteoarticulares]
         antecedentes_negativos = antecedentes.count("NO") + antecedentes.count(
             "['NO']")
-        if antecedentes_negativos == 15 :
+        if antecedentes_negativos == 15:
             sin_patologias = True
-    if consultas_paciente :
+    if consultas_paciente:
         consultas_paciente = consultas_paciente[:3]
     ortodoncia_paciente = Ortodoncia.objects.filter(
         paciente_id=paciente_id).order_by('-creado').first()
@@ -332,14 +318,14 @@ def pacientedetalles(request, paciente_id) :
         image_data = encode_image(ortodoncia_paciente.image)
         ortodoncia_paciente.image = image_data
     return render(request, "almaFront/pacientes/paciente.html",
-                  {'patient' : paciente, 'antecedentes' : antecedentes_paciente,
-                   'consultas' : consultas_paciente,
-                   'sin_patologias' : sin_patologias,
-                   'ortodoncia' : ortodoncia_paciente})
+                  {'patient': paciente, 'antecedentes': antecedentes_paciente,
+                   'consultas': consultas_paciente,
+                   'sin_patologias': sin_patologias,
+                   'ortodoncia': ortodoncia_paciente})
 
 
 @login_required(login_url="/")
-def verhistoriageneral(request, paciente_id) :
+def verhistoriageneral(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     consultas_list = Consulta.objects.filter(paciente_id=paciente_id).order_by(
         '-id')
@@ -348,37 +334,37 @@ def verhistoriageneral(request, paciente_id) :
     page_obj = paginator.get_page(page_number)
     return render(request,
                   "almaFront/pacientes/patient_treatments_history.html",
-                  {'patient' : paciente, 'treatments' : page_obj})
+                  {'patient': paciente, 'treatments': page_obj})
 
 
 @login_required(login_url="/")
-def verCPO(request, paciente_id) :
+def verCPO(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     cpos_list = CPO.objects.filter(paciente_id=paciente_id).order_by('-cpo_id')
     paginator = Paginator(cpos_list, 1)  # Show 1 cpo per page.
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
     return render(request, "almaFront/pacientes/patient_cpo.html",
-                  {'patient' : paciente, 'page_obj' : page_obj})
+                  {'patient': paciente, 'page_obj': page_obj})
 
 
 # Get patient clinical background
-def getantecedentes(paciente_id) :
+def getantecedentes(paciente_id):
     antecedentes_list = AntecedentesClinicos.objects.filter(
         paciente_id=paciente_id).last()
-    if antecedentes_list :
+    if antecedentes_list:
         antecedentes_list.creado = formats.date_format(
             antecedentes_list.creado, "SHORT_DATE_FORMAT")
         antecedentes_list.endocrinometabolico = ast.literal_eval(
             antecedentes_list.endocrinometabolico)
         antecedentes_list.cardiovascular = ast.literal_eval(
             antecedentes_list.cardiovascular)
-        for c in antecedentes_list.cardiovascular :
-            if c == 'H.T.A.' :
+        for c in antecedentes_list.cardiovascular:
+            if c == 'H.T.A.':
                 c_index = antecedentes_list.cardiovascular.index(c)
                 antecedentes_list.cardiovascular[
                     c_index] = 'Hipertensión arterial'
-            if c == 'I.A.M' :
+            if c == 'I.A.M':
                 c_index = antecedentes_list.cardiovascular.index(c)
                 antecedentes_list.cardiovascular[
                     c_index] = 'Infarto agudo de miocardio'
@@ -390,17 +376,17 @@ def getantecedentes(paciente_id) :
 
 
 @login_required(login_url="/")
-def verantecedentes(request, paciente_id) :
+def verantecedentes(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     antecedentes_list = getantecedentes(paciente_id)
     return render(request, "almaFront/pacientes/patient_background.html",
-                  {'patient' : paciente, 'antecedentes' : antecedentes_list})
+                  {'patient': paciente, 'antecedentes': antecedentes_list})
 
 
 # Get patient orthodontics background
 
 
-def getconsultasortodoncia(paciente_id) :
+def getconsultasortodoncia(paciente_id):
     ortodoncia_paciente = Ortodoncia.objects.filter(
         paciente_id=paciente_id).order_by('-creado')
     if ortodoncia_paciente:
@@ -412,24 +398,24 @@ def getconsultasortodoncia(paciente_id) :
 
 
 @login_required(login_url="/")
-def verhistoriaortodoncia(request, paciente_id) :
+def verhistoriaortodoncia(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     ortodoncia_paciente = getconsultasortodoncia(paciente_id)
     paginator = Paginator(ortodoncia_paciente, 1)  # Show 1 cpo per page.
     page_number = request.GET.get('page', 1)
     ortodoncia_obj = paginator.get_page(page_number)
     return render(request, "almaFront/pacientes/patient_orthodontics.html",
-                  {'patient' : paciente, 'ortodoncia_obj' : ortodoncia_obj})
+                  {'patient': paciente, 'ortodoncia_obj': ortodoncia_obj})
 
 
 @login_required(login_url="/")
-def compararortodoncia(request, paciente_id) :
+def compararortodoncia(request, paciente_id):
     paciente = Paciente.objects.get(paciente_id=paciente_id)
     ortodoncia_paciente = getconsultasortodoncia(paciente_id)
     ortodoncia_imagenes = []
-    if ortodoncia_paciente :
-        for o in ortodoncia_paciente :
-            if o.image :
+    if ortodoncia_paciente:
+        for o in ortodoncia_paciente:
+            if o.image:
                 ortodoncia_imagenes.append(o)
     ortodoncia_comparativa = [ortodoncia_imagenes[0], ortodoncia_imagenes[-1]]
     print(ortodoncia_comparativa)
@@ -444,28 +430,28 @@ def ingreso(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        if user is not None :
+        if user is not None:
             login(request, user)
             userprofile = UserProfile.objects.get(user=user)
-            if userprofile.user_tipo == 'SECRETARIA' :
+            if userprofile.user_tipo == 'SECRETARIA':
                 return HttpResponseRedirect('/dentalE/resumendia/',
-                                            {'user' : userprofile})
-            elif userprofile.user_tipo == 'DOCTOR' :
+                                            {'user': userprofile})
+            elif userprofile.user_tipo == 'DOCTOR':
                 return HttpResponseRedirect('/dentalE/pacientesdeldia/',
-                                            {'user' : userprofile})
-            else :
+                                            {'user': userprofile})
+            else:
                 return HttpResponseRedirect('/dentalE/pacienteincio',
-                                            {'user' : userprofile})
+                                            {'user': userprofile})
     return render(request, 'almaFront/index.html')
 
 
 # antecedentes paciente
 @login_required(login_url="/")
-def agregarantecedentes(request) :
+def agregarantecedentes(request):
     form = AntecedenteForm()
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = AntecedenteForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             form.save()
             messages.add_message(
                 request,
@@ -474,10 +460,10 @@ def agregarantecedentes(request) :
             )
             return HttpResponseRedirect("/dentalE/agregarantecedentes/")
     return render(request, "almaFront/agregar_antecedentes_clinicos.html",
-                  {'form' : form})
+                  {'form': form})
 
 
-def logout_view(request) :
+def logout_view(request):
     logout(request)
     return redirect('ingreso')
 
@@ -485,14 +471,14 @@ def logout_view(request) :
 # Historia clínica paciente pdf
 
 @login_required(login_url="/")
-def patient_render_background_pdf(request, *args, **kwargs) :
-    try :
+def patient_render_background_pdf(request, *args, **kwargs):
+    try:
         userprofile = UserProfile.objects.get(user=request.user)
-    except ObjectDoesNotExist :
+    except ObjectDoesNotExist:
         return render(request, 'almaFront/bases/404.html')
-    if userprofile.user_tipo == 'SECRETARIA' :
+    if userprofile.user_tipo == 'SECRETARIA':
         return render(request, 'almaFront/bases/404.html')
-    elif userprofile.user_tipo == 'DOCTOR' :
+    elif userprofile.user_tipo == 'DOCTOR':
         user = request.user
         paciente_id = kwargs.get('paciente_id')
         patient = get_object_or_404(Paciente, paciente_id=paciente_id)
@@ -510,16 +496,16 @@ def patient_render_background_pdf(request, *args, **kwargs) :
         filename = patient_name + "-HistoriaClínicaDental"
         response = pdf.generate_pdf(template_path, context, filename)
         return response
-    else :
+    else:
         return HttpResponseRedirect('account_logout')
 
 
 @login_required(login_url="/")
-def contacto(request) :
+def contacto(request):
     form = ContactoForm()
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = ContactoForm(request.POST)
-        if form.is_valid() :
+        if form.is_valid():
             form.save()
             subject = "Usuario " + request.POST['nombre'] + ": " + \
                       request.POST['asunto']
@@ -527,7 +513,7 @@ def contacto(request) :
             message = request.POST['mensaje'] + remitente
             email_from = settings.EMAIL_HOST_USER
             recipient_list = ['almatech20@gmail.com']
-            try :
+            try:
                 send_mail(subject, message, email_from, recipient_list)
                 messages.add_message(
                     request,
@@ -535,13 +521,13 @@ def contacto(request) :
                     'Mensaje enviado exitosamente!'
                 )
                 return redirect("/dentalE/resumendia/")
-            except Exception as e :
+            except Exception as e:
                 messages.add_message(
                     request,
                     messages.ERROR,
                     'Error al enviar la consulta, error: {}'.format(e)
                 )
-        else :
+        else:
             messages.add_message(
                 request,
                 messages.ERROR,

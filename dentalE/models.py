@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.forms import forms
@@ -51,7 +50,7 @@ CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 
 
 # MODELOS
-class UserProfile(models.Model) :
+class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_tipo = models.CharField("Perfil de usuario* ", max_length=15,
                                  choices=USER_TIPO, default='')
@@ -68,10 +67,10 @@ class UserProfile(models.Model) :
                                          choices=USER_ESPECIALIDAD, blank=True,
                                          null=True)
 
-    def __unicode__(self) :
+    def __unicode__(self):
         return self.user
 
-    def __str__(self) :
+    def __str__(self):
         return str(self.user.get_full_name())
 
 
@@ -79,11 +78,11 @@ class Terms(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     agreement = models.BooleanField(default=False)
 
-    def __str__(self) :
+    def __str__(self):
         return str(self.user.get_full_name())
 
 
-class Paciente(models.Model) :
+class Paciente(models.Model):
     # Informacion
     paciente_id = models.AutoField(primary_key=True)
     documento = models.CharField('Documento* ', max_length=8, unique=True,
@@ -120,21 +119,21 @@ class Paciente(models.Model) :
     alta = models.DateTimeField(auto_now_add=True),
     nucleo_activo = models.BooleanField('Núcleo Activo', default=True)
 
-    def clean(self) :
-        try :
+    def clean(self):
+        try:
             ci = int(self.documento)
         except ValueError:
             raise forms.ValidationError(
                 {'documento': 'Por favor ingrese solamente números'})
         if not validate_ci(ci):
             raise forms.ValidationError(
-                {'documento' : 'El documento no tiene un formato válido'})
+                {'documento': 'El documento no tiene un formato válido'})
 
-    def __str__(self) :
+    def __str__(self):
         return str("{} {}".format(self.nombre, self.primer_apellido))
 
 
-class AntecedentesClinicos(models.Model) :
+class AntecedentesClinicos(models.Model):
     creado = models.DateField(auto_now_add=True)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     fumador = models.CharField('Fumador*', max_length=2, choices=SN_OPCIONES,
@@ -202,7 +201,7 @@ class AntecedentesClinicos(models.Model) :
     observations = models.TextField('Observaciones', max_length=150, null=True,
                                     blank=True)
 
-    def __str__(self) :
+    def __str__(self):
         return str(self.paciente)
 
 
@@ -222,14 +221,14 @@ class Consulta(models.Model):
 
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
-    def __str__(self) :
+    def __str__(self):
         return str(self.paciente)
 
-    class Meta :
+    class Meta:
         ordering = ('creado',)
 
 
-class Ortodoncia(models.Model) :
+class Ortodoncia(models.Model):
     doctor = models.ForeignKey(User, related_name='doctor_ortodoncia',
                                on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
@@ -248,15 +247,15 @@ class Ortodoncia(models.Model) :
     image = djongomodel.ImageField(storage=GridFSStorage(collection='image'),
                                    blank=True, null=True)
 
-    class Meta :
+    class Meta:
         verbose_name = " Consulta de Ortodoncia | Ortopedia"
         verbose_name_plural = "Consultas de Ortodoncia | Ortopedia"
 
-    def __str__(self) :
+    def __str__(self):
         return str(self.paciente)
 
 
-class CPO(models.Model) :
+class CPO(models.Model):
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
     doctor = models.ForeignKey(User, related_name='cpo_doctor',
@@ -273,14 +272,14 @@ class CPO(models.Model) :
     cpos = models.DecimalField(max_digits=2, decimal_places=1, blank=True,
                                null=True)
 
-    class Meta :
+    class Meta:
         db_table = "dentalE_CPOs"
 
-    def __str__(self) :
+    def __str__(self):
         return str(self.cpo_id)
 
 
-class Cita(models.Model) :
+class Cita(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     doctor = models.ForeignKey(User, related_name='app_doctor',
                                on_delete=models.CASCADE)
@@ -289,15 +288,15 @@ class Cita(models.Model) :
     creado = models.DateField(auto_now_add=True, blank=True, null=True)
     modificado = models.DateField(auto_now=True, blank=True, null=True)
 
-    class Meta :
+    class Meta:
         ordering = ('fecha',)
         # unique_together = ('doctor', 'fecha', 'hora',)
 
-    def __str__(self) :
+    def __str__(self):
         return str(self.paciente)
 
 
-class Contacto(models.Model) :
+class Contacto(models.Model):
     nombre = models.CharField(max_length=50, blank=False, null=False,
                               default='')
     email = models.EmailField(max_length=50, blank=False, null=False,
@@ -308,10 +307,10 @@ class Contacto(models.Model) :
                                default='')
     date = models.DateTimeField(auto_now_add=True)
 
-    class Meta :
+    class Meta:
         verbose_name_plural = "Contacto"
 
-    def __str__(self) :
+    def __str__(self):
         return str("{}-{}".format(self.name, self.email))
 
 

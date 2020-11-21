@@ -13,8 +13,6 @@ admin.site.register(Ortodoncia)
 admin.site.register(Terms)
 
 
-
-
 @admin.register(Nucleo)
 class PublisherAdmin(admin.ModelAdmin):
     list_display = ('matricula', 'titular',)
@@ -23,5 +21,5 @@ class PublisherAdmin(admin.ModelAdmin):
 
 @admin.register(Integrante)
 class IntegrantesAdmin(admin.ModelAdmin):
-    list_display = ('nucleo',  'relacion_nucleo', )
+    list_display = ('nucleo', 'relacion_nucleo',)
     list_display_links = ('nucleo',)
