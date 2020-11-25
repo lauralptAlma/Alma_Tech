@@ -31,7 +31,7 @@
                     <thead class="card-header py-3">
                     <tr>
                         <th>Documento</th>
-                        <th data-sortable="true" data-sort-name="{{ pat.nombre }}" data-sort-order="desc" >Nombre</th>
+                        <th data-sortable="true" data-sort-name="{{ pat.nombre }}" data-sort-order="desc">Nombre</th>
                         <th>Email</th>
                         <th>Celular</th>
                         <th></th>
@@ -44,7 +44,9 @@
                         {% for pat in patients %}
                             <tr class="tr-body">
                                 <td>{{ pat.documento }}</td>
-                                <td><a class="a-link"
+                                <td>
+                                    <span><i class="fas fa-user-circle"></i></span>&nbsp;
+                                    <a class="a-link"
                                        href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">{{ pat.nombre }} {{ pat.primer_apellido }}</a>
                                 </td>
                                 <td>{{ pat.email }}</td>
