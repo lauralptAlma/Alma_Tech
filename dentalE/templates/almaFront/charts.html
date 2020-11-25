@@ -1,32 +1,36 @@
 {% extends "almaFront/bases/blank.html" %}
 {% load static %}
-{% block tab-title %}Charts{% endblock %}
-{% block page-title %}Análisis de Negocio{% endblock %}
+{% block tab-title %}Analítica{% endblock %}
+{% block page-title %}Analítica{% endblock %}
 
 {% block page-content %}
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <div class="card shadow mb-3">
+                <div class="card">
                     <div class="card-body">
-                        <canvas id="chartPatientDpto" width="300"
-                                height="300"></canvas>
+                        <canvas id="chartPatientDpto" width="300" height="300"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="card shadow mb-3">
+                <div class="card">
                     <div class="card-body">
-                        <canvas id="chartPatientGen" width="300"
-                                height="300"></canvas>
+                        <canvas id="chartPatientGen" width="300" height="300"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="card shadow mb-3">
+                <div class="card">
                     <div class="card-body">
-                        <canvas id="chartPatientCons" width="300"
-                                height="300"></canvas>
+                        <canvas id="chartPatientCons" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="chartType" width="300" height="300"></canvas>
                     </div>
                 </div>
             </div>
@@ -42,6 +46,7 @@
             let defaultData, labels = []
             let defaultDataGen, labelsGen = []
             let defaultDataAnt, labelsAnt = []
+            let defaultDataT, labelsT = []
 
             $.ajax({
                 method: "GET",
@@ -53,6 +58,8 @@
                     defaultDataGen = data.datos.valuesGen
                     labelsAnt = data.datosA.labelsAnt
                     defaultDataAnt = data.datosA.valuesAnt
+                    labelsT = data.datosB.labelsT
+                    defaultDataT = data.datosB.valuesT
                     setChart()
                 },
                 error: function (error_data) {
@@ -62,9 +69,12 @@
             })
 
             function setChart() {
+
                 const ctx = document.getElementById('chartPatientDpto').getContext('2d')
                 const ctx2 = document.getElementById('chartPatientGen').getContext('2d');
                 const ctx3 = document.getElementById('chartPatientCons').getContext('2d');
+                const ctx4 = document.getElementById('chartType').getContext('2d')
+
                 const chartPatientDpto = new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -81,17 +91,13 @@
                                 'rgba(255, 159, 64, 0.2)',
                                 'rgba(255, 99, 71, 0.2)',
                                 'rgba(46, 139, 87, 0.2)',
-                                'rgba(160, 231, 229, 0.2)',
-                                'rgba(255, 174, 188, 0.2)',
-                                'rgba(251, 231, 198, 0.2)',
-                                'rgba(136, 123, 176, 0.2)',
-                                'rgba(244, 176, 98, 0.2)',
                                 'rgba(255, 99, 132, 0.2)',
                                 'rgba(54, 162, 235, 0.2)',
                                 'rgba(255, 206, 86, 0.2)',
                                 'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
+                                'rgba(153, 102, 255, 0.2)'
+
+
                             ],
                             borderColor: [
                                 'rgba(255, 99, 132, 1)',
@@ -102,17 +108,11 @@
                                 'rgba(255, 159, 64, 1)',
                                 'rgba(255, 99, 71, 1)',
                                 'rgba(46, 139, 87, 1)',
-                                'rgba(160, 231, 229, 1)',
-                                'rgba(255, 174, 188, 1)',
-                                'rgba(251, 231, 198, 1)',
-                                'rgba(136, 123, 176, 1)',
-                                'rgba(244, 176, 98, 1)',
                                 'rgba(255, 99, 132, 1)',
                                 'rgba(54, 162, 235, 1)',
                                 'rgba(255, 206, 86, 1)',
                                 'rgba(75, 192, 192, 1)',
                                 'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
                             ],
                             borderWidth: 1
                         }]
@@ -127,7 +127,42 @@
                         },
                         title: {
                             display: true,
-                            text: 'Pacientes por Departamento'
+                            text: 'Pacientes por departamento'
+                        }
+
+                    }
+                });
+                const chartType = new Chart(ctx4, {
+                    type: 'bar',
+                    data: {
+                        labels: labelsT,
+                        datasets: [{
+                            data: defaultDataT,
+                            label: 'Cantidad',
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        },
+                        title: {
+                            display: true,
+                            text: 'Consultas por tipo'
                         }
 
                     }
@@ -155,49 +190,49 @@
                     options: {
                         title: {
                             display: true,
-                            text: 'Pacientes por Sexo'
+                            text: 'Pacientes por Género'
                         }
                     }
 
                 });
                 const chartPatientCons = new Chart(ctx3, {
-                    type: 'polarArea',
-                    data: {
-                        labels: labelsAnt,
-                        datasets: [{
-                            label: 'Prevalencia de Antecedentes',
-                            data: defaultDataAnt,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)',
-                                'rgba(255, 99, 71, 0.2)',
-                                'rgba(46, 139, 87, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)',
-                                'rgba(255, 99, 71, 1)',
-                                'rgba(46, 139, 87, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        title: {
-                            display: true,
-                            text: 'Prevalencia de Antecedentes'
+                        type: 'polarArea',
+                        data: {
+                            labels: labelsAnt,
+                            datasets: [{
+                                label: 'Prevalencia de Antecedentes',
+                                data: defaultDataAnt,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 99, 71, 0.2)',
+                                    'rgba(46, 139, 87, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(255, 99, 71, 1)',
+                                    'rgba(46, 139, 87, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'Prevalencia de antecedentes'
+                            }
                         }
-                    }
-
-                });
+                    },
+                );
             }
         })
     </script>
