@@ -655,7 +655,35 @@ class ChartData(APIView):
             "labelsAnt": antecedente,
             "valuesAnt": cantidad,
         }
-        data = {"data": data, "datos": datos, "datosA": datosA}
+
+        # Cantidad de consultas por tipo
+        consultaso = Ortodoncia.objects.all().values()
+        consultas0_data_set = pd.DataFrame(consultaso)
+        consultasg = Consulta.objects.all().values()
+        consultasg_data_set = pd.DataFrame(consultasg)
+        # consulta general
+        consultasg_data_set['tipo'] = 'GENERAL'
+        consultasg_data_set = consultasg_data_set['tipo'].value_counts()
+        consultasg_data_set = consultasg_data_set.reset_index()
+        consultasg_data_set.columns = ['Tipo',
+                                       'Cantidad']  # change column names
+        # consulta ortodoncia ortopedia
+        consultas_ort = consultas0_data_set['tipo'].value_counts()
+        consultas_ort = consultas_ort.reset_index()
+        consultas_ort.columns = ['Tipo',
+                                 'Cantidad']  # change column names
+        # consultas totales
+        consultasT = pd.concat([consultasg_data_set, consultas_ort])
+        tipo = consultasT['Tipo'].tolist()
+        cantidades = consultasT['Cantidad'].tolist()
+        dataTipos = {
+            "labelsT": tipo,
+            "valuesT": cantidades,
+
+        }
+
+        data = {"data": data, "datos": datos, "datosA": datosA,
+                "datosB": dataTipos}
         return Response(data)
 
 
@@ -694,6 +722,7 @@ def ChartPatient(request, paciente_id):
             "labels": cpo_fechas,
             "values": cantidad_caries,
         }
+
     return render(request, "almaFront/pacientes/patient_statistics.html",
                   {'data': data, 'data_caries': data_caries,
                    'patient': paciente})
