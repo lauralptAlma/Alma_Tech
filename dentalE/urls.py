@@ -86,14 +86,14 @@ urlpatterns = [
         name='editarpaciente'),
 
     # general
-    url(r'^negocio/$', analisis,
+    url(r'^analitica/$', analisis,
         name='analisis'),
     url(r'^api/data/$', get_data,
         name='api-data'),
     url(r'^data/$', DataView,
         name='api-data'),
     url(r'^api/chart/data/$', ChartData.as_view()),
-    url(r'^api/chart/generarestadistica/(?P<paciente_id>\d+)/$',
+    url(r'^generarestadistica/(?P<paciente_id>\d+)/$',
         ChartPatient, name="generarestadistica"),
 
 ]
