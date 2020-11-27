@@ -59,7 +59,7 @@
                                     Modificar
                                 </button>
                                 <input id="btnDelete" class="btn btn-danger"
-                                       type="submit" name="eliminar"
+                                       type="button" name="eliminar"
                                        value="Eliminar"/>
                                 {% if 'editarcita' in request.path %}
                                     <input id="btnCancel"
@@ -72,9 +72,22 @@
                                     </button>
                                 {% endif %}
                             </div>
+                            <!-- Modal confirm -->
+                            <div class="modal" id="confirmModal" style="display: none; z-index: 1050;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body p-3 mb-2 bg-info text-white" id="confirmMessage">
+                                        </div>
+                                        <div class="modal-footer bg-light text-dark">
+                                            <button type="submit" class="btn btn-danger" name="eliminar"  value="eliminar" id="confirmOk">Aceptar</button>
+                                            <button type="button" class="btn btn-secondary" id="confirmCancel" data-dismiss="confirmModal">Cancelar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
             </form>
         </div>
     </div>
@@ -148,6 +161,26 @@
                 $('#txtFecha').val("");
                 $('#txtHora').val("");
             }
+
+
+            var mensaje = "Está seguro que desea eliminar la cita?";
+            $('#btnDelete').on('click', function (e) {
+                confirmDialog(mensaje, function () {
+                });
+            });
+
+            function confirmDialog(message, onConfirm) {
+                var modal = $("#confirmModal");
+                var fClose = function () {
+                    modal.modal("hide");
+                };
+                modal.modal("show");
+                $("#confirmMessage").empty().append(message);
+                $("#confirmOk").unbind().one('click', onConfirm).one('click', fClose);
+                $("#confirmCancel").unbind().one("click", fClose);
+            }
+
+
         });
     </script>
     <script>

@@ -633,6 +633,24 @@ class ChartData(APIView):
         p = p.loc[p['value'] == 'SI']
         antecedente = p['variable'].tolist()
         cantidad = p['cantidad'].tolist()
+
+        def switch_antecedentes(argument):
+            switcher = {
+                "alcohol": "Alcohol",
+                "fumador": "Fumador",
+                "aparato_digestivo": "Aparato Digestivo",
+                "dermatologicos": "Dermatológicos",
+                "alergias": "Alergias",
+                "autoinmunes": "Autoinmunes",
+                "oncologicas": "Oncológicas",
+                "hematologicas": "Hematológicas"
+            }
+            return switcher.get(argument, "Antecedente inválido")
+
+        for a in antecedente:
+            indice = antecedente.index(a)
+            antecedente[indice] = switch_antecedentes(a)
+
         datosA = {
             "labelsAnt": antecedente,
             "valuesAnt": cantidad,
