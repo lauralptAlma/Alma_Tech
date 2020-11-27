@@ -24,14 +24,14 @@
                     </form>
                 </div>
             </div>
-
             <div class="table-responsive table mt-2" id="dataTable" role="grid"
                  aria-describedby="dataTable_info">
-                <table class="table my-0" id="dataTable">
+                <table class="table my-0" id="table"
+                       data-toggle="table" data-pagination="true" data-pagination-parts="[pageList]">
                     <thead class="card-header py-3">
                     <tr>
                         <th>Documento</th>
-                        <th>Nombre</th>
+                        <th data-sortable="true" data-sort-name="{{ pat.nombre }}" data-sort-order="desc">Nombre</th>
                         <th>Email</th>
                         <th>Celular</th>
                         <th></th>
@@ -44,13 +44,16 @@
                         {% for pat in patients %}
                             <tr class="tr-body">
                                 <td>{{ pat.documento }}</td>
-                                <td><a class="a-link"
-                                       href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">{{ pat.nombre }} {{ pat.primer_apellido }}</a>
+                                <td>
+                                    <span><i class="fas fa-user-circle"></i></span>
+                                    <a class="a-link"
+                                       href="/dentalE/pacientedetalles/{{ pat.paciente_id }}"> {{ pat.nombre }} {{ pat.primer_apellido }}</a>
                                 </td>
                                 <td>{{ pat.email }}</td>
                                 <td>{{ pat.celular }}</td>
                                 <td><a class="a-link"
-                                       href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">Ver más información</a>
+                                       href="/dentalE/pacientedetalles/{{ pat.paciente_id }}">Ver
+                                    más información</a>
                                 </td>
                                 <td>
                                     <a href="/dentalE/editarpaciente/{{ pat.paciente_id }}">
@@ -77,4 +80,11 @@
 {% endblock %}
 
 {% block page-javascript %}
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+            $('.dataTables_length').addClass('bs-select');
+        });
+    </script>
+
 {% endblock %}
