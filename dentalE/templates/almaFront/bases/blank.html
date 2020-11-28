@@ -28,7 +28,8 @@
           href="{% static 'assets/fonts/fontawesome5-overrides.min.css' %}">
     <link rel="stylesheet"
           href="{% static 'assets/css/Bootstrap-Calendar.css' %}">
-    <link href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css"
+          rel="stylesheet">
     <script src="extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
 </head>
 
@@ -45,19 +46,22 @@
                             id="sidebarToggleTop" type="button"><i
                             class="fas fa-bars" style="color: #00ACC1"></i>
                     </button>
-                    <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group"><input
+                    <!--form method="GET" id="general-search-form"
+                          class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input
+                                name="buscarpaciente"
                                 class="bg-light form-control border-0 small"
                                 type="text"
-                                placeholder="Buscar ...">
+                                placeholder="Buscar paciente...">
                             <div class="input-group-append">
                                 <button class="btn btn-primary py-0"
-                                        type="button"><i
+                                        type="submit"><i
                                         class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form-->
                     <ul class="nav navbar-nav flex-nowrap ml-auto">
                         {% include 'almaFront/bases/global-search-responsive.html' %}
 
@@ -111,14 +115,18 @@
         </div>
         <footer class="bg-white sticky-footer">
             <div class="container my-auto">
+                <div class="text-center mb-2">
+                    <li><a class="a-link"
+                           href="/dentalE/contacto/"> Contacto </a>
+                        - <a class="a-link"
+                             href="/dentalE/terminos/"> Términos y
+                            Condiciones </a>
+                    </li>
+                </div>
                 <div class="text-center my-auto copyright">
                     <span>Copyright &copy;
 	                    <script type="text/javascript">document.write(new Date().getFullYear());</script> | AlmaTech
                     </span>
-                </div>
-                <div column-count:2;>
-                    <li><a class="text-center nav-link"
-                           href="/dentalE/contacto/"> Contacto </a></li>
                 </div>
             </div>
         </footer>
@@ -133,7 +141,7 @@
 <script src="{% static 'assets/js/bs-init.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
 <script src="{% static 'assets/js/theme.js' %}"></script>
- <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
 {% block page-javascript %}
 {% endblock %}
 </body>

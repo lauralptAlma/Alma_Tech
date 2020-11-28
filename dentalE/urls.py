@@ -16,6 +16,9 @@ from .views import (
     # contacto
     contacto,
 
+    # ver terminos y condiciones
+    terminos,
+
     # secretaria
     resumendia,
     listaprofesionales,
@@ -62,9 +65,11 @@ urlpatterns = [
         patient_render_background_pdf,
         name="paciente-pdf-view"),
 
-
     # contacto
     url(r'^contacto/$', contacto, name="contacto"),
+
+    # mostrar términos
+    url(r'^terminos/$', terminos, name="terminos"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),

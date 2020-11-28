@@ -77,6 +77,8 @@ class UserProfile(models.Model):
 class Terms(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     agreement = models.BooleanField(default=False)
+    alta = models.DateTimeField(auto_now_add=True)
+    term_id = models.AutoField(primary_key=True)
 
     def __str__(self):
         return str(self.user.get_full_name())
