@@ -76,7 +76,7 @@ class CitaForm(ModelForm):
             'fecha': forms.TextInput(attrs={'class': 'form-control',
                                             'type': 'date', 'min': today}),
             'hora': forms.TextInput(attrs={'class': 'form-control',
-                                           'type': 'time', 'min': '07:00',
+                                           'type': 'time', 'min': '09:00',
                                            'max': '19:00', 'step': '600'}),
         }
 
