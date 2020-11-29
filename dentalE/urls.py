@@ -16,6 +16,9 @@ from .views import (
     # contacto
     contacto,
 
+    # ver terminos y condiciones
+    terminos,
+
     # secretaria
     resumendia,
     listaprofesionales,
@@ -63,8 +66,10 @@ urlpatterns = [
         name="paciente-pdf-view"),
 
     # contacto
-    url(r'^contacto/$', contacto,
-        name="contacto"),
+    url(r'^contacto/$', contacto, name="contacto"),
+
+    # mostrar términos
+    url(r'^terminos/$', terminos, name="terminos"),
 
     # secretaria
     url(r'^resumendia/$', resumendia, name='resumendia'),
@@ -86,14 +91,14 @@ urlpatterns = [
         name='editarpaciente'),
 
     # general
-    url(r'^negocio/$', analisis,
+    url(r'^analitica/$', analisis,
         name='analisis'),
     url(r'^api/data/$', get_data,
         name='api-data'),
     url(r'^data/$', DataView,
         name='api-data'),
     url(r'^api/chart/data/$', ChartData.as_view()),
-    url(r'^api/chart/generarestadistica/(?P<paciente_id>\d+)/$',
+    url(r'^generarestadistica/(?P<paciente_id>\d+)/$',
         ChartPatient, name="generarestadistica"),
 
 ]

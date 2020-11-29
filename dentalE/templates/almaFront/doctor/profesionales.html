@@ -8,13 +8,13 @@
         <div class="card-body">
             <div class="row justify-content-end">
                 <div>
-                    <form method="GET" id="search-form" autocomplete="on" >
+                    <form method="GET" id="search-form" autocomplete="on">
                         <div class="search-div input-group">{% csrf_token %}
                             <input type="text" class="bg-light form-control border-0 small"
                                    name="buscar"
                                    placeholder="Buscar profesional...">
                             <div class="input-group-append">
-                                <button class="btn btn-primary py-0" type="submit" id="search-btn" >
+                                <button class="btn btn-primary py-0" type="submit" id="search-btn">
                                     <i class="fas fa-search text-grey" aria-hidden="true"></i></button>
                             </div>
                         </div>
@@ -23,10 +23,13 @@
             </div>
 
             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                <table class="table my-0" id="dataTable">
+                <table class="table my-0" id="table"
+                       data-toggle="table">
                     <thead class="card-header py-3">
                     <tr>
-                        <th>Nombre Completo</th>
+                        <th data-sortable="true" data-sort-name="{{ prof.user.get_full_name }}" data-sort-order="desc">
+                            Nombre Completo
+                        </th>
                         <th>Especialidad</th>
                         <th>Email</th>
                         <th>Celular</th>
@@ -39,7 +42,7 @@
                             <tr class="tr-body">
                                 <td>{{ prof.user.get_full_name }}</td>
                                 <td>{{ prof.user_especialidad }}</td>
-                                <td>{{ prof.user.socialaccount_set.all.0.extra_data.email}}</td>
+                                <td>{{ prof.user.socialaccount_set.all.0.extra_data.email }}</td>
                                 <td>{{ prof.user_celular }}</td>
                             </tr>
                         {% endfor %}

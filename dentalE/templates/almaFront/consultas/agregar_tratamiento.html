@@ -14,13 +14,35 @@
                         </div>
                         <div class="card-body" align="justify">
                             <div>
-                                <form method="post" action="">
+                                 <form method="post" enctype="multipart/form-data" action="">
                                     {% csrf_token %}
-                                    <table class="col-sm-8">
-                                        {{ form.as_table }}
-                                    </table>
+                                    <table class="col-sm-10">
+                                        <tr>
+                                            <th>{{ form.paciente.label }}:</th>
 
-                                    <div class="footer" align="right">
+                                        </tr>
+                                        <tr>
+                                            <td>{{ form.paciente }}</td>
+
+                                        </tr>
+                                        <tr class="tr-body" >
+                                            <th>{{ form.diagnostico.label }}:</th>
+                                            <th>{{ form.tratamiento.label }}:</th>
+                                        </tr>
+                                        <tr>
+                                            <td> {{ form.diagnostico }}</td>
+                                            <td>{{ form.tratamiento }}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="tr-body">
+                                            <th>{{ form.indicaciones.label }}:</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ form.indicaciones }}</td>
+
+                                        </tr>
+                                    </table>
+                                       <div class="footer" align="right">
                                         <button type="submit" class="btn btn-info">Guardar</button>
                                     </div>
                                 </form>

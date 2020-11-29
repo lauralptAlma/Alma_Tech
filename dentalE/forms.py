@@ -1,21 +1,30 @@
-from django.forms import ModelForm
-from django import forms
-from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from bootstrap_datepicker_plus import DatePickerInput
+from django import forms
 from django.contrib.auth.models import User
+from django.forms import ModelForm
+from django.forms.models import inlineformset_factory, BaseInlineFormSet
 from django.forms.widgets import EmailInput
 from datetime import date
 from .models import Paciente, Cita, Consulta, Nucleo, Integrante, \
     Contacto, AntecedentesClinicos, UserProfile, CPO, \
     CARDIOVASCULAR_OPCIONES, ENDOCRINOLOGICOS_OPCIONES, \
     NEFROUROLOGICOS_OPCIONES, OSTEOARTICULARES_OPCIONES, SN_OPCIONES, \
-    PATIENT_GENDER, Ortodoncia
+    PATIENT_GENDER, Ortodoncia, Terms
 
 
 class IngresoForm(ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password',)
+
+
+class TermsForm(ModelForm):
+    class Meta:
+        model = Terms
+        fields = ('agreement',)
+        widgets = {'agreement': forms.CheckboxInput(
+            attrs={'type': 'checkbox', 'class': 'custom-checkbox',
+                   'required': 'True', }), }
 
 
 class PacienteForm(ModelForm):
@@ -67,7 +76,7 @@ class CitaForm(ModelForm):
             'fecha': forms.TextInput(attrs={'class': 'form-control',
                                             'type': 'date', 'min': today}),
             'hora': forms.TextInput(attrs={'class': 'form-control',
-                                           'type': 'time', 'min': '07:00',
+                                           'type': 'time', 'min': '09:00',
                                            'max': '19:00', 'step': '600'}),
         }
 

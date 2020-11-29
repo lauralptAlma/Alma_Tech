@@ -1,0 +1,47 @@
+{% extends "almaFront/bases/blank.html" %}
+{% load static %}
+{% block tab-title %}Agenda{% endblock %}
+{% block page-title %}Agenda de hoy{% endblock %}
+{% block page-content %}
+
+    <div class="form-row">
+        <div class="form-group col-lg-10">
+            <div class="modal fade" id="termnsModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">TÉRMINOS Y CONDICIONES</h5>
+                        </div>
+                        <div class="modal-body">
+                            {% include 'almaFront/bases/terms-text.html' %}
+                        </div>
+                        <div class="modal-footer" >
+
+                             <form method="post" action="" >
+                                    {% csrf_token %}
+                                    {{ terms.agreement }}
+                                    He leído
+                                    y acepto
+                                    los términos y condiciones de la aplicación
+                                    <button type="submit" id="btnAdd"
+                                            class="btn btn-success">Enviar</button>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block page-javascript %}
+    <!-- terminos modal -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#termnsModal").modal('show');
+        });
+    </script>
+{% endblock %}

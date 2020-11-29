@@ -19,9 +19,9 @@ from django.views.generic import CreateView, ListView, DetailView, \
 from django.views.generic.detail import SingleObjectMixin
 from dentalE.historiaPdf import pdf, clean_cpo
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
-    ConsultaCPOForm, ContactoForm, OrtodonciaForm
+    ConsultaCPOForm, ContactoForm, OrtodonciaForm, TermsForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
-    AntecedentesClinicos, CPO, Ortodoncia
+    AntecedentesClinicos, CPO, Ortodoncia, Terms
 from datetime import date
 # Imports needed for pdf generation
 from rest_framework.views import APIView
@@ -33,12 +33,23 @@ from rest_framework.response import Response
 
 @login_required(login_url="/")
 def resumendia(request):
+    terms = TermsForm
     busqueda = request.GET.get("buscar")
+    if request.method == 'POST':
+        form = TermsForm(request.POST)
+        if form.is_valid():
+            form.instance.user = request.user
+            form.save()
+            return HttpResponseRedirect("/dentalE/resumendia/")
+    accepted = Terms.objects.filter(user=request.user).order_by('alta').last()
+    if not accepted:
+        return render(request, "almaFront/bases/terms.html",
+                      {'terms': terms})
     try:
         userprofile = UserProfile.objects.get(user=request.user)
     except ObjectDoesNotExist:
         return render(request, 'almaFront/bases/404.html', status=404)
-    if userprofile.user_tipo == 'SECRETARIA':
+    if userprofile.user_tipo == 'SECRETARIA' and accepted.agreement:
         agenda_hoy = Cita.objects.filter(fecha=date.today()).order_by('hora')
         if busqueda:
             agenda_hoy = agenda_hoy.filter(
@@ -47,8 +58,8 @@ def resumendia(request):
                 Q(paciente__documento__contains=busqueda)
             ).distinct().order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
-                      {'agenda_hoy': agenda_hoy, 'successful_submit': True})
-    elif userprofile.user_tipo == 'DOCTOR':
+                      {'agenda_hoy': agenda_hoy})
+    elif userprofile.user_tipo == 'DOCTOR' and accepted.agreement:
         agenda_hoy = Cita.objects.filter(fecha=date.today(),
                                          doctor=request.user).order_by('hora')
         if busqueda:
@@ -58,9 +69,10 @@ def resumendia(request):
                 Q(paciente__documento__contains=busqueda)
             ).distinct().order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
-                      {'agenda_hoy': agenda_hoy, 'successful_submit': True})
+                      {'agenda_hoy': agenda_hoy})
     else:
-        return HttpResponseRedirect('account_logout')
+        return render(request, "almaFront/bases/terms.html",
+                      {'terms': terms})
 
 
 @login_required(login_url="/")
@@ -527,6 +539,13 @@ def contacto(request):
 
 
 @login_required(login_url="/")
+def terminos(request):
+    if request.method == 'POST':
+        return HttpResponseRedirect("/dentalE/resumendia/")
+    return render(request, "almaFront/bases/terminos-y-condiciones.html")
+
+
+@login_required(login_url="/")
 def analisis(request):
     return render(request, "almaFront/charts.html")
 
@@ -655,7 +674,35 @@ class ChartData(APIView):
             "labelsAnt": antecedente,
             "valuesAnt": cantidad,
         }
-        data = {"data": data, "datos": datos, "datosA": datosA}
+
+        # Cantidad de consultas por tipo
+        consultaso = Ortodoncia.objects.all().values()
+        consultas0_data_set = pd.DataFrame(consultaso)
+        consultasg = Consulta.objects.all().values()
+        consultasg_data_set = pd.DataFrame(consultasg)
+        # consulta general
+        consultasg_data_set['tipo'] = 'GENERAL'
+        consultasg_data_set = consultasg_data_set['tipo'].value_counts()
+        consultasg_data_set = consultasg_data_set.reset_index()
+        consultasg_data_set.columns = ['Tipo',
+                                       'Cantidad']  # change column names
+        # consulta ortodoncia ortopedia
+        consultas_ort = consultas0_data_set['tipo'].value_counts()
+        consultas_ort = consultas_ort.reset_index()
+        consultas_ort.columns = ['Tipo',
+                                 'Cantidad']  # change column names
+        # consultas totales
+        consultasT = pd.concat([consultasg_data_set, consultas_ort])
+        tipo = consultasT['Tipo'].tolist()
+        cantidades = consultasT['Cantidad'].tolist()
+        dataTipos = {
+            "labelsT": tipo,
+            "valuesT": cantidades,
+
+        }
+
+        data = {"data": data, "datos": datos, "datosA": datosA,
+                "datosB": dataTipos}
         return Response(data)
 
 
@@ -689,7 +736,6 @@ def ChartPatient(request, paciente_id):
             cpo_fechas.append(c.creado.strftime("%Y-%m-%d"))
             i = i + len(c.caries)
             cantidad_caries.append(i)
-            print(len(c.caries))
         data_caries = {
             "labels": cpo_fechas,
             "values": cantidad_caries,

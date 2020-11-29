@@ -31,7 +31,7 @@ def cara(argument):
     switcher = {
         't': "Vestibular",
         'l': "Distal",
-        'b': "Lingual/Paladino",
+        'b': "Lingual/Palatino",
         'r': "Mesial",
         'c': "Oclusal",
     }

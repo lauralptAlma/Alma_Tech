@@ -1,9 +1,10 @@
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.contrib.auth.models import User
 from django.forms import forms
 from djongo import models as djongomodel
 from djongo.storage import GridFSStorage
+
 from dentalE.validators.ci_validator import validate_ci
 
 # USUARIO OPTIONS
@@ -49,8 +50,6 @@ CONSULTA_OPCIONES = (('ORTODONCIA', 'Ortodoncia'), ('ORTOPEDIA', 'Ortopedia'))
 
 
 # MODELOS
-
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_tipo = models.CharField("Perfil de usuario* ", max_length=15,
@@ -70,6 +69,16 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return self.user
+
+    def __str__(self):
+        return str(self.user.get_full_name())
+
+
+class Terms(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    agreement = models.BooleanField(default=False)
+    alta = models.DateTimeField(auto_now_add=True)
+    term_id = models.AutoField(primary_key=True)
 
     def __str__(self):
         return str(self.user.get_full_name())
