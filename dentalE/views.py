@@ -42,13 +42,13 @@ def resumendia(request):
             form.save()
             return HttpResponseRedirect("/dentalE/resumendia/")
     accepted = Terms.objects.filter(user=request.user).order_by('alta').last()
-    if not accepted:
-        return render(request, "almaFront/bases/terms.html",
-                      {'terms': terms})
     try:
         userprofile = UserProfile.objects.get(user=request.user)
     except ObjectDoesNotExist:
         return render(request, 'almaFront/bases/404.html', status=404)
+    if not accepted:
+        return render(request, "almaFront/bases/terms.html",
+                      {'terms': terms})
     if userprofile.user_tipo == 'SECRETARIA' and accepted.agreement:
         agenda_hoy = Cita.objects.filter(fecha=date.today()).order_by('hora')
         if busqueda:

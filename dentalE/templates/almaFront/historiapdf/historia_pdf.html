@@ -359,7 +359,7 @@
 <div id="footer_content" style="text-align: center; vertical-align: bottom;">
     Historia Clínica Dental
     <b>{{ patient.nombre }} {{ patient.primer_apellido }}</b> | Generada
-    el <b>{% now "SHORT_DATETIME_FORMAT" %} </b> por <b>{{ user.get_full_name }} -
+    el <b>{% timezone "America/Argentina/Buenos_Aires"%} {% now "SHORT_DATETIME_FORMAT"%} {% endtimezone %}</b> por <b>{{ user.get_full_name }} -
     Página
     <pdf:pagenumber>
         de
