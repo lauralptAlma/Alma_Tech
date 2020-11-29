@@ -415,6 +415,7 @@ def compararortodoncia(request, paciente_id):
 
 # frontpage
 def ingreso(request):
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -426,7 +427,7 @@ def ingreso(request):
                 return HttpResponseRedirect('/dentalE/resumendia/',
                                             {'user': userprofile})
             elif userprofile.user_tipo == 'DOCTOR':
-                return HttpResponseRedirect('/dentalE/pacientesdeldia/',
+                return HttpResponseRedirect('/dentalE/resumendia/',
                                             {'user': userprofile})
             else:
                 return HttpResponseRedirect('/dentalE/pacienteincio',
