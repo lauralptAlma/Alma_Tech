@@ -96,7 +96,7 @@ DATABASES = {
 if 'test' in sys.argv:
     DATABASES['default'] = {
         'ENGINE': 'djongo',
-        "CLIENT": {"name": 'autoTestsDB',
+        "CLIENT": {"name": 'automationTestsDB',
                    "host": 'mongodb+srv://admin:almaAdmin@clusteralmatech.izim4.mongodb.net/test?authSource=admin&readPreference=primary&ssl=true',
                    "username": 'admin',
                    "password": 'almaAdmin',

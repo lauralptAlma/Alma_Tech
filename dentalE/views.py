@@ -19,9 +19,9 @@ from django.views.generic import CreateView, ListView, DetailView, \
 from django.views.generic.detail import SingleObjectMixin
 from dentalE.historiaPdf import pdf, clean_cpo
 from .forms import CitaForm, PacienteForm, AntecedenteForm, ConsultaForm, \
-    ConsultaCPOForm, ContactoForm, OrtodonciaForm, TermsForm
+    ConsultaCPOForm, ContactoForm, OrtodonciaForm
 from .models import UserProfile, Consulta, Paciente, Cita, Nucleo, \
-    AntecedentesClinicos, CPO, Ortodoncia, Terms
+    AntecedentesClinicos, CPO, Ortodoncia
 from datetime import date
 # Imports needed for pdf generation
 from rest_framework.views import APIView
@@ -33,23 +33,12 @@ from rest_framework.response import Response
 
 @login_required(login_url="/")
 def resumendia(request):
-    terms = TermsForm
     busqueda = request.GET.get("buscar")
-    if request.method == 'POST':
-        form = TermsForm(request.POST)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.save()
-            return HttpResponseRedirect("/dentalE/resumendia/")
-    accepted = Terms.objects.filter(user=request.user).order_by('alta').last()
-    if not accepted:
-        return render(request, "almaFront/bases/terms.html",
-                      {'terms': terms})
     try:
         userprofile = UserProfile.objects.get(user=request.user)
     except ObjectDoesNotExist:
         return render(request, 'almaFront/bases/404.html', status=404)
-    if userprofile.user_tipo == 'SECRETARIA' and accepted.agreement:
+    if userprofile.user_tipo == 'SECRETARIA':
         agenda_hoy = Cita.objects.filter(fecha=date.today()).order_by('hora')
         if busqueda:
             agenda_hoy = agenda_hoy.filter(
@@ -58,8 +47,8 @@ def resumendia(request):
                 Q(paciente__documento__contains=busqueda)
             ).distinct().order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
-                      {'agenda_hoy': agenda_hoy})
-    elif userprofile.user_tipo == 'DOCTOR' and accepted.agreement:
+                      {'agenda_hoy': agenda_hoy, 'successful_submit': True})
+    elif userprofile.user_tipo == 'DOCTOR':
         agenda_hoy = Cita.objects.filter(fecha=date.today(),
                                          doctor=request.user).order_by('hora')
         if busqueda:
@@ -69,10 +58,9 @@ def resumendia(request):
                 Q(paciente__documento__contains=busqueda)
             ).distinct().order_by('hora')
         return render(request, 'almaFront/secretaria/agenda_hoy.html',
-                      {'agenda_hoy': agenda_hoy})
+                      {'agenda_hoy': agenda_hoy, 'successful_submit': True})
     else:
-        return render(request, "almaFront/bases/terms.html",
-                      {'terms': terms})
+        return HttpResponseRedirect('account_logout')
 
 
 @login_required(login_url="/")

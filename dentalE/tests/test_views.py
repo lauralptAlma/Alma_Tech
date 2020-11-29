@@ -16,7 +16,6 @@ class TestViews(TestCase):
     def test_resumendia_GET_error(self):
         self.client.login(username=self.username, password=self.password)
         response = self.client.get(reverse('resumendia'))
-        print(response.status_code)
         self.assertEquals(response.status_code, 404)
         self.assertTemplateUsed(response, 'almaFront/bases/404.html')
 
